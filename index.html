@@ -1,0 +1,2667 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quelli del padel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Extra+Condensed:wght@800;900&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&amp;display=swap">
+<meta name="theme-color" content="#1A56C6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Padel">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style id="app-style">/*QDP-CSS*/
+:root {
+  /* Campo di giorno. Layout da iPhone: testata disegnata come un campo visto dall'alto
+     che arriva fin sotto la barra di stato, una colonna che scorre, sezioni in una barra
+     traslucida fissa in basso sopra l'indicatore home. */
+  --bg: #ECF0F6;
+  --surface: #FFFFFF;
+  --ink: #0C1A35;
+  --muted: #56667F;
+  --line: #D4DCE8;
+  --court: #1A56C6;
+  --ball: #DDEE3A;
+  --on-ball: #1A2408;
+  --lead: #F1F7BE;
+  --link: #1A56C6;
+  --field: #F3F6FA;
+  --bar: rgba(255, 255, 255, .86);
+  --win: #15834A;
+  --loss: #C93B3B;
+  --draw: #6F7C92;
+  --on-sem: #FFFFFF;
+  --shade: rgba(8, 16, 34, .55);
+  --font-display: "Sofia Sans Extra Condensed", "Avenir Next Condensed", "Roboto Condensed", "Arial Narrow", sans-serif-condensed, sans-serif;
+  --font-body: "Sofia Sans", "Avenir Next", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* Campo in notturna */
+    --bg: #081020;
+    --surface: #101B31;
+    --ink: #E9EFFA;
+    --muted: #8E9DB8;
+    --line: #22304D;
+    --court: #1F5DD6;
+    --ball: #E1F14A;
+    --on-ball: #1A2408;
+    --lead: #242E13;
+    --link: #8DB3FF;
+    --field: #0A1426;
+    --bar: rgba(16, 27, 49, .86);
+    --win: #3CC27A;
+    --loss: #F07070;
+    --draw: #8E9DB8;
+    --on-sem: #06101F;
+    --shade: rgba(2, 6, 14, .72);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #081020;
+  --surface: #101B31;
+  --ink: #E9EFFA;
+  --muted: #8E9DB8;
+  --line: #22304D;
+  --court: #1F5DD6;
+  --ball: #E1F14A;
+  --on-ball: #1A2408;
+  --lead: #242E13;
+  --link: #8DB3FF;
+  --field: #0A1426;
+  --bar: rgba(16, 27, 49, .86);
+  --win: #3CC27A;
+  --loss: #F07070;
+  --draw: #8E9DB8;
+  --on-sem: #06101F;
+  --shade: rgba(2, 6, 14, .72);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 16px/1.45 var(--font-body);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+body.has-sheet { overflow: hidden; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button, .btn, .tab, label.btn { cursor: pointer; touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+p { margin: 0; }
+img { max-width: 100%; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--link); outline-offset: 2px; }
+.mast :focus-visible { outline-color: #fff; }
+
+.app { min-height: 100%; display: flex; flex-direction: column; }
+
+/* ── Testata: il campo ── */
+.mast { background: var(--court); color: #fff; }
+.mast-in {
+  max-width: 560px; margin: 0 auto;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) var(--gutter-r) 16px var(--gutter-l);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.mast-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+.mast-kicker { font-size: 12px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; opacity: .9; overflow-wrap: anywhere; }
+.mast-court {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  border: 2px solid rgba(255, 255, 255, .75);
+  border-radius: 3px;
+}
+.mast-left { display: flex; align-items: flex-end; padding: 18px 14px 14px; min-width: 0; }
+.mast-left.is-me { align-items: center; gap: 12px; padding: 14px; flex-wrap: wrap; }
+.mast-title {
+  margin: 0;
+  font: 900 48px/.86 var(--font-display);
+  letter-spacing: .005em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.fonts-ok .mast-title { font-size: 58px; }
+.is-me .mast-title { font-size: 40px; }
+.fonts-ok .is-me .mast-title { font-size: 48px; }
+.mast-sub { margin-top: 6px; font-size: 13px; font-weight: 600; opacity: .92; }
+.ball { display: inline-block; width: .2em; height: .2em; margin-left: .08em; border-radius: 50%; background: var(--ball); }
+.mast-right { display: grid; grid-template-rows: 1fr 1fr; min-width: 104px; max-width: 46vw; border-left: 3px dashed rgba(255, 255, 255, .9); }
+.mast-box { display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 9px 14px 10px; min-width: 0; }
+.mast-box + .mast-box { border-top: 2px solid rgba(255, 255, 255, .75); }
+.mast-box .l { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; opacity: .9; }
+.mast-box .n { font: 800 36px/.9 var(--font-display); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.mast-box .n small { font-size: 19px; font-weight: 600; opacity: .8; margin-left: 1px; }
+.mast-box .n.is-name { font-size: 27px; line-height: .95; text-transform: uppercase; }
+.mast-slim { flex-direction: row; align-items: center; justify-content: space-between; padding-bottom: 12px; }
+.mast-name { font: 900 30px/.9 var(--font-display); text-transform: uppercase; letter-spacing: .01em; overflow-wrap: anywhere; }
+
+.sync {
+  display: inline-flex; align-items: center; gap: 7px; flex: none;
+  min-height: 32px; padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, .5); border-radius: 999px;
+  background: transparent; color: #fff;
+  font: 600 12px/1 var(--font-body);
+  white-space: nowrap;
+}
+button.sync { background: rgba(255, 255, 255, .16); }
+.sync i { width: 8px; height: 8px; border-radius: 50%; background: var(--ball); flex: none; }
+.sync.is-ro i { background: transparent; border: 2px solid #fff; }
+.sync.is-err i { background: #FFB0B0; }
+.sync.is-busy i, .sync.is-dirty i { animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+
+/* ── Avatar ── */
+.av {
+  display: inline-grid; place-items: center; flex: none;
+  width: 36px; height: 36px; border-radius: 50%; overflow: hidden;
+  background: var(--field); color: var(--muted);
+  border: 2px solid var(--line);
+  font: 800 20px/1 var(--font-display); text-transform: uppercase;
+}
+.av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.av-xs { width: 26px; height: 26px; border-width: 1.5px; font-size: 15px; }
+.av-m { width: 52px; height: 52px; font-size: 28px; }
+.av-l { width: 84px; height: 84px; border-width: 3px; font-size: 44px; }
+.av-xl { width: 92px; height: 92px; border-width: 3px; font-size: 48px; }
+.av.is-ring { border-color: var(--ball); }
+.mast .av { border-color: var(--ball); background: rgba(255, 255, 255, .16); color: #fff; }
+
+/* ── Colonna ── */
+.view {
+  flex: 1;
+  width: 100%; max-width: 560px; margin: 0 auto;
+  padding: 22px var(--gutter-r) 32px var(--gutter-l);
+  display: flex; flex-direction: column; gap: 30px;
+}
+.block { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap; }
+h2 { margin: 0; font: 800 32px/1 var(--font-display); letter-spacing: .01em; text-transform: uppercase; text-wrap: balance; }
+h3 { margin: 0; font: 800 23px/1 var(--font-display); letter-spacing: .015em; text-transform: uppercase; text-wrap: balance; }
+.hint { color: var(--muted); font-size: 13px; }
+.note { color: var(--muted); font-size: 14px; max-width: 65ch; }
+.err { color: var(--loss); font-size: 14px; font-weight: 600; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+.pad { padding: 14px; }
+a { color: var(--link); }
+
+/* ── Tabelle ── */
+.rank { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.rank th, .rank td { padding: 10px 5px; text-align: right; font-size: 15px; font-weight: 500; }
+.rank thead th { padding: 11px 5px 8px; font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.rank thead abbr { text-decoration: none; }
+.rank tbody th, .rank tbody td { border-top: 1px solid var(--line); }
+.rank .c-pos { width: 38px; padding-left: 10px; text-align: center; }
+.rank .c-who { text-align: left; }
+.rank .c-pt { width: 52px; padding-right: 14px; font: 800 26px/1 var(--font-display); }
+.rank thead .c-pt { font: 600 11px/1.45 var(--font-body); }
+.pos { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font: 800 20px/1 var(--font-display); }
+.is-lead th, .is-lead td { background: var(--lead); }
+.is-lead .pos { background: var(--ball); color: var(--on-ball); }
+.rank tbody tr:last-child th:first-child, .rank tbody tr:last-child td:first-child { border-bottom-left-radius: 15px; }
+.rank tbody tr:last-child td:last-child { border-bottom-right-radius: 15px; }
+.who { display: flex; align-items: center; gap: 9px; width: 100%; padding: 0; border: 0; background: none; color: var(--ink); text-align: left; min-width: 0; }
+.who-txt { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.who-name { font-size: 17px; font-weight: 700; line-height: 1.1; overflow-wrap: anywhere; }
+.me-tag { display: inline-block; margin-left: 6px; padding: 2px 6px; border-radius: 999px; background: var(--court); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; vertical-align: 2px; }
+.form { display: inline-flex; gap: 3px; }
+.f { width: 13px; height: 5px; border-radius: 2px; background: var(--draw); }
+.f-V { background: var(--win); }
+.f-P { background: var(--loss); }
+.rank .tag { display: block; margin-top: 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.rank.mini .c-who { padding-left: 14px; font-weight: 700; overflow-wrap: anywhere; }
+.rank.mini td:last-child, .rank.mini thead th:last-child { padding-right: 14px; }
+.rank.mini .strong { font: 800 22px/1 var(--font-display); }
+
+/* ── Bottoni e campi ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 0 18px;
+  border: 1px solid var(--line); border-radius: 14px;
+  background: var(--surface); color: var(--ink);
+  font: 600 16px/1.1 var(--font-body); text-decoration: none; text-align: center;
+  transition: transform .08s, opacity .08s;
+}
+.btn:active, .chip:active, .fig:active, .g-row:active, .match:active, .who:active { transform: scale(.98); opacity: .85; }
+.btn.primary { background: var(--court); border-color: var(--court); color: #fff; }
+.btn.danger { color: var(--loss); }
+.btn.quiet { border-color: transparent; background: transparent; color: var(--link); }
+.btn.wide { width: 100%; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.actions .btn { flex: 1 1 auto; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+label, .label { font-size: 13px; font-weight: 600; color: var(--muted); }
+input[type="text"], input[type="date"], select, textarea {
+  width: 100%; min-height: 48px; padding: 0 12px;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--field); color: var(--ink);
+  font: 500 17px/1.2 var(--font-body);
+  -webkit-appearance: none; appearance: none;
+}
+select { background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) 21px, calc(100% - 13px) 21px; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 34px; }
+textarea { min-height: 190px; padding: 12px; line-height: 1.4; resize: vertical; }
+input:disabled, select:disabled { opacity: .7; }
+input[type="date"] { display: block; min-width: 0; }
+input[type="range"] { width: 100%; height: 40px; margin: 0; accent-color: var(--court); touch-action: pan-y; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.stepper {
+  display: inline-grid; grid-template-columns: 46px 62px 46px; align-items: center;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--field); overflow: hidden;
+}
+.stepper button { height: 46px; border: 0; background: transparent; font: 700 24px/1 var(--font-body); }
+.stepper button:disabled { opacity: .35; }
+.stepper output, .stepper input[type="text"] {
+  width: 100%; min-width: 0; min-height: 46px; padding: 0; border: 0; border-radius: 0; background: transparent;
+  text-align: center; font: 800 28px/1 var(--font-display); font-variant-numeric: tabular-nums;
+}
+.stepper output { display: grid; place-items: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  min-height: 44px; padding: 0 15px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface); color: var(--ink);
+  font: 600 15px/1 var(--font-body);
+}
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.chip small { display: block; margin-top: 4px; font-size: 12px; font-weight: 500; line-height: 1.3; opacity: .8; }
+.chip.tall { min-height: 58px; padding: 9px 14px; border-radius: 12px; text-align: left; line-height: 1.2; flex: 1 1 150px; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 13px; background: var(--field); }
+.seg button { min-height: 40px; padding: 2px 4px; overflow-wrap: anywhere; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font: 600 14px/1.1 var(--font-body); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(8, 16, 34, .22); }
+
+/* ── Ingresso ── */
+.gate-form { display: flex; flex-direction: column; gap: 12px; }
+.gate-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.gate-peek { display: flex; align-items: center; gap: 10px; padding: 12px 14px; }
+.gate-peek b { font-weight: 700; }
+
+/* ── Campo della partita ── */
+.match { display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit; text-align: left; }
+.match-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; padding: 0 2px 7px; font-size: 13px; color: var(--muted); }
+.match-meta b { color: var(--ink); font-weight: 700; }
+.match-cta { font-weight: 700; color: var(--link); }
+.match-cta.is-off { color: var(--muted); font-weight: 600; }
+.court { display: block; padding: 5px; border-radius: 8px; background: var(--court); color: #fff; }
+.court-in {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  min-height: 88px;
+  border: 2px solid rgba(255, 255, 255, .8); border-radius: 2px;
+}
+.side { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 12px; min-width: 0; }
+.side-b { flex-direction: row-reverse; text-align: right; }
+.names { display: flex; flex-direction: column; gap: 1px; min-width: 0; font-size: 16px; font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+.names .is-self { text-decoration: underline; text-decoration-color: var(--ball); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.score { flex: none; min-width: 30px; text-align: center; font: 900 50px/.85 var(--font-display); font-variant-numeric: tabular-nums; }
+.net { border-left: 3px dashed rgba(255, 255, 255, .9); margin: 0; }
+.side.is-win .score { color: var(--ball); }
+.side.is-win .names { font-weight: 700; }
+.side.is-lose .names { opacity: .78; }
+.match.is-empty .score { opacity: .5; }
+.match-mvp { display: flex; align-items: center; gap: 8px; padding: 9px 2px 0; font-size: 13px; color: var(--muted); }
+.match-mvp b { color: var(--ink); font-weight: 700; }
+
+/* ── MVP ── */
+.star { display: inline-grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--ball); color: var(--on-ball); font-size: 13px; line-height: 1; }
+.star.is-off { background: var(--field); color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
+.mvp-line { display: flex; align-items: center; gap: 8px; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--line); font-size: 14px; font-weight: 600; }
+.mvp-who { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.mvp-now { font-size: 15px; color: var(--muted); }
+.mvp-now b { color: var(--ink); font-weight: 700; }
+.log .btn { min-height: 44px; padding: 0 16px; font-size: 15px; }
+
+/* ── Calendario: elenco delle giornate ── */
+.g-list { list-style: none; margin: 0; padding: 0; }
+.g-list li + li { border-top: 1px solid var(--line); }
+.g-row { display: block; width: 100%; padding: 11px 12px 10px 8px; border: 0; background: none; color: inherit; text-align: left; }
+.g-grid { display: grid; grid-template-columns: 34px minmax(0, 1fr) 58px minmax(0, 1fr); align-items: center; gap: 4px 8px; }
+.g-num { grid-row: 1 / span 2; align-self: center; text-align: center; font: 800 25px/1 var(--font-display); color: var(--muted); font-variant-numeric: tabular-nums; }
+.g-a, .g-b { display: flex; flex-direction: column; min-width: 0; font-size: 15px; font-weight: 500; line-height: 1.22; overflow-wrap: anywhere; }
+.g-b { text-align: right; }
+.g-a.is-win, .g-b.is-win { font-weight: 700; }
+.g-a.is-lose, .g-b.is-lose { color: var(--muted); }
+.g-score { text-align: center; font: 800 26px/1 var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.g-score.is-vs { font: 600 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.g-meta { grid-column: 2 / -1; display: flex; justify-content: space-between; gap: 2px 10px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.g-meta b { color: var(--link); font-weight: 700; }
+.g-meta b.is-mvp { color: var(--ink); }
+.g-row.is-next { background: var(--lead); }
+.g-row.is-next .g-num { color: var(--ink); }
+.g-row.is-mine { box-shadow: inset 4px 0 0 var(--court); }
+.g-row .is-self { font-weight: 700; color: var(--ink); text-decoration: underline; text-decoration-color: var(--court); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.g-list li:first-child .g-row { border-radius: 15px 15px 0 0; }
+.g-list li:last-child .g-row { border-radius: 0 0 15px 15px; }
+
+/* ── Area personale ── */
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 8px; margin: 0; }
+.kpis div { display: flex; flex-direction: column-reverse; gap: 3px; }
+.kpis dt { font-size: 12px; font-weight: 500; color: var(--muted); }
+.kpis dd { margin: 0; font: 800 28px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.lastfive { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--line); font-size: 13px; font-weight: 600; color: var(--muted); }
+.res-list { display: inline-flex; gap: 4px; }
+.res { display: inline-grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 6px; background: var(--draw); color: var(--on-sem); font-size: 13px; font-weight: 700; }
+.res-V { background: var(--win); }
+.res-P { background: var(--loss); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tagp { padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--field); font-size: 13px; font-weight: 600; }
+.tagp.is-shot { background: var(--ball); border-color: var(--ball); color: var(--on-ball); }
+.motto { font-size: 16px; font-style: italic; font-weight: 500; }
+.skills { display: flex; flex-direction: column; gap: 9px; }
+.skill { display: grid; grid-template-columns: 86px minmax(0, 1fr) 24px; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+.skill .bar { height: 9px; border-radius: 5px; background: var(--field); border: 1px solid var(--line); overflow: hidden; }
+.skill .bar i { display: block; height: 100%; background: var(--court); border-radius: 0 5px 5px 0; }
+.skill b { text-align: right; font: 800 21px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.duo .card { display: flex; flex-direction: column; gap: 8px; padding: 12px; min-width: 0; }
+.duo-who { display: flex; align-items: center; gap: 9px; min-width: 0; font-size: 17px; font-weight: 700; overflow-wrap: anywhere; }
+.log { list-style: none; margin: 0; padding: 0; }
+.log li { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 10px 12px; }
+.log li + li { border-top: 1px solid var(--line); }
+.log-txt { font-size: 14px; line-height: 1.3; overflow-wrap: anywhere; }
+.log-txt b { font-weight: 700; }
+.log-txt small { display: block; color: var(--muted); font-size: 12px; }
+.log-score { font: 800 24px/1 var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rest-note { display: flex; align-items: center; gap: 10px; padding: 12px 14px; font-size: 14px; }
+
+/* ── Giocatori: le figurine ── */
+.figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.fig {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 0 10px 14px; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 16px;
+  background: var(--surface); color: inherit; text-align: center;
+}
+.fig-band { align-self: stretch; height: 58px; margin: 0 -10px; background: var(--court); border-bottom: 3px dashed rgba(255, 255, 255, .9); color: #fff; display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 12px; font: 800 24px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.fig-band .vote { color: var(--ball); }
+.fig .av { margin-top: -40px; background: var(--surface); }
+.fig-name { margin-top: 4px; font: 900 30px/.95 var(--font-display); text-transform: uppercase; overflow-wrap: anywhere; }
+.fig-sub { font-size: 13px; font-weight: 600; color: var(--muted); }
+.fig-shot { margin-top: 4px; padding: 4px 10px; border-radius: 999px; background: var(--field); border: 1px solid var(--line); font-size: 12px; font-weight: 600; }
+
+/* ── Scheda: editor ── */
+.stage-row { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.stage {
+  position: relative; width: 208px; height: 208px; flex: none;
+  border-radius: 50%; overflow: hidden;
+  border: 4px solid var(--ball); background: var(--field);
+  display: grid; place-items: center;
+  font: 900 100px/1 var(--font-display); color: var(--muted); text-transform: uppercase;
+}
+.stage canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+.stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.file-in { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+.sliders { display: grid; grid-template-columns: 84px minmax(0, 1fr); align-items: center; gap: 2px 12px; }
+.sliders label { font-size: 14px; color: var(--ink); }
+.rate { display: grid; grid-template-columns: 86px minmax(0, 1fr) 28px; align-items: center; gap: 10px; }
+.rate label { font-size: 14px; color: var(--ink); }
+.rate output { text-align: right; font: 800 24px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.savebar {
+  position: sticky; bottom: 0; z-index: 4;
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px;
+  margin: 0 calc(-1 * var(--gutter-r)) -32px calc(-1 * var(--gutter-l));
+  padding: 12px var(--gutter-r) calc(12px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+  background: var(--bar); border-top: 1px solid var(--line);
+  -webkit-backdrop-filter: saturate(180%) blur(18px); backdrop-filter: saturate(180%) blur(18px);
+}
+
+/* ── Lega ── */
+.rules { display: flex; flex-direction: column; }
+.rule { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; }
+.rule + .rule { border-top: 1px solid var(--line); }
+.rule-name { font-weight: 600; }
+.rule-name small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
+.roster { display: flex; flex-direction: column; }
+.roster-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 9px 12px; }
+.roster-row + .roster-row { border-top: 1px solid var(--line); }
+.roster-row .btn { min-height: 44px; padding: 0 14px; font-size: 14px; }
+.roster-name { font-size: 17px; font-weight: 700; overflow-wrap: anywhere; }
+.extras { list-style: none; margin: 0; padding: 0; }
+.extras li { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; }
+.extras li + li { border-top: 1px solid var(--line); }
+.ex-pts { font: 800 26px/1 var(--font-display); font-variant-numeric: tabular-nums; color: var(--win); }
+.ex-pts.is-neg { color: var(--loss); }
+.ex-txt { font-size: 15px; overflow-wrap: anywhere; }
+.ex-txt b { font-weight: 700; }
+.x { width: 44px; height: 44px; flex: none; border: 0; border-radius: 50%; background: transparent; color: var(--muted); font-size: 26px; line-height: 1; }
+.extra-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: end; }
+.extra-form .full { grid-column: 1 / -1; }
+
+/* ── Barra delle sezioni ── */
+.tabs {
+  position: sticky; bottom: 0; z-index: 5;
+  background: var(--bar); border-top: 1px solid var(--line);
+  padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  -webkit-backdrop-filter: saturate(180%) blur(18px); backdrop-filter: saturate(180%) blur(18px);
+}
+.tabs-in { max-width: 560px; margin: 0 auto; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+.tab { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; min-height: 52px; padding: 8px 2px 6px; color: var(--muted); font-size: 11px; font-weight: 600; text-decoration: none; }
+.tab svg { width: 24px; height: 24px; }
+.tab .av { margin: -1px 0; }
+.tab[aria-current="page"] { color: var(--ink); }
+.tab[aria-current="page"] .av { border-color: var(--court); }
+.tab[aria-current="page"]::before { content: ""; position: absolute; top: -1px; left: 26%; right: 26%; height: 3px; border-radius: 0 0 3px 3px; background: var(--court); }
+[data-screen="gate"] .tabs, [data-screen="edit"] .tabs { display: none; }
+[data-screen="gate"] .view { padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
+
+/* ── Pannello dal basso ── */
+.sheet-wrap { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; background: var(--shade); }
+.sheet {
+  width: 100%; max-width: 560px; max-height: calc(100% - 24px - env(safe-area-inset-top, 0px)); overflow: auto;
+  -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+  display: flex; flex-direction: column; gap: 18px;
+  padding: 10px var(--gutter-r) calc(18px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+  border-radius: 22px 22px 0 0;
+  background: var(--surface); color: var(--ink);
+  animation: rise .22s cubic-bezier(.2, .8, .2, 1);
+}
+.sheet::before { content: ""; flex: none; align-self: center; width: 38px; height: 5px; border-radius: 3px; background: var(--line); }
+@keyframes rise { from { transform: translateY(40px); opacity: .6; } }
+@media (min-width: 620px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 22px; } }
+.sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.sheet-kicker { font-size: 12px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.score-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px 12px; }
+.score-who { font-size: 18px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.quick { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; }
+.quick button { min-height: 44px; padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font: 800 22px/1 var(--font-display); }
+.quick button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.net-line { border: 0; border-top: 3px dashed var(--line); margin: 0; }
+.sheet-actions { display: flex; flex-direction: column; gap: 10px; }
+.p-head { display: flex; align-items: center; gap: 14px; }
+.p-name { margin: 0 0 4px; font: 900 40px/.9 var(--font-display); text-transform: uppercase; overflow-wrap: anywhere; }
+.p-sec { display: flex; flex-direction: column; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 30;
+  transform: translateX(-50%);
+  width: max-content; max-width: min(92%, 420px);
+  padding: 11px 15px; border-radius: 12px;
+  background: var(--ink); color: var(--bg);
+  font-size: 14px; font-weight: 600; text-align: center;
+  opacity: 0; pointer-events: none; transition: opacity .18s;
+}
+.toast.is-on { opacity: 1; }
+
+@media (max-width: 350px) {
+  .mast-title { font-size: 40px; }
+  .fonts-ok .mast-title { font-size: 50px; }
+  .rank th, .rank td { padding-left: 3px; padding-right: 3px; }
+  .names { font-size: 15px; }
+  .score { font-size: 44px; }
+  .stage { width: 184px; height: 184px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}</style>
+</head>
+<body>
+<div class="app" id="app">
+<header class="mast" id="mast"></header>
+<main class="view" id="view"></main>
+<nav class="tabs" id="tabs" aria-label="Sezioni"></nav>
+</div>
+<div id="sheet-root"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="application/json" id="league-data">{"v":2,"rev":1,"at":"2026-11-17T13:32:49.656Z","name":"Quelli del padel","players":["Lelle","Betti","Ferra","Martina","Toffa","Vinci"],"rules":{"win":3,"draw":1,"loss":0,"game":0},"results":{},"mvp":{},"dates":{},"extras":[],"profiles":[{"shot":"Bandeja","side":"ind","hand":"dx","style":"jol","skills":[1,7,2,10,1,6],"motto":"NON VEDONO UNA PALLA"},null,null,null,null,null],"avatars":["data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBMRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAABAKADAAQAAAABAAABAAAAAAD/7QA4UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAAA4QklNBCUAAAAAABDUHYzZjwCyBOmACZjs+EJ+/8AAEQgBAAEAAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/bAEMAAQEBAQEBAgEBAgMCAgIDBQMDAwMFBgUFBQUFBgcGBgYGBgYHBwcHBwcHBwgICAgICAoKCgoKCwsLCwsLCwsLC//bAEMBAgICAwMDBQMDBQwIBggMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDP/dAAQAEP/aAAwDAQACEQMRAD8A/oXj+NXwsurVvDGp3GpWuyFYjOiXkCuGzldrwMUH8W7YBnjpXEapf+CdZvruLTZNTkvnbZG8c8VzMp8zLkQskLKMZyMscckda+cvh3b+I/Cdgt9d6/YBHEjfLdIwSQMG37XZGwcL1UZ3nHv9C+BfFNpeakrz6ul7dKD5RK28hdAqqyk+YvbkHLDHIK18JOd+h9eqaSbTPmv4q/DP4V6tqaXeseE9WimnzLLLNZpL5oPKsx3jnG4EqR16+uZdfD/wJptkJP8AhHr0o3lsHWzVAMKUXBikG/c2fUHOAO9fdfii51tJUnso7UvLP5XmxQjew2cAtCzD7rdCPl6gk1xsdjixWwEdg7HAjSNZR/EW2lmc4xyAMc8455rOUntfY1jayuj4LTwT4a1pJbfVtCnubN3kdkNltBbnkZJ4BAPoAMjBr1f4d+D/AAvdoLXTfDl7aR2/yxzPaW8SgAZChnXI2nOGJJzggivpq18AalqJu7lIdOjtIGDI81q+wHBDAjcyhduMLu56HB5q94vutK8OXZ8EJOdavF8qQJbWkO2IOMLuLz7UIBGA5UEEEcnlqL5eoOonJR6ngep+IreDQm006nqTCBpDh72EHqSoK7wT8z8jefwFfOHjLxZousXzzG/S9t72M+daS28lxs24P3bgY6jcGB5PcGva/FPxR+F3h+Fx420y50S6icJBLeC2hSW4yMQiYCRV45CswLc7c4xXzn4gs/BUGlTX0KNcfIqpJHfech8wsFJ8tUPBbjb2wcccqUZrVm8ZRbsQWepW0CxalZGySSKVHO62tIQnzjHyRoZCTySQpIz0Jr4c+O/hm9+OnhjWfActudQZ45Ps8pjYhd25t6HcgPzDCkg5ZT0GMfZms694X0HTxpuj6bIr3DL51zcEQsI12swGN7BRtJUblIzwMZI/HL9on9vjw/4F+JN34b+HtmniS9srj7JDCzSFACoDFipJA3OAEycY+cEjLdGEpVHPmhutSazgo2ktz57/AGQfipdfC2z1jwV4s8y2uvD07yRiNlV1YOwKqwjf5o5clSWxkjGBk1+qejfE/TNJ8JT/ABBWfUdUv9PR75YxteBAU/55EpLuwX+b7gBAI25Lfz8+Ntd8Tar46X4g6hFDpcGuyC5H2f5sdNwZcBSwIyQOCeeCcV7P4e+J3iew+KWkeFr7xB/a3huSRbc+aiJtjVArOAm4gLkqmXOcEcZ49etTVWfOcNKMqcLHs37MXx80+4+OPjfxL4nUP/bcsdzskkWBmGMbMhJQpXYAW6DBOTuFfqZonxb+Fvw+8ODXvFt2umRahblrOec4EZkcEoG6A+TmRd4KktzjKmvw4+Nfh7wR4X+K8t/4NeR7a5sEt97sEkS5CblYqhGwvGwypLDcTyRzXwf8V/i34tknsfDOqXk1zYafE3lpvwU3NggDOAGbkkcnnNU8Iq01K/RC53CFkfqV8ev2svBPh/xNceJPAkm7SSEeOeFhbzQXAiWJ2iby+EdUQMoUo2ACvJI+DfiV+1VffFXSJLDVYriUrNHunmMcp2ROXCIXi3JHu5KK2Oec8k/L3xL8Qz3cUGi2CCKFYxIVIyCc4C5OckYzjHNZU3inTPC9y+m6/E0jXFuXja3YBYzk7GfDc4KqGXjA788dtLDKMV3MKs7vc9zvfinb6/jW/G9vL4jRFUQQz4KRBphNcPDGpjQmVR5ZDNkhmz1AXUtF+GXizxHPrHinTm02SUiK306xjECmQl42XdG4UJErbSd4eVs5ZVIC/NkPjObVL+K+0OQ2yxBJiiDjdnBCnHy9NykkYovP2kbvw6I9A0G3S3uxJ+/u5AMvGV2rGcfwgZz2PU9zW7ou1omEpRveR+yPgvxf8X/gx4N03wdqOkw2ngs3SDEcFtI+biJoWRnjwu5t4+fyiQevzDnG/ZW+IB+Anxlu/GHgXUIFtbyCBrzS4l8trmJESZ9i7htkiaQlVziQAjggbfxrPxV8a3GmDRBqTLaxOdsBdmVSCSAgYnBG4+nr3roPhj8ZPEeja6t1bMyXKr5IZCVkGNpHUnGNg6D2rKWGervubRffRn9c3wQgi1nxvrvhzw5evp+n393bXttOSTDaRXaFGSJULGQyOrlQjgtuycAnH2Jq8nhx5A0bTJb2eAJA3lvMVjjRQ7scbVBTLocLngKOV/mh/Zc/al8IeDpbvT/iJEIopY0trbyIBiNFOSu4M0uQCyjByRgEgZr9QPhZ4t1rx7eQ+KvCOrIdDtoFmuorkqFEKqgkVRIGkBAGUXDDdt4AYsvi4nCOMrnXRrJrU+zPDfjOz0a1a50pFsLabBkkOXKqpTzFORuyiAMWTBJGCWJUV0Ok6xpGkXf2ye2c3epyKYjNlpGV1Cqzqm5nA+UxgAt1ypOHHzLqNg/xF8THXdEKpo2lSp5ESgLI7x7S++RiGjIkGMlcELk7cfL7y2paZ4Z0eXWHt2l1CWDYlrcAtHEXO0mUOPlY7SfMLb244VDgcsoaWOlPqcl8RtSV9QmNjhy4WOeaNvkG3BIRgFD9R1GRjGDw1ZnhLwzE9vd3+uh47OEqpRmPztljucEhuy4GCSfXacdJZ2N74k0SPxB8RbnydMsg8FuNhU7m3cRxADeOMFlJC/xEVr3WpazrVta6dpUIksoRttRs2srfNtklYpuOeWBYlRglcAE1DWljR7HEavqF/cah/wAI/HBNLF5QhtbODcOQI2GF+fO3JLH7xHLHJNbdlod54b2zeIXRrmZGRYkGBgDGBgYyemDyQcH0rtdDl0Pwvq0bafbLqWq28bCS6aQ+XGXi2MyAr8338LhuCORnaTxF9qupW9w+qSX2+NSHjjVj+9dhgnYcgADqThucYUtwS1GuyNLUYI/CEUPibUES4vFB8qIhWy/y7GGQCSvUKQR05XiqejalcyalFrd7Gmoapds0aZUtEjMVA8wg4dtpYKqjjjOMAVT8F6PrXjfUXudPH2h4I/nb7gj+6GCOB+JOA5JyOctXS6zbaR4V00aboCu96uTIWz5rF4z80ZCgmLuAeO5bkVOo2QXOs3tjBLo+szSGaFyt6JnEglPy5WTBJG3pjoBnvxXK64ttZWdzbTkq0jbnBUjJ3kjzAcZB+YqvHqQvFaGk+HVu7W48S+JHeztFYNGjtsjlkGSVJZcnHHzHuSOxI5TVda1PxO/2hIQkK7VS3QEjOWGEBBOSCNxxyeg6GqUddikz/9D9f7zw4uo2L/2jq19ei8V2229wCFUAswZZIwM/Kudo+vSr+iWq6Tf7Z9K1J7do/LSa5to2VojtJcb0xiQr16knjBPP0LrjTi9jmgv7VYricxyQGyjc4dMFlaLJ25weQq84DdK8t07T9Mh1w3n9rRzwskkzJcWt1EQHUiNcRPjg9ucAdycV8A0j7RVO5W8QSXr6RFZ3Wm22kq0yRQxtZzq6yOy/dPAMgQn5XXBVThSevIeKvBd/4h1b+1vtFpFPaLsb7YrwukWd4HKSsrDJyQoHTnJrp9a0K8n0C6Sx1LRHSNXErvPqEZO4Ftzk4AITqozjGcdgy0vvEkOgG+1K60qedoQqzRXc+7YG2hQ8su1cqrADaT9c85vTUuCutDwz43XPiP4QfDG78Y6rqEkU8c0drDLbzTNIGZAI32ZT5UkOSM7ieFByc5vw6+0eEPBln4SmmGratqEsV7eJGJppvtEpzKz72C7oshSWwrbeQTXyr/wUJ+NWr6Rf+HvhnaWyXn2uQXbqt20xxZyBQT5YCYPGMAN36DB7vw747+HPjDw8utf2vokV5c7yfNmud24sDt3M7AsvCcA5weO1dbjP2asnqKEVzalH46eFb34wf2po/imTUdJ0fRp1e7j2wxRyPJ8rB2ADqIlZtx+YE/KcYIPy7r3hPXfBButF0TWLpcwyXtgklwZLW4W1w7QmH5grgAlJAwIBBYOEfd9zeE/Ay6j4Xh067sbKRp9880nkuxDsmMu2Apw2Pm/H2r8+P219Zt/AHg3VvCdhq1xaxWzxXGkx+Y21JpU5iVRIwAGWwMfcLLkDGbw/NJ8i2FUai2+p8J/tIftueJfFvgq5ufDFrHEDtsklkx5wnKBiz5Xy227iqKM/N8xBTaa/K/w3qGufDnUjr+o2MMN8RLsN4u6RpHBUHAyuV3Fl688k5r0H9qDxvo/ww8Q6Z4E8GX8E9vaW0b4DMUS6cqTJtdVBkdQAcbhivkHxb4+1O91mGbxHeyXN7c7pPmPIIPQjt3wOnFfQ0cB7itomedLGe+0rtnqGueLp7DSjYao6NLFKr/N98bgScD0OR1xXkl58TdU0OY65pwYzROCgcEAFeV4U9uuc9TXEax4mvtY1OSR3+1O3ErZ+cYA6juB04+lZ2svp62TXt2XhRVILqN2M+3X24Irop4ZR3FLEuRja18Z9fn8SLJfXLul0++bJwSWAGRkkgDHGO1TeI/Ff2uOC61JFuo1PySqMOpPvn8wRXgusXXh7U9ZfVVvj5hbOdpGOwwCD2rVs9V0O2Jkt9TAO0ZjdGCtjsQFYV1ezVzmVRJu7VvVHp2p31trl4E1C58plUeTIAeD67Tj+fWsS/wDC2qyTABjdq43AxkknJyeRkZJ5xk1x154gs7qJo0j+cqR+6DgHPcDoPwxXFJ9oeZcEICeDJ8gH1JA/nVKn5hUrpbH0JLbN4R0N7eHy4ri4KjLNu2gA8Anbn6ACvGdY8NalrOvPLp8bNFCkatI/A+VQMnt26Z5rHHid7R8WuyRz0ODtH58n/PWvUvD63culDVEkcuH8s5zksRnCjnirMko1Xy3Of1t7jSLaS6ZRDziIPw7Hu20dAaxNJ8U3l83lGTy5e23IJ/H/AAr0fxroscljHqVxhhEpaX5s4wBgZJ654xn+VeDWVnfwFb9YXCqQVbBwfxoUb7BOpOM1Z6H0HoXi7xDp0rIt28kcgHDHcOnHJz616/4M/aH8f+AHi0ufUb+PSYCXkgt5ZF5bGWUDAB4B/Cvl21uZ9Hge/upHUzDIi6dTnO3PQGugXULGSGG8M/l7Ds3OSMg+/wChH/16j2avZ9ToclJeaP3F/Y5+NOseJDf32ma5e39tjesTu52OHDqGUlvvOcnoCeeelfuN8L4LGayXxF41vopi1kl9bwsHldnAD/MFRgo2KgeVmA6dRzX8eH7N3xH034f/ABDi1abVhY28kgaZLZixyM/wHAYH0YGv3t+Ffx+vrq1hvb29jvLcuyxXU+wxOpGDHgufmQjIBI46eleJmeFfNzRN8JW05bn6baodS8a6tHqcoSDZEi5kPlxRLj74YuzKQTkDbg9cE4z2WojR7nTF0nQ5VFpK22WeQsS5UuVwCwZmYsGP8OcDOBivBvB/xL0LxfaWWmQ3MCW1uRFDBuBErMSzFmVweXOCoAA69vm9/t7efw3dXel2d35+rP5bJFbyKbe3Bcld0m9UkJHAj7cHOeniSi9rHqKSMLVtDbTIIdPlglikKyFoHfaQcZDSruUggKcIuBxyQSan8GeAp/GVy2p+KLkqIsyzFBuCoCwAPBCDPy5HAJxtJyoqA6fMRO1y0f2hfLaN1CspLZwq5BjjJIARc56kqOvoGv33hjR9AS006WSFoWaO7aOP/loQy5COwIbZhTMPkAZRxuIK12KukYmrazoXh/T/APhF9AWOKDKyvJJ8wzySznBWRjj5NoYccDPTjEubyBLnW7r/AEhVPltJIGIdWBIy+7BwcAgc85OTmuSu7++vrVrxbeODTzIRDaggHcQRuO0KXxj5nPyjIHy52na8OWPi/wAQ6gllFIiqIAXmkkUJBEu35w5IC8HAYFjnKKN3AqzGi3q0Or+MfEKmW9kv5TIkcNrEwc7dwYlQxPQgYUnJJzhiM10sltpfhOQ3f2n7Ky5DSlC581VAGQAxGdxyu0ZGfavOLe7i8DodUjmZBcqVwpIeYDJ2gbciJjxubnj14rH1K/1bxoE1fWJBb2MUp2IyFid+NwUAZY4HzE+o9cVL106DSP/R/oG1bXbe18yWUIUDBHtxaywu3HViisFZeQTnkc/XxeS18V2tsuq2tw0BnjkgNvHO6Mkcm5cOXiK7d+Qvdc9F+9XoWsfEC5HmXi3NzNI2yVYTdzbUdiGxtkhXBwo6kircd1A0t4fGVtqN0JfnEkbrJGd+D0YoeBglgWHXnJ5+BTv1Ps1dK7R53p1j4y1WyuLGyv8AUBO4MRLXiMN4AVVcbThSexfAHTPIqSLw78RNPsFay1a6s1tWLmIPasc4VQpdJVIJ3EZYdD09aeqJ4ZmvEk0+yEUMMT5aS3kkVn3DpuyPlyWJHJOMg5YjPW18NRT3GlW8cc5mXbG0kDxuxJPJVI2AByvGCcnsoBqJI1TufiB/wV01XxN4a8U+DPiEkkj27xXVjLOGhbaHZZCoMTYJQw7uT0PUbq+zfhf8PL/wH8FbDwxqsS77OxTerrHslim3FJNpY8FSoP3hnJJwRn4G/wCC1vg1F+G3hbxFY3mYf7WaOaFI5UjjSSAjdudF+4SV4PzdTz056D4+pr37Gtjrd7qMk8tv5EE7EFANhUOGduT8zENzg4z0r1YU+bD07d/8zFVHGpL+uxs+Jfif4s+FOo3WueEbwWvhWaUvOl3CtwIdzE7otzEjfnoDwOuM4r82f2oP2s9d+ITSeC7aaDVvLmE6XIgELR+WeRsTAAGBjO4d+DWv8U/iJB8Srh/ht4X1nyrGKNH1PUHBYRRkqxSFWH+tbfjgj3I5A/P34ka5YJcy+HPBswSw80x/adoWR1OAS5ADEE8AE4/KvVw2Gi1zcvvf1ucVWq776Hwh+0Rreu6p48uNRnkeWOQoUYDCho1Gdp9vavKLr4ka1f3Iu7+NJJPU5/PqK+n/AB7aaRf2q6ddqJNpHlFR93PG4ew9O54r5M8QaJp+lXJjhaZ0z1ZQv65P8q9qLbivI8urGcW5weh6rDLc6jp8Ws6M21A4UmI8hsDhge5PbvXd6d4gj1Oy+zXGBKQd6sO2M5wSf4etfO3hzxOfDd35mkq5EnyTRSFSrp3XoOv0r060ZfEcqap4VmaFthWW3Yj2J57jPQ4PTmla5rCupb7nN+O/BNj4Z2X9uP3NxnaCeh6kD8xjJry1mK8BQD16fpX01/ZGvax4fuPDus2/mR7QbdldTtZfu9cYHbpnFeY6f8Oddl1hbe8twsaENIWI+uOD19KpaLVmU6HNL3Njz23sru5jaSPJLcA1b0vQZ7y/js7lHQOeTjoP6fWvqLwx8Ora4jjT7OZWkOIo1znaDyxx2J713mq/CSW3RNOi2/uLcySlO7dfqc471i8RG/KzthlmilvY+e7b4P3DEeRFK+7o+DgfjiuhTTdZ0a2Ni/zRPghgM8jPTP1/wr9LvDXwR1K7t0jSYxJGMHcD1Pp2roZPgHDaxNbSzvPFjATaCfT+LFea8zhF6n0NPJHyr2atc/JPxbbeIbrR47G9D+WW3M4IOcdP59yKb4d8HCS2E9lEbh5U24OcqwI644+nNfqY/wCz14WvZnstSiktgR8j7QFbHt93OPasPUPgPpfh8G38PyqpY5+bv26Zx+WK2hmtC9r6nPPIMTdyUUz8vdW0FTIACRJGmDxxkcAZ5z0yT3rNWxg1Hw7Ha3C7m3lt24A5JP8AnvX6E+L/AIGazNbSpZ2b3EzKSgVNq5OOdxPHQdPSvlTxT8CNVjdtLk3Wt/GucMPkb/D0zz/Suyni6c1uedicuq07vkPmu0mOg6qssSs208Akfzr6p8KePdR02yXSZ53lt3lDC2yQpJA6gHHQ4PtxXiA8B61oc5fUkykGTIxHy4APTOAfbPc1SXxHeXVzHcW1q0yI2fTkHj2/SuiUFJHl0nyK0j9pvgF8QNO8ZGPw+kFtok9oAYbqFWQBmbgNJuIB9CRz04r9if2dPiD4z1ix1XS9Rvnu7vTrswNc2p+ch1GSGUdiB3GR+dfzH/Bv4v3ula0b63sQyvE6NCX+VkZSrA4HTvxnp2r+g79gf4gvbfDm78ShfJvdWuAGJJzGEwu/dtJYEZDAEds5xXjY+hy05SZ6OFq3mo9T9FNaXSvhto+PEEIu76QfNbxjYmXQ7PNJyVXA3CPrIMN8vzEeW6tqtvZ3itqpMl1IFeO3bbsSNsODKB91SDlUUtkEH5RjOZ4n8SNJqWNJwl7uOJoyW4PB2seM8YyODjjPFavgTwlJdQfaIY3ldycMzZQMrAuGBHo2STg5+7yK+cb1PXQ/QY2u2mOtXBijn27jkYyvO1Y8AsAQQEXAUnk+vrXiDVNM8N6ULbSICWt3CeTIMruPIknO5drHJMaKOMZPasWDQ1jtUkujE8KKCk0hYsdqgGOFMfMOCS+3A4xzyeBTxFeadCLXQ1E7yylohjhCuOdxIXlTyTkKOQc5IW4730HjSTe2h1vxfOtzOSp8l2BcoAvGNwZRjGOOB1wMZztYvzYXw0ww+bdTAFI4iNkQZiQDg5JwMbQRzyfQq2neKNRkKWkR829LkNESVA34ZQ5YnbngliTjucjN4+HbbR2bT5HhuGDEO6MWIzg4Xplxgg5AAzg5PAetzRPsf//S/TrxP4w+K+q2Ums6hojXhtJDLvlt5mdVClehlDMobgAAlT8uc8V55b+KPiDNFJa31hHA6zKALm3mj2MMDK7nJHygL0zjjoMV7brvxg8Sh2WTQIrNtjGJnaaN2iU5TltyuwBIXCn1ywrnLr4jT6xbS3Z0n7fcghzJNKGKohJYDKBjuGMsSR2AGK/PW+x95CL6rT+vM5OfWfGUVz593Z2Nt52VUtBuZs7QSpdiCR6sQBjHGaZp2v6xCw0+zmsbaUKSJ4htYryNoaMDGWIGSeecHGa7a58aXraaumww6hZShWIhgEarvJyrDdhiOh4UdcgkYrzp/iHf38iB7i6uLl1EZZY49x2AfI0iHc5APJbk4Gc9stexqrLc+Df+ClvhHxR45/Zj1N/INwdNZbkkFmIjR88FycIMD06dM1+G3gT41r4I/Zo17wJfW+Zp5HighmYf6xyF4TluA25gOCVr+nz436g/jH4ca34T8SQySQX8bWhd5gu4hDgYSM8c/wAPr681/ER8ULLxf4J8Tan4e1WaWS2tL6RkBODuJ2AgE5ycD9OeK+lyaKqUnB9Hc8vHz5J3XVGlb+OL7StIl8Lwsou45WaWQEbixwCy9zwoUkk46ADJJ80ijmubOU3hZJFOxQwwTyzN19P0rzbVvE00flxBJTMh5H90envzyeeuK7yJLjVtL0/WYJdr4bzEzkghiPmI6nGD+XfNe+o8qPOldu/Q888ZalDoUFteXsPnu+RGh6DHXPI61zGsfCqbxk0Wv6Dtt0uIlkdX4AyOqgcnHfjivV9R8JSa/flbW5ji+yIwYzEgfeJ4wc4PqoyBgV7JovhLxTceFo7LSrL7XcFcB4wdm0E/xyDIx0zkH+VFSsoRRcMN7W66HyhpHwAsJNSEM13Lc7eZBCqgJxn5m3N+QFem6Z4J0DSJzpvhuC5vJiuXkRQwHOOg/lxXsNv8EvEkV4p8VXo4P7u0swVjBPA3sQpY89MCvVdF8B2Hh3ZKIrvSNzYZtjGNifQMCPf1rneNSTs7+h3UcoaaTjZP7/69T5dm8C+MvMRbW0MydWaTdHj25znHrg/yrvtN+Fmp3diz38sSuBnbyU/4Ex/wr6QW18J28OdT1ea4foQrLn6EooIx6ZFT6ZZWepyRx+EdLuLi4EnDyqWA9QHldwuc9x+FcUsfOWlvwPTp5TRg+/z/AMj580TUNS8DrJb6hpAnhlYKdQjDMgxxuJI+YDnocV9CeD/CWm+P7iLSvDLM0G4TXl2Rtyc8AZznjAx0AxXr1n8C/Eni65SLxjM0Ni+MQW/JbnOHfrjtjFcFbaU/wA+Otr4Z0uVp7HUPKiePAz+8zjHP8J9Kw9pGrdR+O1/I7Vhp4fldRXpN21Vmr/1vufYmm+E1t7JLePJijAUZPpx161NJokVuTsA9emf617dovge4u5Ns5+U9GBFeg6f8LLCSMebIxJPUdvwIr5yeJtuz7alho7RR8aX+ifb4GtrpFMbe2fzyK5eHwPLayI9sI5o0bgONrAem4ZyPqM+9fftx8IYixS3aUt6nBH5cZrBHwS1mB2kmhWcdih7euBj+VOOIuaywi6o+Wl0We5thBbWAwem50A/TJH4CvIvFPwDuPEN+dT1EwxyqNiNAuSoOfvFh834AV9s6j8PNUslXEEiHPGF3dK5OWO5tC0TtuTvu/wAaujiZQfNAyxGAhVXLV1R+Lfx6+EPiXwVbSXt5GL22yplYL8p69R/+uvhe5sURHTVbxbcZO10QDjPAKgAEnkkV/TPr3hTSPF+lz6TqUQKToVZceoxmvwb/AGmPgze/CvxgdFvYXOnyy+bBJ2K5ycduuMj9OlfW5RmKr3pz+I/PeIsj+qr21NXizyfQfGWieGNDNh4btnmuN2yWVkCsxJwenfOAM9q+1/2dfjd8QPAesQT6U6vbcSNBMxwRuG4Z7Ak7SOmSDjIr4XsvDtudQt5nOEXPmHjbgZOSPQgda9ciu9Ztr2DSvDW0xp87FOrbiDweTkY4HHJ75r2atOMlys+Pi3Fpn9M3gLxl/wALJ8N2l7pNt5MF+VkVY9285wvIxwq54wOo7jivr/TWj8H28tpOmLnyQjEhcRynnMg5Ldjj279K/Ir9k/xsmoeHNO8GWM0QuRHiVpGIZRGXdmUryAxUZJ4PTjNfqp4X8OmDwtKNclSWNS25kIbJB+XaQCNzAjjceCM4xXxmMoeyqOPT9D6ChV54JtkPiTVI9RYJcXBeC4IdmflcgspOCoJH0HXgZ7VfD1jqF3avY79lnLtWQR5bbtK7S+0EsGLHaAd34Yq//ZsU0EGnkuIoR5hzgMx5JHUZB2gEnJA7HobOr+LfsemWugaQEiSPcJ5l3EMcBUAY4PADdQMcYOMVy27HV00N6/1LQPDe3R7GaW8W3ZPlfco4PLYb7gDEHZzn7vqa851uaSa/uFs0MbMxjUGMqN+QGVYxk4GeAeSOcA/LSX1tPdiGe9hdhvykSN80wO4b5MsccgfKBz6g43R6rqNla7LwB1vHYuNhyIyScKuVBYgDliRjoFA5ppW1Kif/0/120fxAmsWkLHS7yWXeUaKWO1aFIhkujeYpBIIHJIGecA8DCfUbHS4pTp+iwh45AipNa252DIUqSoOeGGAyk545Br0/T9A+HuoaVNLpFnPJDNdI0rSXTBkbcw4G6UjKkYHr39aDfDL4XaeJJdWjeBbdgrb7xgZEOWATakeWJPGOMDnOM1+e21SufdprrEzbTULFdKgnvPD9g12ERBdC0sgrMQCSQE5GD3H15r0+yvo7bR9kVjshupBvngj8pVJU8ZhjCnIwCMj3PHKQTeCvD1lKLdoVsJG8ovg5Ygbl6secDHBPHFcAvxt8InzY0S5tUDs8CSgD5cnn5CTng4XjAznmiTnbRjjTjfRHy9e+KdP8KeP9Y+H8ltcqs/8ApWnymUIAHKrJGo2EnvxuDLkE56V/Lv8A8FNvA/hDSviTYHwfp32SK/8AOZ1j3guytwzhyThWOCQBkYPU5P8ATp+05beFfiX4aF2t00WoWsUtxaXcULoySrhgS4PuPlzznvX8qP7UOp6xpniPXtYuL67uLo3klorzBXPloWACsQwVUU4OBkM2T0Br28nfv86fk1+pxY6PuqLR+XfiXwdDtaeTUcRRsQ8jBgGGeANzcD0yK9S+E3gyDXrWTw9o7PI8xEtsAN43DCt8uP4h6dcenTwHxje2GiKplUtPcuRGq8lsYHUg8eo4zX7uf8E8v2b4NA+Ha/FHxZGj3upR7ohLx5ag5DKcH1/THUV9Diq8aVN1JHHgcPOvUVOJ0Hws+Dk/w9+HcOm+JrSyEkeZpXKMZNzY4+bv2J5/kK5e+8FXt7q7XabIoSAiL0+UEnJAHGT6Yr3L4vfF/wCF3gK4ltPEXiCFplUu0ZkLMw7BUB5+nfvXx3q/7Tk+tTKPhX4evNVhcHNzIjJHn6kY/MivnY0sTXbny7/JH2PtsFhoKnOauui1f4Hv9r8PNGs0DyEvOV/1g4/8d6YHpWvpvhpb0SQ/a0BXqSg5HpjPWviHWPiH+0hqUcjtHaaaj5AQupcA9MFWIyPc/hXFaI37SdzM8kOueW5OVUMCB78Rfz3V0Qyypb3poxnxDQjpClL8v1P0gHgXR3l86WZmYDBPygH9P61P/Yen208ZtMKin5htAznr0xX58S+IP2ptJmRpLs3bKc7AVO7HPTC5z7VBov7XPizRLxrHx3Y75UJ3bAY2XjgbDwfxollNZq8ZJmlLiXBRfLODj6o/VS5kl03w7Lc6N9miO3AkJcHjr3HT2rnvhj8HfBl54sT4ga9I+paqq5RpTlUweCAcknnqa/ODX/2w9FvUtoreznwjhpNuMkDsM+tSD/goanhbUVk0nRlCDgCaba2O4IANYxyjF8rUFZs7P9YMrc1KrO6Xk3+h+xPi/U18NXdkYl8sS7gzKB044/GvQ7bxd4attNO64j/eDjJGckdBzivxQ1X/AIKceCPEGinTvGGkXMd0GBSW1ZXUDrznH6Cr8P7aXwcvdOBsr+Z5duD+7I5//X7Vz/2DiYpc0P1O9cUZfJv2dVL10/M/ZeP4m+HoYgsTiSVeCqEFseuATW5b/EXSJIBMZcDA4UbiM9iP/rV/PBqX7WviIyuvhGEQAH5Hk+Zj9QOg79aiH7Qv7Qd4DnMe1gdxQp74wXBIPrj8a1XD9TduxwPjKhdqKcn5I/oYk8f6RfMsdkA6btshJ249+frWBrnhrSNaiLwIglY/fx/PHWvwUtv2nvjlLc+XqttjnqkQK8f7rsP1r6d8GfteX2k28F14pS4sSvykSh1iYeoZwFz9DWFfIK0fepu/odFDi/Czly1Pd9VY/QB/Alzb3CfZxuUn5uikfnXhP7Rv7NFr8a/Ak+kMrLcwqZbaUD5lkUHgqOTnn1znHfNek/Dn9pPwD4zUJDeRJKOQJjtBGM8N0P519H6Vq9leygooG77rrg5yK4aaxGHqptcskezKvhcbRcOZOLP5T7DQNW8P6rJ4a1+3Npdac+JlYYJA43K3fIAzjsfYV55JdXlv4jcxswjWZmVAxOVccFRwDwO/ToO1f0O/tZ/sb6L8VEHirw7/AKLqgyfMUYznkjjAPuCcZ5znr+CfjLwF4s8F67PoPimIxXVsSmV6OvZlOO2Dx1HSvu8DjI1o3W/VH5RnGVTwlRp6x6M+uvgR8UL7wL4otfEujpA/JE0UwI8xCpyDjldx4yOQec4Jz+9Ph/4g6h4h0PT/ABHfW8cstzboVSInyxGQdoySz8Eck+tfzg+Co1SOSWcGaSaHylVdu4lhgcnGAOenTsM1+7X7KvjjS9f+EVp9pcS3ujN5GxcELGDuVm9Tt6Y49cCuTOaKdONVLVHNlknzuLe59dX8kcejLqREm8qFEcgwRkE54yAvoSQW68VwsOq3dzryXWob3ZCFGCqqqrnARSCFx2OCe+Oa4rVPGd1q1/KwG23dt5TgktkA5OQMHk9K7CxS4jshfxqfOkQuhYkhZMkAKQeCQPvYJHoa+ZPci7na3Ml14XtI5rOc/bL4AyxkbyyYI2mQN/F12pwAcEk7gOctNEn02E6/rZiMwUvBaOp+dQpIbaCAEyRxnLenc9r4Y0yTU9WjnvWS6vmhaZS7E4KZO0LwXckDgEE5yRjiuTvdPuNS1L/TpvmjyP3bbsdMsDnBOT973707XKR//9T9irfXNRsrSe6nW8sI7dcTrLaxnLI/l7chsh8k5JwDgjGeBCPiHcz2yw69ZfaUvJECSRwKjuU+VgHabJXII45/DFdRZadNoFpJdx3DzWqgOI48zZJB3ZIiU5DFhksB6dQDiSap4vuLybT7i+uUNoxaBXt4goXIBwwVXXJO7k988nmvzhWep987LQ4rUIdc164aHTbC3tbX7QUVpEZs8ghuQ3pjA4J9q5GTwR4ksxLe3MsVm8WGRLYHIXazscjaVXDev8q9Kvbbx5qN8F8+7NsM73JwDggnBBG0k4wQeOe1eWXPgzxeiXMF3qEcaLETOJbplyqryCFDkgdMYPpSshxb7nB3elRRpFqF3Gt6qiQeTdMAgG0Zycnr9O1fyC/tPfES+n+IF/pseI0S9lLW69N0jElcYH930/hya/rk1pYtD8IapeDUllurWykmRbRHJcqjHaWlC9NoP3cHNfyAeK/A2sfFP4n382m3MUU01vcX0RYHazAZcAjJySSFGOntX0eQU3Nysux5+aVFBXPinVfCGnj4orr2tBp7SIK8cacbVX+HkYAznmv0K+HvjH9pn9o+0/4Q/wAEXZ0XwnZqsEsq/KMA5O1+XZ+STtIHY9cV5F8OY9Q+JniTS/glY6TY2cF5KGvrxYN9wsUH3iJWy6BiDu2lRzjsBX60+If7K+Gfgq08C+AoBbt5QjiWMcxwqMbjjncegJ9z2r2sTW5HGmo3m9r9PM4sJTclKrKVqa3tpfyPkMfs3/C/4K6YviCdjrF5IxWOW7I6kfwIPl4wTnGRXkPizxzePK1uisFAwoPyqoz2Ar1/XJ9R8Z30S3BkkESCG3XG7oADgDGcnnjt611fhv8AZy89Bf8AjCNo1c7jFjDH0JP8OfYA+tZVa0KetWV3/WyOnC0a1bSjCy/rdnzHpmqX2owxiRGxkfd6EZx1Oa9l8MWmpQXiXC20m1OuRjj054r3PUfD3grwiMaPaRwuBhScEgVxp1uJZtsRzk5OK5JY9Ne5E9SnlE071JW9Cq/grxV43v45Ui8tE4UbgD1znPcj6V81ftpfDLUPC+m6N4tu1iV5Wa3cr9445BY457AV9/eCNSdZVZuFBBzXxJ/wUR+I9nd3Ok+B7aRSYY/tUgxyN2cc+hH8qjL8VWqYyMFtrcecYKhTwUp9dPvPk34JfDzwv48urubxHKz/AGRQy26Nt3ZOOT1x7CvpO1/Zx8PX6SXGn6VaQxgEjbESB7bsVV/YT+BuseOrq58d6kjxaQoCqwHEp9j6A/nz6V+wsOj6dpVoY4IwERcbBwPyrTN8y9lV9nCWvkdXDeUwqYZVJwV33V7n5DaX+zl8NtQ/4lfivSbWSJxzLENjj3DDFfnX8VfA/hr4efEq/wBB8GTm9sIpAsDFsluBkZ+tfvx8VPhvqFxo1x4j8HQlZoAXkhHQjkkjPQ+3Q1/PZ4uluE8bXMl7G0EsNz86MORh8nIr0slxM63NeV0cXFeBjQ5LU0nrqkfqj8EvghoWmfDmz1cQq97fxCV5yMkA8gc5xj2qzqnwjWZ5ZbCfEh5w/r9a9t+G3iqz134U6XqFiVzJAFYKc4I4x9RjmvOPEWvXWlRvcFtu08ZrzKmJqurNPub4XCUFh4cq6LU8S1X4Y+ILVdskZz2lTlevfuKxLTw9488MmS5Icx9AyZI/LA4+tey6L8chbSNYXuFicYZgM/pXrXhvxB4e8Qx40yZGJ+8nQ/iDzWzxU4K8onLLLadWVlPU+Idd8P8AhLxHqpuJbWXT5nP+ttDtYfVcEHHuK+gfh58Sfj/8JUQ+C75PFWmKPMWwuvll7k7H6kn06+gFez+IPhpout2rzW0Cpcf3wOv1A/mK8etPh7rehXCzo5WYY/i4OO/St4YmlWjyy18mcU8DXwcueDafdH3Z8Cv2/PhD8TL1fBHjNW8N6qAFaG+OxDITgqjHJJBOMHBPp1x41+3/APAjRgbX4haIEkt75C2+NgwyvBKkZBX156n3rxX4hfs3+H/2ivBM720cen+MtPjaW3u0GPtAQf6uTHJOB8rDn9c/FHhv4q/Fz4dfD650vUfE1vrFnaER3Oiag7CSAIdhEImIwwHQR8+3HG9DBUlLnpOz7Dxec1p0fY4qPN2ls/miHw5dW2hNOWtTczuSkcm4ZH+ztYOOnqPpX6P/ALIK+IdE0O9W7B8m6kQZwG7AYdSM8ZH6++Pz8OlXMOm2viyzDRDUraG9jK9PnUE/ipJB9xX6xfst6lpuofDAz3JVrma4ZXP3pC21cMT1HTHpzk0s0vGhKMkebhNaiaZ9h+HvDT3WkDxD5m22iBRuodiQN2BjB3BuK311K6N+tpbojQKPLz90KByOAcA8kn3rL0Gxmuo449Xudlts2yORjIXog4xvPH4nn1qK5ksoDJayHyo1wIlbgsBnHHfJ4z3r5RI9+Ox16eJzLt0S0kMcA+Z7napc84KqCRx0z3Pqc7a2I1s9N0qQa/Hg3KblVgpZQMFZOdu8kEjrjuw4ArgNFsr+W5MRZg+0HbF0JY4PcHB549OtdHDezRarJ/aAS/1KECCOUP8ALEwBI28AlsggMBjJyOeabTDY/9X9Q5PiLrMdtANQszctIhVcmVU25JOApBLHAPcYPc11Gh3vijW9PUyaCHY5R5JJ3ViDx/HlhhgP4u1cFovibURO8c8UtykBBkNyS4XJ+YAOj/eKqeSvPXPf0y3vn1e1N7a6XAxjfKhn6YYHgbAcEY78V+b62P0Nq2tji/EGleIF0uOH7HFDaTfvAiTb+TwBgtk5znp6ehritbsZrG1nsLq6hVQ+10tkLFmGSCWYAADcRwe3416xrniPxPd6hbWemBbURzkbkZguM7cbc8jnIGD27kZ4vWzZw2pvVvVkjmcJLHEpbCgdSCwPGPzPUU2hxkeHeOfCWgzfD7xFeotw6vaXQRQ+D8kRJU4UY4II+bHPtX8vvwa1ew0rx9Z61DKrLFouqZDYAZv7OmZRz3+7j/aAxX9S/j7VbTTfCWq/2gJVjGm3Uu1CgDZjfqecnKfl9a/lN8HHQmub+HVsZsdL1K5V8cib7FO8Q/Btqmvr+FU1JvtKJ4OfJOPK+qZqfsQaHNc/EbXLqaIYgtxEkhHKgt5rYP8A20ANfozqngjU9f8AMuLezleW7+RQeAEXIHUj1zyfWvJP+CU3gRPGvgXxX4zlRbmT+0TEjMcggqp6/UV+s+h+Af7Zupb3WVWGC2BSOOP5Q+zODjPC/wA6MZiFTrTk90kjtwOCdejTh9ltv/I+GdI+Etj4M07+0rwL9slADNgZUHqoPpmvnz4nfEeDTfMttD2PJGpHmufkU9+nXGK9A/al+Puj+FrF4NAuop/KkaJ1jb52YdFUDkDuWGeOlfir8UPFfxA8QXwfxEXtLe5LPDbg4wvGMgc9uC3WuHCYCeIn7Wroj2MfmVHBr2OH1Z6Z4k8c3OranLd6nqPnSM2cIxK/gBxj0rqfAepibUFiMuDLgAMevNeEfDqwtJLG6F3B9rkkcLHxnp97HQjt+VfRPw+8A3t1cNcyQLEsh+QHO4AemTwK9DFUYQi4p6nLgcTUqe9JaH1lY6quh6S9zdALHApdifQe9fkloWj+Jf2uv2ko9AsxJMlzcDzD/dgRwMdwvB4zxuNfUH7bPxPh8C+C7f4daVPv1LUlDXKofmWPAKg4Ofm9MEEV9of8Euf2cm+H/gGT4s+K7ILqerc28jHnyWUH9fy9eRw8LbCYaWKl8UthVaUswxsMHB+7HV/1+Hqz7o8O/DTw/wDCrwPZeCPCNusNlZDYNoxk9yfr/wDrOevGazbrLd7UfAT7w+vpX0drEMUiSFOMjpXyzrN4YtRlg27iWOWFfH1JSlUc29Wfq+Dw1OMYxSslsd34ct7P7MzzIHZztBJ7d8ivxA/4KSfs3Wvw88TwfE3w1EItP1LiVVHAlZj39/p9eTX7P+E9T2s0TQklu57Yq/8AFr4d6D8Y/hnfeDNbgVzcRN5ROMq4B2kE8A5/I89q9HKMbLD17vbqefxNlccbhZQS95ao/D39jfxlNqfgm58IzHfNYMZVP+yzHjr617/4y06yv9KnvNTLKkI3kJwTivzb8I3PiD9mX4+nw9roKC3nFrchu6MevQn36Z+lfr1r3h+DV9HTV7UCWG4jDHjqrDuK+hzSnyVlVjtLU/N8nm5UZUZr3ofl/wAA/Oy4md53+wRZAOfwqGLxvc+EdYj/ALQsyHOCrI2Dg/T/ABr6I134b2ib7rTSYWAPyjkfr0zXg3j/AMG67ctFdwQGeW3U7wmCcdQfw/rWmHqU5PlkYY2lWjFzpn2F8KvjV4f8SrFp7XA81iFEMmA/4c/N+FfW/hvwPZeLyfIHmZ+6qnGT+IPQdq/FTwDpFpqevNp97O9jcZBicA8MDwDjpz3r9N/hZ8YdU+EustoXxJbc8yH7LOoJDkkECTBIIIPDAcdyaxxeXWlzUHr2Nsvznnh7LFLTuewWXw98UeFfGVrLADHGkytuJB/d7uc4z1HFflD+1p8EtGs/219L0Yx/8S3xNcW9zJFCAuBI2JAOvJwcn3r+mTwJp/w1+NPgq18aeHY3WXPlSDJDKynDKy56Z/8Ard6/MT9vP4d3vhL9ov4SavoCedc3MkwQKASQkiA/X5T19K78rxVqnK97O5x5zlv7lzjqrqx418evC/hrU/hB4e8WeFNPh0610gyaTPa26/KnlSeYCS2T88UgA3Zy0chGBwOh/YhayGsXXhe1vIxA8RdZGB3jZndxgnOCPT6815z4K8bR3nivxZ8CfEe6J9QWWS2il/huYEMsZxyCzxiaEf8AXXPtVL9lWz19dVttY0QsXjuk2sMqrrIRGysTj5SSAc8A8mvTzJe2w0pS3aR81hP3VdU47J/1+p+wl3qlqmkw28o2QIc7SM7sDOQc8sxz2zjj2qCDSZdSWLWruHDxgLErEg8chsHGfQY4GPenW0loWWCEm6h37pE6KWU5K89gepHfOPfc1HU3sljjn8qOHYZFjYkgBcjOCc4GMcHnFfB8up9cttSrNrljodjMjXK27Mu5pM7WOSSPnJGFz1rc+Evw3+IHxguxeeDgmm6LDL5cutXUZeN5E+9DbpgtJJg4x91ec5xipvg78GNS+OGpf274nee08L25wGT5HuuQQkZYDC4+9JyAOmSc1+yfwq+D95rtnZ3emkaH4f09BBDJDGo+RSdsdujABhkfNJyFPdmPHdgcDWxNVUKEOab/AA9Tgx2Y4fCUZYjEz5YLr39D/9b9c7/Vp9GWW6lMQkSTy23xXThihOFkyQv3mLY555yWrl7fxj4tv7Ux6lfJ5MkojCmNgowGPBHPsOfTPrXSr4R8QRQvb69LapGpDiRbiNgz7c7WUhtwGBkYHckE5FZ+n+C5UkSab7NINwcqepwu7jy4xgc4wDxx1zX5xddT9E5brU84up7FopP7Td55FQnaFVRuOOjEMSOcnj+eaNF0O+nijjsLTzhJESsjOFHDYPGR3B46/pXoV7rMVlC1tLo9tJLMxVcwOcgYQAFxnIIH51m3k+qyaSNStNDjWLDCIpCWO4qpcAAHu2Rx3pp3d0Pm01PBPjJ8P/E2qeEdY0uyW3nuFsZGKq5A2tG7E5b5RwcAZAOeBzX8pPieyj8NW2uwzWrQ3UNhdWjI2QwleMo2R6hh+tf1QeKdY8XXcMum2lteq9yrRXHkQSjcuOV4A4AHQV/NP+2JpNxa/FnVvC9hC8N1Pr0Flbh1KO3mqI+VfaVzuBwQODX1fDVRwlUg15nz+cxU+SSl5H6Hf8EXbC38P+DPHfw01+NlvbDUo7wxkfdR4lH/AI9jI/H2r63/AG5Pi2/wS+Fsuj6PKq694kOxVGCYYMfNwTxkEjvzweMV89/Du1m/ZH/bZtYdTlMeifEHQ4YxkHIurcFRE2RhSMZyTk/Tirnxy0J/iZ8Sbjxr4nAlQTYhQgELGn3F6c8DPTvg5xXPjKsPrCqPWLSZ9Nl9GccK6CVpxbXp/SPx58MvrkOpX+ra7pf2qW6iaOKSYbgu8YyOcE9+nJ5riNQ+E2reJ9ZXXfFN3JcOFUMCDyqAADk8DAxxX6+eNNH8DTwNq1rb4uFiCFmPXHQBTwBXzPqfhoXV0ZVQLHjAQVazRtvlViYcPxS55u581eHfA2l6WVazthGq/cAHTr/jXrE/iLR/ht4Xu/HfiPH2awTeEJAMjdkGeMmup/s23slaadhFFHyzOQAMe54r4L8bXHiz9r34n23ws8ARkaDpcmZLhQdrYzliSMcjIAHX8yNMPTdeV5v3VuxY2qsPBQgvfeiR5L8Bfhz4p/bA/aPGuasp+wC4FxMXGFMYP3QcDPA6jBwMjJr+p/w5pUWiaLDoulRhYbWJY0UD+6Mc4wMnvXyj+yN+zlpHwhlu5dLjCQ+WIlz1Jzkn6cDvX3TdyaZpts+whpCM7R1zXJmuM+sVFCHwR2Po+HsuWEouc1epLc8S8VmWwdZrnPzj5ucc14Nqt0kssnlDG45Fe2eLdP1XX4y1up5Ofw9K82fwXq0sWSu1h0BrwZOPMfd4WNo80jndD8938plwz8KK9f08EERHJKivKBYahp9wiXUZQg8GvQ9HvppE2O++Qc4AxxVQ1kjTFQco3R+W3/BSb9mRtS01PjR4XtB58WRdiMfOx4w3HoBkn0zzwBXFfsT/ABYtPHfgL/hX2uTA6jpa+UiN95owPTjpnHf3r9nPEVtZeKPCt54b1RRsuYimSAcE9Dj1B5Ffy+31t4s/Zf8Aj5ca9YRObSyuCrkZ2sjHJViMAn9M+1fWYKX1rDSw037y2PynOsO8vxscdTXuS0kv6+8/U/xb4Tn0qcCP542Pyn+hrzW88O/aC0qArIBnHY47V9Q+HPE3hv4neD7bxJpEizwXKAnafut3B7jB9a46+8Ny28nyYYZ4NedGo03Ce6Ouph4tKpTd4s+cdP8ABUF7fi68tY5WbbnGCCPfr9a9kl/Z7t/E9g1xeXsgaP5weCVz6Hj0z+FbSaSsdwC8fPbAr0zSZdUjZbeLIXbh+evH61q8XVjblZzxy2hO/NHU6X9kvxBrfwh8TvpmrPJLpd6oS54PBH3ZNv8A6F3x+NepftJafpPjv9t/4HeHEmBhjFxPIIz0XazA+2SoH41S8H6alvbRXG35snPrzXnfwevLb4hft+6h40idZ7TwXpUdmEOR+/fup9VwQfUGunB1f3kq8uiZhjaPuQw0Oskvud3+R8Pf8FFPhpefAH9srT/EPhuRQLySyusysFB3P5bAHjsBn8fWtn9kXTtTh0QXF0rf2fbXghkmToEkUMcHB5O/A9/TFfYH/BZzRrTVofh74rtY1V5bWUlyADkPGyE+4JH5e1ee/s5aHa23gmzXSp0h0t2F1KNu8Sncvyr05VV7nOPY5r3cbWUMDddT4yrh7ZlNfP8Ar7z6w8FXq2VjNrmuRxyQSf8AHpAxwGfdh8jKnaBg8Eck816l8GfhHrnx8159Q1o/ZvDFlJ/pEseVa4kAGYY29Af9Y3RQMZJ6cV4A+HmqftAeOotE8PSfY9PtSZLiUjJhjLfdQd3bBAHqeeAAf3O+AvwT0GHS49G0OH7HoGjYjlkjzmaTJ+RX7sesjj7uPUjHzmBwVXFVoUKEbzlt5ebOzH4+jg8PPE4mVqcfx8ka/wAIfgtpmrWFpqeq2ws/DNniK2t1BRrhUPKRgEbYeNrueWywA/ir6tkkijjS2tY1ggiURxRRjCoq9FUdgBU1zIgVIIEWKGJRHHFHwqKowqqPQAYrLlbBzX7/AMPcO0Mso8sNZv4n3f8AkfzjxLxNiM3r89TSmvhj2X+Z/9f9Y7e/8PIjSy6JeK5VjFtfo7H7xKqDwccBcenXntNDun1DUBeT6dKswVjvKL+72gA5kc4bk9h+Hrm2/hu1sbZbvWC8rSviR0uFww5OSvmAkbSB165BxXBQtJJfva6OIkSCRolmSREJ3AqNzLknJB4zjHtX5ul0P0e57bqLalbzLe2cD3KZy2XjQjHPXzApJ77V4xXKf8JX4oXz9XltpXg8wiNfPhypXaucKw4IK447jk157qOh+ILizK28CywxTf6uOXdgdccH+IEZPWj/AInUWqS/2hochjJCmE7sBQAUG4+wUn1wKErKw+Xqjj/EPxL+IXiEOmqT24ttxaOJY1XYTnbzvZjgZGfxr+e79tr4ca/qv7X+k+KJYHfTbzWLCaS5UYjedZsMABwCe3sO9f0QX3h7QLiRb+906+jhVdxIDHPIHcDAwSOD6V8hfGa2+H/jiXwro1raTW1nZasLjdNy7SpNEnJyQQVXj0Oa9HL8a8PUc3qnp94oZT9emqFLdXl9yu/wR5h+2v8ACCz+MPgW20zTZntNX0udrzTbtTjy5h7dwwG0/X6V+bOhftYXPhOVvAv7ROmTaTqdnEQ14FzFNtO0FR1y3XoB/X9rviDYLeXL2zAEqSF5x16+1fBPxg+EfgnxpKv/AAmmlw3whBSN5BnAPJA/E1ng8fDk9liI3j5br08j6XF5VUqTdfCS5anW+zt38/M+Wrj4+fAW+tg41+3UPglXLgjvyMHB9a8M+IX7TfwX8KafPqNnqsepSRsNtvbH5iD3G4DgDrmuc8afskfC+/1R5tImubGMHPlxkMOv+0M03Q/2Tvg7FPBcXdpJcSQY3F3PzEdyucfhXqU44CHvc0n5Hmyo5w3yKEV53/r8j5nn8W/Gn9rzXI/Bfw8spLDQ5yUlm5EbDr+8cZGcY4Hv2r9pv2Vf2ZPCPwO8G22h2EaT6hMNt1dAYkcnkZI6gHp+WT38++Hsvh7wci6VpFtHbQqgjVY1CjjpnHX8a+0vhpqMLSpPcpuBO4e2K5sTmjn+5px5Yfn6nXgckVCbxGIlz1X16L0O7XRm0e6NnAvHHI969F0r4QXckh1PW2KKRnyx1/H0+let/Cfwymt382tXsQZIiPKLDo3X8cLj86+hda8Nxp4fn1KQx4RedvWoWHlKm5I92lVtNc5+efi3Q4dGYrGoIJ+XHpXkpMUszeYjDnjNfQnjiJZrqQuSPL6fSvHJIYbiRlTljzzXi027XPp5PRHJalpbSBYY0HzHqaz7LwvHanbbkDdy3+fSuumu44QlmfmLnAb0r03wZ4bkuZI9kKySM+Ru9K2ou8wTajrscTF8JdV1DRjqSlYBjcBJkEr647Z7V+ZHxa+AOieN9W1zwpr1v5bXZZQ5AOG28MuR78HFf0J3NrYy6a0FyoHy4PpXxT+0H8Mo5NJfxpoMeJrYfv1QHLRjvx3X+WRmvoqUHSlzR3Pl8bRWIpyUldH8uPhXxt4y/Y3+Id54J8WwS3GiSybFcZCnHQoTxnn5v5+v6a6B4v8ADfjjR11bw7dx3MRGcxnOD6H9RT/iv4H8E/FDR5PD/i23WcMcrICAwPsw5wfavzkm/Zc+MHw51h7/AOEeth4WdmEcj7dqj7q853HB6447V0zqYfGazfJU/BnycMPjMtvGnD2lF9Fuv6/qx+jol8iQHHOQc11Wl3i+aGx07V+W1p8Zv2rPCV9Jaa94clvFjUKCY9yk467srkmuxtfil+1742sJLfwv4djszKComKhGX3BL8EUnls+s1bvc0hndB6KlPm7cp+h/xO+Oeh/CfwLNqU5DalMfJsbSP5nkkbhcL1xn869R/Yk+Ft98PvDcd14jT/ic+I7n7bfuOzynKpyc8AgYz1r5U/Zm/ZIvZ/G9t8QfjZqB17U9oaGGUEpE5O4kEk8ggEEY78c1+4fww+HUBu4/EJXzHUgRoegI6tjpnsPSspzhGP1ek793+hth8NWnU+uV4ctvhj113b8/yPnD/gpZ4Bh8T/s2+AhNAHMeq7GZhyQkLBVPf7wx9a+f/D3wM1L4etpnwd0OPfNeRwTWwDZ3GdSVPPACqNx+bABAyTxX6h/tqfDLWdf+AnhO4tNrHSdfhuJFGeS8jFB0Hy54Y/zr1v4SWWj/ABN8P6N8U9I0srrOrW/2IQyBfNUxu22HHJQk5DEdFxngE16uYzapUqPLfmW3nfb5ngVsDGf1jGSdlBpX8ra/dY6D9mn9nyw8Ow2/w/8ACypBui8/U9QkG48fekI4LM2dkK4UY54wa/Su1trLRtJi8O6Ihh0+1z5MZOTyeWZurM3VmPU1n+FvBll8PdBj8OwGOa5J828uUH+ulPcE5OxBhUB6KPUmrdw6jjviv1fhHh2OAoKtVV609/LyR/NvGnFM80xPsKLtQhol382UJm3NnpxWPdXGCRVmWUnJ7msW4clsV93TifDH/9D9mT8Q/Een3sKgaTDJOd0jq28Zzg42OSgHpnGMfWr58Yak2px3TNpl9sjDbJC5yV2g8H16fnzWfqF9YatDHc6lpkUMkvzsWKOh+XqpMrMQdoPyhfyNRx6d4ahkWSe8s7ZM+aYWAG3aeRkvkZAP51+cc/Q/R3BLWx1sXii2DtaanpdnHGu399G4jA5I28qeQcHORxWDdeL/AAVdmSyuZ4OC2VSZmVmGRv5RRleq9vrVe81HQtIhYzQOWYgny3JLSPksMbT26YPr615DPZ2GrMSlntG7gr83D5wQDt6YwT0z704zb3F7LtodBrz+G7+yeCz1mSJEDwx48xNhIAGW2FTyCcZ5+lfkJ8WfFGr6H8UbHwTqVvJCbPVLfy7lSDFOLiQBWjYAdk+Ze3pX6hX1lpMUZsZgY3cjc7LjbjAOSvXPXpXyj+0Tonh+bw/bXssINxBNFdW7jcdsttucKTngMu4jkdOK3pSWsbdvwdz1cmn7PGU5uWj5l/4FFr9T6g8Q+E4NQv5JHjBGTjjj36V8L/E7RrmDULuza3KbHZlGOME8EHuK/VS40p9R0y014Jg3tuk7hegLKGOPbmvmP4o+DLfV1kwBvjUkY4Oc5HPvjmuedLkbuj6vDVlJKUT8TvE/hrUbXWJImjKoOVJ/unoeK5RbO5tpvK6Z5Nffni7wKiXsiXUbbY2IGTx/nvXiuu+Dra4UmBR5sJwPf2zVKvbRmzpSbv0PnyBHjlJxkjp719H/AAq8ZFMQMjbl2xCMnjczAA57DPX6968z1Lw/DYyAy4UbRgjP3sH+tanhWZtKmNzGwBSSOQ59EcMR+IFUpJtN7XJqRtBtbn7k6HNpnw08IadpOozIZljzIw4yx5c/TJrM1f44/DRYpNHutXtLd5uiyyKuTj3Ir85f2yfjTq3hXwxe+KNNYmSO32QL1Az94+nXv9OK/kL+Lfxt+L1541m1GHWb1P3xaNUkfarAkjaCeMdsV9BgL4jmSdo7HmZvOWDhGUY3f9WP7nviJp6LZ/2jaMHD8Eqcjn3r5yu7tbYmBuJuhr8Jf2F/21fj74LsWtvibLca1oIIUxzsWbLdwe59zyBjnHB/dJpLLUbeDxDaqRFdRiVS3UBgD/WvHx+XSw8tHeLOzKM6WMhqrSXQoWNuI22sc5PWvddA8aeEvh9oNx4w8ZXsNha2if62YhRx1/Ic/TnpXj9gDcI14R+6jBZj9BnpX4aftr/FL4nftBaNqPh3Rp5LLTbJiEtIzjcAcHeOrHjPbnr0GDK8H7WsnJ2ijpzbMpYeg1TV5PZeh+0Wuf8ABQj9nvWbptG0rxBDIzPtyGBDc4wAMk5PtXvPgH4r+HPGtkLK3nS4jmBHmbgRjHSv4OtDj1y01hdOWWSNlfDAZz+lf0X/ALDGoazpngy3n1h3Ee4hGkz93HHJ7cce1e9mlJYaCnGVzzuHsdVxd4VIrrqdB8VtKi0Hx5r2haecxWl9JGh7kA5/mTXlti2ptITKpAHT0969L8XX/wDwkvia+1lPlF1O0vTqCcD8cAZ9639C0ZZmCxJkjjGM9a8apUTk2dcKXRHFWkt+wSMIXBOOO1dzo9pPPOsEcR3E8gfTP8q9S0j4fNOfOYiNu3y5x+Ne1eGPBllbPGu1Sg5Y45J981zvEJuyOhUWlc1/hF4KkY2txsLO7hcZ7ZwTyPrX6N+CPDUOi6dDZjJYE/MR1yc1458KfD0G2K52hgAQFwOMHHB/GvsLwPpYl1WGDZvw/Q44z3GfT9K9fBUedxt1PGxdbk5m+hsfGbw9pZ+C9hpevzGCP7dbO0i4U7w+9RzkcsAPxrT/AGDNO+yeB/FHjG706E3l7q1zZRSEDdAkZ2yKnHyhjjJHUflW7+0KbIfBjWlu9u2OJGjJxw6upXGe5PAr1L9mfSbLRvgTos1uuJtVEl/ct/elndmZsdBnjgcV+mZNgY1M1hKSuoQ/G5+Mcf5vKhw1OhF2lVqr7lHU9NnYgZccmsC8l+brgAVt3bcFuwrkL+TcxPbFfrNGNz+Z2U536qD0rJuLjyl3NzxwKnkODzXP3o/fE5+8P/rf0r0acNdSoRu7H//R/Uly01wLG+Yq0EY5lzJggdVVxkAg/dBHr2xV+68JTW+mLI9lA5YD5g2DkgYBG7AOT6VVi0z7BdTzYtZQAwQkqykgEcZPAA3DPI/QjTOiXEV66aesWYmRAGfBz6MvA7Z7D6mvzfrofqD6NnFtpzwpHePZyLuz++UEjJHHXjjk+v58Ot9VuYbKSyt5wVI2+W25SQccZHYEZ5I6nrmux07RPE8BE1t5Rkf5TGTnGSPQgDp61ZvrHTYo4rnW7QmeZd8vlqfXb2YDLev6c0nJXsXY5KOXVprNXjQtHOhUNGT1xhg24c4HA59cd68x+M/gzUvFng7Ubfw5pzC5nbECPGQvyYwAVBAYkEckDnBOM17qjeFrW/EVhM1vvK/eYjGQx6OuDkY74z096N5LqukoYLO6EofbtjJLFSOhXAA6e3fpWtGcYzUuxnUjNxaR794Q0K4l+H+k29xH++tbOO3nXrh40CMPfkV4n458Jol3PMjHEo3Ko6cDGK+nfh3q51fTYobpUS4aNHk2fdJIwSPxU1zfjLwxCGlifqGKqfQ+n/1q9bF4bmpKtHbqergcZy1XB6dfvPzK8beDZJVkVfm5yVbqVx0BFfMGsaAbRiYlYhQT79a/QzxlozWrAucshKt+FfHXjDSZ0WRbfhg2Ax7jNfON8snBn2NGV4nyvr1nE8LyXC4HJweoPrzXlBW5toJJgQVPBAr2q98x5ZLK4YNLE/zduvT/APXXE6lpFuoyEXbnB9aqlUtozPExcUYeo6/pvxH8Or4H8RTEOFMatIfvA8Dk9x2r5Cu/+CZOi+K9Xi1L+1I4rPzPmDD5uvQcHt3OfpX0xL4IlnmEtm6rnrmvSvCHhvxVa/6M8/lWh4I3Eg+4HTr16V6uExE6Um6ct+hz16tKvTVKsr27Huvwz/ZR+BPwf8BW1jBYx6jPbAsLiQZ3E+2SD685/LAEWv8Axo8E3bt4YjU2ptTtVSm1eOMDHH8q3tG1dtM0WPw/Md8CkkMPXP5Y56V8r/FLwjZw6w+oWF0m6clyG9fQYH8+laYmUpyanI5cJCEEnTjax6zcfFTR9JgZIGMvbaOhzVfTdH8B6yj6hdaTbP8AbUPmEIu75hzyAOffNeQaJ4bjMaTX43ynBxzgCvX9K1PTbO0dQBH5YwB0/AVyUm4z5YyO6eIg46x+8+R/F/7IX7LWk64/i2W2hsriRy4iZ1APbAU89vWg3ukQ2g0HwvxCvyll4AHoK6nx54f03xH4ll1ASOhICsB7Vg2mn6dpf+j2pBUdSeufWuyvKU7c0m7GWGqwpwkqMFG/YpQ6YluFKgn3NeveBNKgaOS5lYMem3Hb1rk9NgtbktHPJgY+U+9eoeEoYrYMITuBHWuCtN2ZrRlqonrOj6XElskSqMMBXqXhnSEx5YTbztUHn8a4rw/bl1SO4+Ynnjt7V7d4S05Zr6EEZA+b6YH9TWSktLHXK9mfSnw40RtP0eKLByMkgjuxz19BX1x4DsWimkkfO5MBieh69K86+GukK6hJFzuTDH1xiveIPI0+D7OnLtz+dfe5Nh7RjKZ+f51i7uVOPU+W/wBrGzn8WaRpHgxpAtlNdG4vIzkB0XCIMgg5DNuHuAa/RCKysdG0210bTV2Q2dulvGuc4VFCgZ74Ar4H+Ikf/CVfECw8N2yCSZZra2QHj5nkWR+fZeT9D6V993jK8jlehNfo/CF6lbE1JLROKXyWv4s/CvFiap4fAUE9WpSa9XZP7kjmr9sd+TXMTEkkGukvMBiG7Vzlwp5Ir9Io7H4l1MmTIy2M1jbXuWYyKVABx2xW0zZbb6VWljSTD5xtOc/T1+ld0HYuLsf/0v0ZsJP2mbGJx/wq/UGZyGUsLRGQsx4yJAWByQOnYdsVoWWsftHiEWkvw/1VF27t5Nsx6AcEzE/eGOD1PSv2UP7G3xmJDPreh+4EM/I9PvHqetWI/wBkL4yxtuTXdHXgrxHODg9ckNz6fTivkf7GxL1dJf8AgX/BPsXnuFX/AC9f3H5GSeIvEVkHn8UeFdRtJ5fuJJamRs5J52hlIznoaqXfxB8OWafbdSnuNKYRsiC8hkgOTu+UFto9McHtyK/Xl/2S/jZAc22uaNn/AGo5iPyOa5HVf2eP2hbYSaSthp+ron8cVz5MTnHaNxkY6c+nFZ1MkxKV1T+5ounxBg3o6qXqmfknPq1lrEP9ow3sN0m7CshUjCgDIxzUt5cxyWkc1psLYZWBPzBuhK9Bj/Pavujxt+zbJqdw8/jf4ZztNAGEt5aQR/u+csyzQ4dgvOCp+g7V833nwB+GpRLbw/repaNOWKsly/mbyegCXSs/U8bWA7CuKrhZ01+8g4+qZ6lHMKVV2pzT9H+h0PwE8TGd5vC91kTpL58Ge8RA3df7rjt/fHvX1PrejJq9l9vtgOMhhjOTgflXx14V+DvxF8DeNrXxXpmoadfC0ZkKOskBeJ+JFIPmryACCCCrAEV90acfsl41ugPlTEZU+49f8K+jymrTxFB0r3a3/RmOIqTpzUkvQ+AfijosdrZvexBiJH2t7Z5/X+dfCfjazFtevAh+UjJ9efwFfrR8YfCN/ZXbG1CyWF0Tk5wVfg49weSD1B9sV+e/i/wxFfzyLOmZEbaT0IPevmM1wsqFbVaH3eS46Nainc+EvE+mRi5Jj4yO9eb3Om3FyDDGjlgM/LX0h4p8MSy6m9tDuPlKTgDP+RXFeHtFiutYTTmBja4+Ut6HGefyrjo0ru/Q78XWvGyPErLTfsqFZHcEeo5rqLDU5oIRACCh9R/LNe4ah8Ob2yLlVMijuD+tYV18O7+OFry6ZBaj+LdjkDP8q9GlFRbe5xRw8ppOMjzJ9bukj8hRzkgHG3/H+VeS+N72OKNWkYPIOWyMkf8A666rxTr3h3Sr8pZ6lG3lcNGmG5+oz+lcH4g1PQb/AE8S6h0uBgMrc/UrjrTqSk6nM1oexhMvSp+9Ir+F/EzXGoPJLKZNq42AdD2+ldle6pby/OGICgnbgd/cmvMdP1Lwr4fj8rSdwZxl5J26/Tint468NGffPE8seedvGR+NJxvLmijqeEpeycZNDp5DfSvKV2gngDg4quuis+blAWC/iK7TTfHXwkn/AHWrS/ZADxvDYOf9rGPwr2O203wpf26Nok6SQMclomBHHbitJSnbY8uWFjHSEtTwTStJjjlkknJbgEDt+B716Foiy2dxELdcIDyOvBrstc0qwS3CNtVlOFxgZrV0HTYmhWU/fYfNx2FclS8ro4VzqpZs7jw9CJCsjHjO4dvpX0L8NbUSayxf/VkbGHqxxj8q8Y8OaVFcSxSS5jjDAEg4FfVHwq0B31tYcERowfn+I5H6Z6/SrwWGlOcYo6cbi4wpu59zeA7C2srE3UjDgcn371qx6kLi9Nw5xFGSx+lc7NdRWXh+K2hOAw5Yd+5J+v8A9atrwRpza9eWVoM7bqZVYsOCinc+fqoav0rBUeapToQ2Py/NMWqVGtipvZP8D2HQvhhpmia2PG+ooDqLgmNQT8m9QCSOm/b8vsK6+YYBNdjqN7biQyOcsxzXHyyR7ivXtX65lmDp4anyU42W782z+Xc+zfE5nifb4mV3ayXRJbJHMak2TwK5uVZDx616AbaN/mfvWdcWUSsHVRXtU6qWh4XJqcF5ErOQAfpVXULC58oKozg5rvHt0jG4AZpPswZfSuhYm1mioqzP/9P+9M3ySLuLdO1Zb30quSjcelUjKOoquz7jXpRpJHx1bGzfU1ftjyktu/KoTPjg1Q3bfmBqPdnpVKCOeWKl13NBmLDOeKwNZ8JeF/FMTQ+ItOtr4MhjPnxq52nqASCR+GK0VmHHapvN28ihx0sEK9nzJnzhr37JPwe1BjLoEV1oUoX5RYzMse/s7RtuVj0yDwQMV8wfEjwPq/wj8S6foFxfS6rbXdu0sN1LGImDo2Gi+Q7WwpDDABAznPb9LRID1rw39obwTP418ASTacUW90iQX8Jf+IRgl492CV3pkfXGeK544KkpOcYpSfU93AcQYinUgqlRumns+x8Q6qLHWdNe3vnJSYEbvr3B9QelfEPjzwTd2N+8V1gqTkSKOGGeuOx9f09K+t7e+WW1iYZ8m4RZYt4wcMMjI9xXJ69Y2uv6fLY3C8kYz6HqD9RwRXiZphlXXK1qj9fyzGujJTi9GfkJ8Rd2h+J5wPmzFgZ759P1r4X8bfF9PCd9u05mN9A24kAEDHI3evbIHOPSv0E/aHs3trk2d4hjvLOYwuw4BBXcGHGdpABHvx61+c+v/B6PxhrjgzNBLMcnaAVz68/rzXw6pqnU5Z6WPu41Pb0+aGzLVx/wUN0W28OtA2kpJqkAOSHG3cOnB52n0zn2r4Y8cftUeKvHt+za/dNHZbtyW0Jwg64+UdeDjnHHavsO7/Yo+Gd8BH4rhkkuwSXnjAjY+g4B4rGX9iPTNLkaTwVcwImfu3yFmX6MOufWvXoVKFvddh0IVI/Err+un/DnwLcfHixsU/dabcyoCQrYCjjrj866DTP2hPCt3bvcajY3MUkS5VXUMGPbnoK+x9R+COpaPpwttRhsZdrEHAA/H5gK8d1Lwr4es2KzRWyq3OFx+tauph9ra+p69HD1Ze8p6Hg15+0Bo+qzb20+dFxwRzXFn4s+OtWuXtfDmkAoT8jSlhx+AxX0zNonhyz2xoLc7/uhQuefxrrdO0Gyu41RmCxkYyo5/DtUe2ox15S5YeT0lU29D4qutb+KN0jTXullXUnAiYgfngZ/Kuf8NfFz4m+G9WM2iW1zBKmVaONS4/4GBX6Q2Xw28MXkYa9uJnjB5UcfqAcfXIr13T/CPgnSbFZLG2hi+UAluScepPJ/GolmFCP2LnBXoPRQmfAfhbxp8afGuqrqmrW1wiYws+CpwOwG49/UZr6++HfjHxVpUf2bxFM7KSCofBI9R9D7167DolnHL5oClOoQDA/Pv+NYfiPRrORkFug2kZ9hk89Pyrhnio1XZRsjldH2avN3Psz4S3Ka7biWMb1OCvrnOCPbBx36/hX3n4JsbDRg1zIUV2Ay564GeF9+x5r84f2YrCddaBjDrbW8J3MOFLEjg8cnAycV9xHxDBBN5b5ZYsgHj8TXv5VQjTXPLqfO5piHUlyxPW7/AFibUiljb4VeFCjjOO3bj04r6a+B+j3VxqMuoyjEOn24j5/56zYPHuqBs/74r5C8Egy3T3zYSMDl27Dg5OfbP0r9Ffg/4el0/wAA2+pXKFJtWc3pVhghGwsQI/65qp/Gv0Xh7DqVZVGttT8i4+zL2OAeHg9Zaf5/15nS3uk/aB5u7G3rXOmzXzzEDmvTUslKYJzn1qnNo9ujCUKD+FfoNPE20Z+Eyw6ep59PZuIAynqM5qBLXzlEeDnoMV6cLCILlwBULWUGzehwRWixQvqqvueTNp90snkc57ZqUWUkSlrgY9K9Bmu7KFxv61ialdQzTBHXdgcVvGvKWliJUYxW5//U/uZN8o7Z+lQpd5k+XpmubeV84FWLGciXa31r6H2Stc/MnVbdjqJdzxnYcVTWaSEENzUhmxyajmlUp7mskuhcpdRrXDPjHBp63J6E1medUZLA7lrTkRn7TqbnnEcipRJHMjRygMpGCD3FZMUjPwfSplk2ketQ4DVRo/ND4j+CL/w14g1jw7bRvFHbytPYKSSPszAFApJ5CncmMnGMccV8uX/jAaOwe9OzO5flPUr6cevWv1c+O3hCTVtLi8ZWKB59KjdZ15y9u2C+MfxIVDAdwCO9flR8dfB88Bt5NFC+VPI0hJPGSMjB575NeVmWGfJ7SG5+t8JZusRRVKo9Y6HzT8evBsHxP8PWnibw/HHJdWJdGViF82JhgqGGRw2GAP6E1+ZOsXd7pkq3dsHUp6AZGOORntg+tfbOn/EDVtCkdJAWtZm2+Tj5cgnDYwemMemK82+InhfTdaX+3NIA/eN+9jjUNjdyTjIPPcd6+Qx2HjWXNH4lufpGX4yWHbhJ+69jxqz+I1tq1souWDXMa4dcAH9Oo71ztx4+YxzKr7Qpxx1PpXl3iXQp7S48+FdwSQlSuQw9OnoKyWupJLdrdiVdjzu7kfWvEdKd7JanvQx6sip4/wDFz6irW+Sdo3bjjB/wr5a1XTJNQLK2ZM+n+f619Qan4dtdUtY7liyAL8y9D/WuK1HRtJgJtlJiG374yfzGacISg/e3OyGIhUjZHy5DaWenlY32s6HGVzXo+nXioyhGxjtmrLeHdEhkznczHgsf8K6iPTdAht1YMGfnGDxXRVd0VGMYbDbHWrmEFUY/n/hUra3eXlwfMKnb7/06VNHpunM6m3AMoI45wM+uRVG8tTHN5BA3OeAeB159uKyjRuyZYmKZ1p8b3ggWKJgqquMHpxgZGB+lXNE1y41PU7XT4wWMkm1m29Af4vw69K4SPwxfXmoRPZSBsjLBT3B5GOhx1r1bw3o6aGy3+0CRTlsE89euen1xXXh8GpNaaHmYjHpJ9z7o+H1xZeBvBC5bDyEsSp5JLHPAI9h/OvTPC+strHlTSLnz3UJGvzHJOAWxwfX/AOvXxZp2oSanem3tw0iRZbZ1GOmTX3r+zX4c/t6+XWLwFLTSgEUseDKQSeeh2L156n2r6XBYd1JqEdkfNY3FRpUnUluz7M+Ffw6uPFN3pvgaDcZNTctdPgjZbpjzmwcY+X5R6swxX6iXsdoFSzsYxFBCgjRR0CrwAPYCvFf2bvCUVn4VvPiRGpkn1d/s9s3UC2hYgbSOokfcxPsB2r2l7eWX5jwCcV+mZXQjTp6H85cU5nLG46S+zDRevX/L5GbHDHuCg9KkuY08oKyk+ldbpFsnKNGDngEitnU9LikVVDKiKpzxXfLEpSsz5y3Q8ugiEybGyADisjUjFbS+SAQK7aKzMCtcbSynoT0rjdYCSyFupHSuyjNOXkJqyOMms2vLn5OAvetGPTUuDhhnZ3NPVGiyV79hWy9u0dqHLYOK7ZVGrK5lGCu2f//V/tzaIFtwNMZwH6cj0rXuNOcDCce9YE1syOcnkV9LBqR+WzuuhaW9dBg9M0JMznnpWMUZpASTt6fSrQUgYzzWjgkZe0bNReuc5FWUIJ6VQgB7VeG8fMFrKSKTLybVI96nQRn7w5rHMr9+DV2KbPU1nKLLUkXDHBtIf5geCDX56/F/4Z6V4e1+bwnEwOn30H2iyjk5KDJV4lY44Q4KckgNjsK/QMuCvWvjH9szSdV1Dwna3ukBvtNpaXskUkZIYOqIVAA65I9D0yOaiWid9T3uHa8o42nGLsnofif8X/g3LoDzaTE+FY/u3bJYDGAMnr1G7GCK+FJtZ1TwfdPIgEpZgro5JJGR78HHAJ/Kvv8Av/2g7WOCHTfi9AWhnQPBqSQ5CA5UCcAkAjn50HY5AHJ8N+IHhbwj4q0/7ZpxiuYT/qry2II/BgfXAIOR618lXo03J1KDuvxXqfuNKdWK9lWjZ9+j9GfNmuQ6F4mxfWpCswHmKMYHHBIHf1Azn9a+etaQWcm24OxAw52/0613mtWcnh+cMvDhhgHPbsenSvNfFOtxS24lkKKISXYjvwcY7ZPTk/jXDVhGWqVmdlJziuW90O17XvJ0OWXTgAdo+aQ4zz3HPWvnXUPE11fyT5cFx94JwR+dYMnjSWyF3bzuZ/Oz949PoCMflXlGq+LZvtDIkmxOMqO/v6/WuKpTu7s9XDYjkTR1UcFy2tfanncIfvKD/P8AwrsbnWbUBYoCxwOS3A/nmvC7rxHK/wAu7eSec8Cqg8SyQIRt3H+E9cD261m0mXTxMo3ue/WmuTPvKtkjgc/1OKmTV/tN1iZwyqNxXAJ4POOfWvmtfEt3eXmwoVjXAODwTXXab4ilSZWK7GJ+8Tn6V006asZ1K0m7n13pXirSrS1VZpliYHfiPkn6gZP6D29+xtpbzWpre6ikMERK7UIG5vqc8E/TNfIWneJrCFjJfypkHIyR9O/0967fSPjXpejBbbTQLuQAhRHkgYPQn7o/z711x0jyx2OKcm3zS3PvbwvptrGJJdRmjtLODDz3EhI2qD8x9enAxX2Z8Nfi1YfEpoPCvw4tpNO8O2jJEzbdskx64A/hTI553N34PP5beDYNf+JRgvvFjt9kBzHZQkhT6Fu7H/IxX6ufADS9O0OOzt7ONbeBGGEUf59Pc10UcfZ+xorfdl/2WpL29d3tsj+hX9lDw7BN+zl4SkAzm1bgngfvXr6BvfDUEoVZgMDqBXjv7Gl9Ff8A7Pej6YqFZdKeaymz0LpISduDyPmxXvuotIySRw53YPSvuaVed0kz+YcwoKOIquS15n+ZxF9b21mDHCNxX1rzbWrhJZVaN844IFdpd3TTo0qtvIwD6jPQe2a851eE28mxwf3mdue+PSvcwcNdXqeJK17ojudW22f2I4Hp61xF/A0jeYvetI20oZpXOVHU1u22mPNC8hQ4Qc59PpXqxcaeqIeuh5xCkyjkYHvW2sxFmQ43E9q0JLNAcIM4OPpS+QIkwBW8qqZJ/9b+5yXFwoUHBrGnsJg7AnitMzd0WrQHmrkd691NxPzRpTOEmR42KNwabA5lG0DBHUV015YiQ579qzvI8rJAzjvXSqqaOSUGmEcbIOBVrzgq7SKcJQVVZBweM+9YOueItA8OaPLr+u3cVraW6b5JJCAFHXn86jfoV6GqTubIoA64NfMOr/tnfsy6IM3niq3CoMyELJhRjOSSv8s4714frH/BSn4CQWU154YttU1bZJ5StHDtjY/7L5bPUYIGOetN6K7djopYLEVHanTb9Ez9BzKAdo5rxj4vSJevYWz/AHYklcexbaBz24zX5u+If+Ctfh7TrC6ex8FXjSxqfKcTxOpKgnlSY2IGOcc9fTJ+FPjB/wAFTvjl4gj+16Lo2l6LGgQebFvuJHBBbb5bD3HRj36k4HNWxeHhB801c+lyHh7MPrUKkqTUV3PVvjz8No9U1V9QCs63EPkyBEBUMhOCQenB+nFfkf8AEf4D/FzwtqLat4AugoWQsPJfys5HV0OVPpxXoHiv9q340+MLxrifX5bR5CMR2kSwqoJJPB3gnnr16cAYr5Z8T+PfHGp6sLrUtZ1C/kYEK3mkYPXGUKhcDn5uufQDPw9Z0lVdSE9fQ/c4TqSpKnKGny/4Jlap4h+NkfmweLtKjnffnzEdUJ6c4yQc468fSvnvxl8TdWsleG806aJM7TsTfj8Rn+Ve4al4juprxHvrhzvONt1IWO1SPuhj8ueecc9DWOdP8MGZrmF5FkVyWwckEZ3YJA6c5/yK554uLeq0N4UHbRHxfqviyG9uWuIbG6YH/pi/+HNcNq+talPdmxi0y5MgIwwRh1GfvY29Pfg1+lMeiRTiORElctIWAmIyCVPTBGOSMdSP1ouvCjXir5zoVTDAKp3HGeBnOFOMe/tmueWLpdY/j/wDohSq9193/BPzeg0L4m3ibrXQbohlDLv25wRkcFs9OelV0+FXxw1SQTLYLAGbClm/kMYP51+mzeEwsouI1BJ3BcA7mJIALHqcAnPJ3Dnmu2u9NtrG0K2sOW5dlYjCk4Lk5yOMknn2FQsZTWsYL53NXSqS3lb0S/4J+WNr8EPijPeta308Vs0ZDOFIB2t/EDlh+hrubL4FayqEXU9xeuW24ecx9M5x5aoPzNfeOoeHtLMSXt0gESrjKkgj0yR/KqMT6PpkKRwr9nZ0LfPyflxnJ+v6fjVf2h/LFXI+rPXmk3/XofLOkfB3R9H2Tz6XbzT8MRL5szL3+blsfn9K9Z0rRl0z95p1rp8FwAQzm1xt78EkAg+pFdtPdXEGpJDfMFwB8yKcMxPQkghSPTOe/wBMy5sgllBfSASLAQ6srDqRgAbvXPA7Z9hlrG1CJYeNjt9I8cfEaysfJs9Qt4y6cbreFSDjjawHTp2P9aW78bfE3VrIaeviG+t5YiA4z8rrjnG3bkEZx8xxkd65q2DK5so4pHicMpKAMuASPnA9AAMk8jOaW603SoCtjfL+4ZNu1g20N1B7gHrzgEdz0rop42aaZhPCqWl3b1Z9GfDL9rb9pzwLbrofhHx9qVlZSDeVtwqYbpkHyyDk9R1x1yOR3epftF/E/wAZajD4g8feKdUvb6VdkskkmJDtBIJEAQHA9SfYivivQ2/s29kjhUupkKrGgKjgFgWQnAJxwQM9Og4Gs7XgWNpJmaRgY2BJ2sdpGSFbOc5JwMYznpXpRz2tHTnZ5EuGsHNubpLm9D64k+Nvju+tF06fXtQubeNWdLczMm2U8f644mIIXDbnYN8pJwABDbfEPUnvPL1HV9Vkhh/ersupuCCTwWckEhgCemBg8E18ymSTT0fD+SVf90EUHqowMKM4GP064q0viifaPIYkrKqbcjPIGQQCfu/ex6DI7GuhcRVv5zL/AFWwf/Ppfcj6wi+KMrHN5qeoIrEkp9slbGFPC5kBGflP4ccgkv8AC/xe1a7a5t9RvtQhUB5VRruQ7VUYQBiwLMx5OeB3zivlk6tdQwt5cZOwM+GO7G4klRn1xx6ewpbfWPKjJf5UJyxAO4hh1+Uc8+mf8dIcR1XrzmM+FsG/+XaPvqD42/FKw0WC+0nx7q9tC3yxxBkdQDgAAYUbflIJckjqCec9ppv7RHx1tbrfpfjm4vZbdFnzd4MJTPVo9g3ADJ2g59c8A/nbaak8U8cYlLxgiSNCx2AYO4LgepJGeucd66mz8QXcEhfT5pIjIhXcpx8vGRjg4J9P5V2w4prLTnf3nHU4MwUlb2a+5H//2Q==","","","","",""]}</script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script id="app-code">/*QDP-JS*/
+(function (root) {
+'use strict';
+
+/* ═══════════ Logica: calendario, classifica, schede ═══════════ */
+
+// 45 giornate, una partita ciascuna: due coppie giocano, la terza riposa.
+// Ogni voce è la partita "abcd": coppia a+b contro coppia c+d; riposano gli altri due.
+// Sono tutte le 45 sfide possibili fra coppie. L'ordine è scelto perché nessuno riposi
+// due giornate di fila e ogni tre giornate tutti abbiano giocato due volte.
+var SCHEDULE_SRC = '0123 0345 1425 0234 0135 1245 0413 1524 0325 1234 0435 0215 1345 0523 0412 2435 0314 0125 0534 1235 0214 2345 0513 0124 0315 0425 1423 0524 1534 0213 1435 0423 0512 0134 0245 1325 0324 1523 0514 2534 0312 0145 0235 1324 0415';
+var DEFAULT_PLAYERS = ['Tu', 'Betti', 'Ferra', 'Martina', 'Toffa', 'Vinci'];
+var N_DAYS = 45;
+var PRESETS = {
+  lega: { win: 3, draw: 1, loss: 0, game: 0 },
+  americano: { win: 0, draw: 0, loss: 0, game: 1 }
+};
+var SHOTS = ['Bandeja', 'Vibora', 'Smash', 'Por tres', 'Pallonetto', 'Volée', 'Chiquita', 'Bajada', 'Uscita di parete', 'Servizio'];
+var SIDES = { dx: 'Lato destro', sx: 'Lato sinistro', ind: 'Destra o sinistra' };
+var HANDS = { dx: 'Destro', sx: 'Mancino' };
+var STYLES = { att: 'Attaccante', dif: 'Difensore', reg: 'Regista', jol: 'Jolly' };
+var SKILLS = ['Smash', 'Volée', 'Difesa', 'Pallonetto', 'Gambe', 'Testa'];
+
+function has(o, k) { return typeof k === 'string' && Object.prototype.hasOwnProperty.call(o, k); }
+
+function buildSchedule() {
+  return SCHEDULE_SRC.split(' ').map(function (id, g) {
+    var a = [Number(id.charAt(0)), Number(id.charAt(1))], b = [Number(id.charAt(2)), Number(id.charAt(3))];
+    var rest = [0, 1, 2, 3, 4, 5].filter(function (p) { return a.indexOf(p) < 0 && b.indexOf(p) < 0; });
+    return { id: id, g: g, a: a, b: b, rest: rest };
+  });
+}
+
+function clampInt(v, lo, hi, dflt) {
+  if (v === null || v === undefined || v === '') return dflt;
+  var n = Number(v);
+  if (!isFinite(n)) return dflt;
+  return Math.min(hi, Math.max(lo, Math.round(n)));
+}
+
+function cleanText(v, max) {
+  var s = typeof v === 'string' ? v : '', out = '';
+  for (var i = 0; i < s.length; i++) {
+    var c = s.charCodeAt(i);
+    out += c < 32 || c === 127 ? ' ' : s.charAt(i);
+  }
+  return out.replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+// La parola d'ordine è il nome: si confronta senza maiuscole, accenti e spazi.
+var COMBINING = new RegExp('[' + String.fromCharCode(0x300) + '-' + String.fromCharCode(0x36f) + ']', 'g');
+function normName(s) {
+  var t = String(s === null || s === undefined ? '' : s).toLowerCase().trim();
+  try { t = t.normalize('NFD').replace(COMBINING, ''); } catch (e) {}
+  return t.replace(/[^a-z0-9]+/g, '') || t.replace(/\s+/g, '');
+}
+function findPlayer(state, word) {
+  var w = normName(word);
+  if (!w) return -1;
+  for (var i = 0; i < state.players.length; i++) if (normName(state.players[i]) === w) return i;
+  return -1;
+}
+
+function normProfile(p) {
+  if (!p || typeof p !== 'object') return null;
+  var skills = [];
+  for (var k = 0; k < SKILLS.length; k++) skills.push(clampInt(p.skills && p.skills[k], 1, 10, 6));
+  return {
+    shot: cleanText(p.shot, 24) || SHOTS[0],
+    side: has(SIDES, p.side) ? p.side : 'ind',
+    hand: has(HANDS, p.hand) ? p.hand : 'dx',
+    style: has(STYLES, p.style) ? p.style : 'jol',
+    skills: skills,
+    motto: cleanText(p.motto, 60)
+  };
+}
+function normAvatar(v) {
+  return typeof v === 'string' && v.length < 140000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(v) ? v : '';
+}
+
+function normalize(raw, schedule) {
+  var s = raw && typeof raw === 'object' ? raw : {};
+  var out = {
+    v: 2,
+    rev: clampInt(s.rev, 0, 1e9, 0),
+    at: cleanText(s.at, 40),
+    name: cleanText(s.name, 32) || 'Quelli del padel',
+    players: [],
+    rules: {},
+    results: {},
+    mvp: {},
+    dates: {},
+    extras: [],
+    profiles: [],
+    avatars: []
+  };
+  for (var i = 0; i < 6; i++) {
+    out.players.push(cleanText(s.players && s.players[i], 14) || DEFAULT_PLAYERS[i]);
+    out.profiles.push(normProfile(s.profiles && s.profiles[i]));
+    out.avatars.push(normAvatar(s.avatars && s.avatars[i]));
+  }
+  var r = s.rules && typeof s.rules === 'object' ? s.rules : {};
+  out.rules = {
+    win: clampInt(r.win, -9, 20, 3),
+    draw: clampInt(r.draw, -9, 20, 1),
+    loss: clampInt(r.loss, -9, 20, 0),
+    game: clampInt(r.game, 0, 5, 0)
+  };
+  var valid = {};
+  schedule.forEach(function (m) { valid[m.id] = true; });
+  var res = s.results && typeof s.results === 'object' ? s.results : {};
+  Object.keys(res).forEach(function (id) {
+    var v = res[id];
+    if (!valid[id] || !Array.isArray(v) || v.length !== 2) return;
+    var a = clampInt(v[0], 0, 99, NaN), b = clampInt(v[1], 0, 99, NaN);
+    if (isNaN(a) || isNaN(b)) return;
+    out.results[id] = [a, b];
+  });
+  // voti MVP: solo per partite giocate, solo dai quattro in campo, mai per sé stessi
+  var mv = s.mvp && typeof s.mvp === 'object' ? s.mvp : {};
+  schedule.forEach(function (m) {
+    var v = mv[m.id];
+    if (!v || typeof v !== 'object' || !out.results[m.id]) return;
+    var P = matchPlayers(m), o = {}, any = false;
+    P.forEach(function (p) {
+      var pick = playerIdx(v[p]);
+      if (pick < 0 || pick === p || P.indexOf(pick) < 0) return;
+      o[p] = pick; any = true;
+    });
+    if (any) out.mvp[m.id] = o;
+  });
+  var d = s.dates && typeof s.dates === 'object' ? s.dates : {};
+  for (var g = 0; g < N_DAYS; g++) {
+    if (typeof d[g] === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d[g])) out.dates[g] = d[g];
+  }
+  (Array.isArray(s.extras) ? s.extras : []).slice(0, 80).forEach(function (e, idx) {
+    if (!e || typeof e !== 'object') return;
+    var p = clampInt(e.p, 0, 5, NaN), pts = clampInt(e.pts, -99, 99, NaN);
+    if (isNaN(p) || isNaN(pts) || pts === 0) return;
+    out.extras.push({ id: cleanText(String(e.id || ''), 16) || ('e' + idx), p: p, pts: pts, note: cleanText(e.note, 40) });
+  });
+  return out;
+}
+
+function resOf(gf, gs) { return gf > gs ? 'V' : gf === gs ? 'N' : 'P'; }
+
+function matchPlayers(m) { return [m.a[0], m.a[1], m.b[0], m.b[1]]; }
+
+// Indice di giocatore valido (0..5) oppure -1: un valore fuori posto si scarta, non si aggiusta.
+function playerIdx(v) {
+  if (v === null || v === undefined || v === '') return -1;
+  var n = Number(v);
+  return Number.isInteger(n) && n >= 0 && n <= 5 ? n : -1;
+}
+
+// MVP della partita: votano i quattro in campo, ognuno per uno degli altri tre.
+// Lo prende chi ha più voti, purché almeno due; a parità è condiviso.
+function mvpOf(state, m) {
+  var v = state.mvp[m.id] || {}, P = matchPlayers(m), tally = {}, count = 0, max = 0;
+  P.forEach(function (p) { tally[p] = 0; });
+  P.forEach(function (p) { if (has(v, String(p))) { tally[v[p]]++; count++; } });
+  P.forEach(function (p) { if (tally[p] > max) max = tally[p]; });
+  return {
+    votes: v, players: P, tally: tally, count: count, max: max,
+    winners: max >= 2 ? P.filter(function (p) { return tally[p] === max; }) : []
+  };
+}
+
+// Stagione: quante volte ognuno è stato MVP e quanti voti ha raccolto.
+function mvpTable(state, schedule) {
+  var rows = state.players.map(function (_, i) { return { i: i, mvp: 0, votes: 0, rank: 0 }; });
+  schedule.forEach(function (m) {
+    if (!state.results[m.id]) return;
+    var r = mvpOf(state, m);
+    r.players.forEach(function (p) { rows[p].votes += r.tally[p]; });
+    r.winners.forEach(function (p) { rows[p].mvp++; });
+  });
+  var sorted = rows.slice().sort(function (a, b) { return (b.mvp - a.mvp) || (b.votes - a.votes) || (a.i - b.i); });
+  sorted.forEach(function (r, idx) {
+    var prev = sorted[idx - 1];
+    r.rank = idx > 0 && prev.mvp === r.mvp && prev.votes === r.votes ? prev.rank : idx + 1;
+  });
+  return { rows: sorted, byPlayer: rows, any: rows.some(function (r) { return r.votes > 0; }) };
+}
+
+// Punti che una partita dà a ciascun giocatore della coppia.
+function sidePoints(rules, gf, gs) {
+  return (gf > gs ? rules.win : gf === gs ? rules.draw : rules.loss) + gf * rules.game;
+}
+
+function eachPlayed(state, schedule, fn) {
+  schedule.forEach(function (m) {
+    var r = state.results[m.id];
+    if (r) fn(m, r[0], r[1]);
+  });
+}
+
+function cmpStats(a, b) {
+  return (b.pts - a.pts) || (b.dg - a.dg) || (b.gf - a.gf) || (b.v - a.v);
+}
+
+function computeTable(state, schedule) {
+  var rows = state.players.map(function (_, i) {
+    return { i: i, pg: 0, v: 0, n: 0, p: 0, gf: 0, gs: 0, dg: 0, pts: 0, extra: 0, form: [], rank: 0 };
+  });
+  var played = 0;
+  eachPlayed(state, schedule, function (m, ga, gb) {
+    played++;
+    [[m.a, ga, gb], [m.b, gb, ga]].forEach(function (t) {
+      var res = resOf(t[1], t[2]), pts = sidePoints(state.rules, t[1], t[2]);
+      t[0].forEach(function (pl) {
+        var r = rows[pl];
+        r.pg++; r.gf += t[1]; r.gs += t[2]; r.pts += pts; r.form.push(res);
+        if (res === 'V') r.v++; else if (res === 'N') r.n++; else r.p++;
+      });
+    });
+  });
+  state.extras.forEach(function (e) { rows[e.p].extra += e.pts; rows[e.p].pts += e.pts; });
+  rows.forEach(function (r) { r.dg = r.gf - r.gs; });
+  var sorted = rows.slice().sort(function (a, b) { return cmpStats(a, b) || (a.i - b.i); });
+  sorted.forEach(function (r, idx) {
+    r.rank = idx > 0 && cmpStats(sorted[idx - 1], r) === 0 ? sorted[idx - 1].rank : idx + 1;
+  });
+  return {
+    rows: sorted,
+    byPlayer: rows,
+    played: played,
+    hasData: played > 0 || state.extras.length > 0,
+    draws: rows.some(function (r) { return r.n > 0; })
+  };
+}
+
+// Prima giornata non ancora giocata; -1 se il campionato è finito.
+function nextDay(state, schedule) {
+  for (var g = 0; g < schedule.length; g++) if (!state.results[schedule[g].id]) return g;
+  return -1;
+}
+
+// Il campionato visto da un giocatore: per ogni giornata, se gioca, con chi e com'è andata.
+function playerLog(state, schedule, i) {
+  return schedule.map(function (m) {
+    var mine = m.a.indexOf(i) >= 0 ? m.a : m.b.indexOf(i) >= 0 ? m.b : null;
+    if (!mine) return { m: m, plays: false, played: false, mate: m.rest[0] === i ? m.rest[1] : m.rest[0] };
+    var r = state.results[m.id] || null;
+    var o = { m: m, plays: true, played: !!r, mate: mine[0] === i ? mine[1] : mine[0], opps: mine === m.a ? m.b : m.a };
+    if (r) {
+      o.gf = mine === m.a ? r[0] : r[1];
+      o.gs = mine === m.a ? r[1] : r[0];
+      o.res = resOf(o.gf, o.gs);
+      o.pts = sidePoints(state.rules, o.gf, o.gs);
+    }
+    return o;
+  });
+}
+
+function tally() { return { pg: 0, v: 0, n: 0, p: 0, gf: 0, gs: 0, pts: 0 }; }
+function addTally(t, res, gf, gs, pts) {
+  t.pg++; t.gf += gf; t.gs += gs; t.pts += pts;
+  if (res === 'V') t.v++; else if (res === 'N') t.n++; else t.p++;
+}
+
+function playerDetail(state, schedule, i) {
+  var partners = {}, opponents = {};
+  state.players.forEach(function (_, j) {
+    if (j === i) return;
+    partners[j] = tally(); opponents[j] = tally();
+  });
+  playerLog(state, schedule, i).forEach(function (e) {
+    if (!e.played) return;
+    addTally(partners[e.mate], e.res, e.gf, e.gs, e.pts);
+    e.opps.forEach(function (o) { addTally(opponents[o], e.res, e.gf, e.gs, e.pts); });
+  });
+  function list(map) {
+    return Object.keys(map).map(function (j) { var t = map[j]; t.j = Number(j); return t; });
+  }
+  return { partners: list(partners), opponents: list(opponents) };
+}
+
+function pairTable(state, schedule) {
+  var map = {};
+  function get(pair) {
+    var k = pair[0] + '' + pair[1];
+    if (!map[k]) { map[k] = tally(); map[k].a = pair[0]; map[k].b = pair[1]; }
+    return map[k];
+  }
+  eachPlayed(state, schedule, function (m, ga, gb) {
+    addTally(get(m.a), resOf(ga, gb), ga, gb, sidePoints(state.rules, ga, gb));
+    addTally(get(m.b), resOf(gb, ga), gb, ga, sidePoints(state.rules, gb, ga));
+  });
+  return Object.keys(map).map(function (k) { var t = map[k]; t.dg = t.gf - t.gs; return t; })
+    .sort(function (x, y) { return (y.pts - x.pts) || (y.dg - x.dg) || (y.gf - x.gf) || (x.pg - y.pg) || (x.a - y.a) || (x.b - y.b); });
+}
+
+function vote(p) {
+  var s = 0;
+  p.skills.forEach(function (v) { s += v; });
+  return (s / p.skills.length).toFixed(1).replace('.', ',');
+}
+
+function fmtSigned(n) { return n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0'; }
+
+function fmtDate(iso) {
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+  if (!m) return '';
+  var d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  try { return d.toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' }); }
+  catch (e) { return m[3] + '/' + m[2]; }
+}
+
+function pairName(state, pair, sep) { return state.players[pair[0]] + sep + state.players[pair[1]]; }
+
+function dayLine(state, m) {
+  var r = state.results[m.id];
+  return pairName(state, m.a, ' + ') + (r ? '  ' + r[0] + '-' + r[1] + '  ' : ' contro ') + pairName(state, m.b, ' + ');
+}
+
+function tableText(state, schedule) {
+  var T = computeTable(state, schedule);
+  var lines = ['*' + state.name + '*', T.played ? 'Classifica dopo ' + T.played + (T.played === 1 ? ' partita' : ' partite') + ' su ' + N_DAYS : 'Classifica: si parte da zero'];
+  T.rows.forEach(function (r) {
+    lines.push((T.hasData ? r.rank : '-') + '. ' + state.players[r.i] + ' · ' + r.pts + ' pt' +
+      (r.pg ? ' (' + r.v + 'V ' + (T.draws ? r.n + 'N ' : '') + r.p + 'P, DG ' + fmtSigned(r.dg) + ')' : ''));
+  });
+  var best = mvpTable(state, schedule).rows.filter(function (r) { return r.mvp > 0; });
+  if (best.length) lines.push('', 'MVP: ' + best.map(function (r) { return state.players[r.i] + ' ' + r.mvp; }).join(', '));
+  var nd = nextDay(state, schedule);
+  if (nd >= 0) {
+    lines.push('', 'Prossima, giornata ' + (nd + 1) + ': ' + dayLine(state, schedule[nd]), 'Riposano ' + pairName(state, schedule[nd].rest, ' e '));
+  }
+  return lines.join('\n');
+}
+
+function dayText(state, m) {
+  var date = fmtDate(state.dates[m.g]);
+  var lines = ['*' + state.name + '* · giornata ' + (m.g + 1) + (date ? ' (' + date + ')' : ''), dayLine(state, m), 'Riposano ' + pairName(state, m.rest, ' e ')];
+  var w = state.results[m.id] ? mvpOf(state, m).winners : [];
+  if (w.length) lines.push('MVP: ' + w.map(function (p) { return state.players[p]; }).join(' e '));
+  return lines.join('\n');
+}
+
+/* Avatar caricatura: lavora sui pixel della foto, tutto sul telefono.
+   bulge 0..0.55 gonfia il centro del viso; toon 0..1 è l'effetto fumetto
+   (tinte piatte, colori più vivi, contorni a china). */
+function toonify(src, w, h, bulge, toon) {
+  var n = w * h, x, y, i, c, o, a = src;
+  if (bulge > 0.001) {
+    a = new Uint8ClampedArray(src.length);
+    var cx = (w - 1) / 2, cy = (h - 1) * 0.52, R = Math.min(w, h) * 0.5;
+    for (y = 0; y < h; y++) {
+      for (x = 0; x < w; x++) {
+        var dx = x - cx, dy = y - cy, r2 = (dx * dx + dy * dy) / (R * R), f = 1;
+        if (r2 < 1) { var kk = 1 - r2; f = 1 - bulge * kk * kk; }
+        var sx = cx + dx * f, sy = cy + dy * f;
+        var x0 = Math.floor(sx), y0 = Math.floor(sy), fx = sx - x0, fy = sy - y0;
+        if (x0 < 0) { x0 = 0; fx = 0; }
+        if (y0 < 0) { y0 = 0; fy = 0; }
+        var x1 = x0 + 1 < w ? x0 + 1 : w - 1, y1 = y0 + 1 < h ? y0 + 1 : h - 1;
+        var p00 = (y0 * w + x0) * 4, p10 = (y0 * w + x1) * 4, p01 = (y1 * w + x0) * 4, p11 = (y1 * w + x1) * 4;
+        o = (y * w + x) * 4;
+        for (c = 0; c < 3; c++) {
+          a[o + c] = (src[p00 + c] * (1 - fx) + src[p10 + c] * fx) * (1 - fy) + (src[p01 + c] * (1 - fx) + src[p11 + c] * fx) * fy;
+        }
+        a[o + 3] = 255;
+      }
+    }
+  }
+  var out = new Uint8ClampedArray(src.length);
+  if (toon <= 0.01) {
+    for (i = 0; i < n; i++) { o = i * 4; out[o] = a[o]; out[o + 1] = a[o + 1]; out[o + 2] = a[o + 2]; out[o + 3] = 255; }
+    return out;
+  }
+  // 1) tinte piatte: per ogni punto, la media del quadrante più uniforme attorno
+  var lum = new Float32Array(n);
+  for (i = 0; i < n; i++) lum[i] = 0.299 * a[i * 4] + 0.587 * a[i * 4 + 1] + 0.114 * a[i * 4 + 2];
+  var flat = new Float32Array(n * 3), rad = 2;
+  var Q = [[-rad, 0, -rad, 0], [0, rad, -rad, 0], [-rad, 0, 0, rad], [0, rad, 0, rad]];
+  for (y = 0; y < h; y++) {
+    for (x = 0; x < w; x++) {
+      var bestV = Infinity, br = 0, bg = 0, bb = 0;
+      for (var q = 0; q < 4; q++) {
+        var sr = 0, sg = 0, sb = 0, sl = 0, sl2 = 0, cnt = 0;
+        for (var yy = y + Q[q][2]; yy <= y + Q[q][3]; yy++) {
+          if (yy < 0 || yy >= h) continue;
+          for (var xx = x + Q[q][0]; xx <= x + Q[q][1]; xx++) {
+            if (xx < 0 || xx >= w) continue;
+            var j = yy * w + xx, l = lum[j];
+            sr += a[j * 4]; sg += a[j * 4 + 1]; sb += a[j * 4 + 2]; sl += l; sl2 += l * l; cnt++;
+          }
+        }
+        var va = sl2 / cnt - (sl / cnt) * (sl / cnt);
+        if (va < bestV) { bestV = va; br = sr / cnt; bg = sg / cnt; bb = sb / cnt; }
+      }
+      i = y * w + x;
+      flat[i * 3] = br; flat[i * 3 + 1] = bg; flat[i * 3 + 2] = bb;
+    }
+  }
+  var fl = new Float32Array(n);
+  for (i = 0; i < n; i++) fl[i] = 0.299 * flat[i * 3] + 0.587 * flat[i * 3 + 1] + 0.114 * flat[i * 3 + 2];
+  // 2) colori più vivi a gradini, 3) contorni scuri dove l'immagine cambia in fretta
+  var INK = [12, 26, 53], mix = Math.min(1, toon * 1.25), step = 255 / 7;
+  for (y = 0; y < h; y++) {
+    var ym = y > 0 ? y - 1 : 0, yp = y < h - 1 ? y + 1 : h - 1;
+    for (x = 0; x < w; x++) {
+      var xm = x > 0 ? x - 1 : 0, xp = x < w - 1 ? x + 1 : w - 1;
+      var gx = -fl[ym * w + xm] - 2 * fl[y * w + xm] - fl[yp * w + xm] + fl[ym * w + xp] + 2 * fl[y * w + xp] + fl[yp * w + xp];
+      var gy = -fl[ym * w + xm] - 2 * fl[ym * w + x] - fl[ym * w + xp] + fl[yp * w + xm] + 2 * fl[yp * w + x] + fl[yp * w + xp];
+      var e = Math.sqrt(gx * gx + gy * gy);
+      var ink = e <= 55 ? 0 : e >= 190 ? 1 : (e - 55) / 135;
+      ink = ink * ink * (3 - 2 * ink) * 0.85 * toon;
+      i = y * w + x; o = i * 4;
+      var gray = fl[i] * mix + lum[i] * (1 - mix);
+      for (c = 0; c < 3; c++) {
+        var val = a[o + c] * (1 - mix) + flat[i * 3 + c] * mix;
+        val = gray + (val - gray) * (1 + 0.45 * toon);
+        val = (val - 128) * (1 + 0.18 * toon) + 128 + 6 * toon;
+        if (val < 0) val = 0; else if (val > 255) val = 255;
+        val += (Math.round(val / step) * step - val) * 0.7 * toon;
+        out[o + c] = val * (1 - ink) + INK[c] * ink;
+      }
+      out[o + 3] = 255;
+    }
+  }
+  return out;
+}
+
+/* Archivio condiviso: ogni risultato, voto, data, bonus e scheda è un documento a sé,
+   così più persone possono salvare nello stesso momento senza sovrascriversi.
+   league/main         { name, players: {p0..p5}, rules }
+   results/<partita>   { a, b }              votes/<partita>-<chi vota>  { p }
+   dates/g<giornata>   { d }                 extras/<id>  { p, pts, note, at }
+   profiles/p<i>       { profile, avatar }
+   store = { league: oggetto | null | undefined, cols: { nome: {id: dati} | null }, over: modifiche in corso } */
+function mergeStore(embed, store, schedule) {
+  var raw = JSON.parse(JSON.stringify(embed)), L = store.league, C = store.cols || {}, O = store.over || {}, i;
+  if (L && typeof L === 'object') {
+    if (typeof L.name === 'string') raw.name = L.name;
+    if (L.players && typeof L.players === 'object') {
+      for (i = 0; i < 6; i++) if (typeof L.players['p' + i] === 'string') raw.players[i] = L.players['p' + i];
+    }
+    if (L.rules && typeof L.rules === 'object') raw.rules = { win: L.rules.win, draw: L.rules.draw, loss: L.rules.loss, game: L.rules.game };
+  }
+  if (O.name) raw.name = O.name.v;
+  if (O.rules) raw.rules = O.rules.v;
+  for (i = 0; i < 6; i++) if (O['p' + i]) raw.players[i] = O['p' + i].v;
+  if (C.results) {
+    raw.results = {};
+    Object.keys(C.results).forEach(function (id) { var d = C.results[id]; if (d && typeof d === 'object') raw.results[id] = [d.a, d.b]; });
+  }
+  if (C.votes) {
+    raw.mvp = {};
+    Object.keys(C.votes).forEach(function (id) {
+      var mm = /^(\d{4})-([0-5])$/.exec(id), d = C.votes[id];
+      if (mm && d && typeof d === 'object') (raw.mvp[mm[1]] = raw.mvp[mm[1]] || {})[mm[2]] = d.p;
+    });
+  }
+  if (C.dates) {
+    raw.dates = {};
+    Object.keys(C.dates).forEach(function (id) {
+      var mm = /^g(\d{1,2})$/.exec(id), d = C.dates[id];
+      if (mm && d && typeof d === 'object') raw.dates[Number(mm[1])] = d.d;
+    });
+  }
+  if (C.extras) {
+    raw.extras = Object.keys(C.extras).map(function (id) {
+      var d = C.extras[id] && typeof C.extras[id] === 'object' ? C.extras[id] : {};
+      return { id: id, p: d.p, pts: d.pts, note: d.note, at: typeof d.at === 'string' ? d.at : '' };
+    }).sort(function (a, b) { return a.at < b.at ? -1 : a.at > b.at ? 1 : a.id < b.id ? -1 : a.id > b.id ? 1 : 0; });
+  }
+  if (C.profiles) {
+    // una scheda mai salvata nell'archivio resta quella della copia nella pagina
+    Object.keys(C.profiles).forEach(function (id) {
+      var mm = /^p([0-5])$/.exec(id), d = C.profiles[id];
+      if (!mm || !d || typeof d !== 'object') return;
+      raw.profiles[Number(mm[1])] = d.profile || null;
+      raw.avatars[Number(mm[1])] = typeof d.avatar === 'string' ? d.avatar : '';
+    });
+  }
+  return normalize(raw, schedule);
+}
+
+/* Versione su GitHub: lo stesso archivio, tenuto in Cloud Firestore (Firebase).
+   Traduce le chiamate e i codici d'errore di Firestore in quelli che la pagina già usa.
+   La scrittura "update" diventa set con merge, che unisce anche i campi annidati. */
+function firestoreDb(fs) {
+  var MAP = { 'permission-denied': 'rejected', 'invalid-argument': 'rejected', 'failed-precondition': 'rejected', 'not-found': 'rejected',
+    'out-of-range': 'rejected', 'unauthenticated': 'rejected', 'resource-exhausted': 'resource_exhausted' };
+  function code(e) { return MAP[String((e && e.code) || '').replace(/^firestore\//, '')] || 'unavailable'; }
+  function fail(e) { throw { code: code(e), message: (e && e.message) || '' }; }
+  function listen(ref, next, err) {
+    return ref.onSnapshot(next, function (e) { if (err) err({ code: 'unavailable', message: (e && e.message) || '' }); });
+  }
+  function docRef(path) {
+    var r = fs.doc(path);
+    return {
+      set: function (d) { return r.set(d).then(null, fail); },
+      update: function (d) { return r.set(d, { merge: true }).then(null, fail); },
+      'delete': function () { return r['delete']().then(null, fail); },
+      onSnapshot: function (next, err) { return listen(r, next, err); }
+    };
+  }
+  return {
+    doc: docRef,
+    collection: function (path) {
+      var c = fs.collection(path);
+      return { onSnapshot: function (next, err) { return listen(c, next, err); } };
+    }
+  };
+}
+
+/* La pagina tiene anche una copia dei dati, per chi la apre senza archivio:
+   si rinnova ripubblicando l'intero documento. Qui sotto la sua forma fissa. */
+var HEAD = [
+  '<meta charset="utf-8">',
+  '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
+  '<title>Quelli del padel</title>',
+  '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Extra+Condensed:wght@800;900&amp;display=swap">',
+  '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&amp;display=swap">'
+].join('\n');
+var BODY = [
+  '<div class="app" id="app">',
+  '<header class="mast" id="mast"></header>',
+  '<main class="view" id="view"></main>',
+  '<nav class="tabs" id="tabs" aria-label="Sezioni"></nav>',
+  '</div>',
+  '<div id="sheet-root"></div>',
+  '<div class="toast" id="toast" role="status" aria-live="polite"></div>'
+].join('\n');
+
+function safeJson(obj) {
+  return JSON.stringify(obj).replace(/</g, '\\u003c')
+    .split(String.fromCharCode(0x2028)).join('\\u2028').split(String.fromCharCode(0x2029)).join('\\u2029');
+}
+
+function buildDocument(parts) {
+  var close = '</' + 'script>';
+  return '<!DOCTYPE html>\n<html lang="it">\n<head>\n' + HEAD + '\n' + (parts.head ? parts.head + '\n' : '') +
+    '<style id="app-style">' + parts.css + '</style>\n</head>\n<body>\n' + BODY + '\n' +
+    '<script type="application/json" id="league-data">' + safeJson(parts.state) + close + '\n' +
+    (parts.scripts || []).map(function (src) { return '<script src="' + src + '">' + close + '\n'; }).join('') +
+    '<script id="app-code">' + parts.js + close + '\n</body>\n</html>\n';
+}
+
+var Core = {
+  N_DAYS: N_DAYS, PRESETS: PRESETS, DEFAULT_PLAYERS: DEFAULT_PLAYERS, SHOTS: SHOTS, SKILLS: SKILLS,
+  buildSchedule: buildSchedule, normalize: normalize, normProfile: normProfile, normAvatar: normAvatar,
+  normName: normName, findPlayer: findPlayer, sidePoints: sidePoints, computeTable: computeTable,
+  nextDay: nextDay, playerLog: playerLog, playerDetail: playerDetail, pairTable: pairTable, vote: vote,
+  matchPlayers: matchPlayers, mvpOf: mvpOf, mvpTable: mvpTable, mergeStore: mergeStore, firestoreDb: firestoreDb,
+  fmtSigned: fmtSigned, fmtDate: fmtDate, tableText: tableText, dayText: dayText, toonify: toonify,
+  buildDocument: buildDocument
+};
+if (typeof module !== 'undefined' && module.exports) module.exports = Core;
+if (typeof document === 'undefined') return;
+
+/* ═══════════ Pagina ═══════════ */
+
+var doc = document;
+function $(id) { return doc.getElementById(id); }
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function same(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
+function store(kind) { try { return root[kind]; } catch (e) { return null; } }
+function sGet(kind, k) { try { return JSON.parse(store(kind).getItem(k)); } catch (e) { return null; } }
+function sSet(kind, k, v) { try { store(kind).setItem(k, JSON.stringify(v)); } catch (e) {} }
+function sDel(kind, k) { try { store(kind).removeItem(k); } catch (e) {} }
+
+var LS = 'localStorage', SS = 'sessionStorage';
+var K_UI = 'qdp.ui.v2', K_ME = 'qdp.me.v1', K_MINE = 'qdp.mine.v1', K_GUEST = 'qdp.guest.v1';
+var TABS = ['io', 'classifica', 'calendario', 'giocatori', 'lega'];
+var LABELS = { io: 'Io', classifica: 'Classifica', calendario: 'Calendario', giocatori: 'Giocatori', lega: 'Lega' };
+var SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">';
+var ICONS = {
+  io: SVG + '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/></svg>',
+  classifica: SVG + '<path d="M9 21V8h6v13M3 21v-8h6M15 21v-5h6v5M2 21h20"/></svg>',
+  calendario: SVG + '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  giocatori: SVG + '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.7a3.5 3.5 0 0 1 0 6.6M18.5 14.4c1.9.9 3 2.7 3 5.6"/></svg>',
+  lega: SVG + '<path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.5"/><circle cx="8" cy="17" r="2.5"/></svg>'
+};
+var AV = 256;
+
+var schedule = buildSchedule();
+var EMBED = (function () {
+  try { return normalize(JSON.parse($('league-data').textContent), schedule); }
+  catch (e) { return normalize({}, schedule); }
+})();
+var state = clone(EMBED);
+var ui = { tab: 'io', filter: 'tutte', ex: { p: 0, pts: -1, note: '' } };
+var me = null;        // giocatore entrato su questo dispositivo
+var guest = false;    // sta solo guardando
+var mine = null;      // la mia scheda tenuta su questo dispositivo: { i, profile, avatar }
+var edit = null;      // editor della scheda aperto: { i, first, f }
+var photo = { src: null, w: 0, h: 0, cx: 0, cy: 0, zoom: 1, timer: 0, ptr: {}, dist: 0 };
+var COLS = ['results', 'votes', 'dates', 'extras', 'profiles'];
+var live = {
+  db: null, art: null,
+  resolved: false,      // sappiamo se l'archivio condiviso c'è
+  write: null,          // può scrivere: true, false, null = la piattaforma non l'ha detto
+  admin: false,         // può anche rinnovare la copia nella pagina
+  league: undefined,    // documento della lega: oggetto, null se non c'è, undefined se non ancora letto
+  cols: { results: null, votes: null, dates: null, extras: null, profiles: null },
+  fresh: {},            // letture confermate dall'archivio
+  over: {},             // modifiche alla lega appena fatte, finché l'archivio non le conferma
+  seq: 0, pending: 0, error: null, stale: false, timer: 0, frame: 0, chains: {}, copyBusy: false,
+  hosted: false         // versione su GitHub con Firebase
+};
+var RO_MSG = 'Per segnare risultati e voti serve l\'invito con «Può modificare»: chiedilo a chi gestisce il campionato.';
+var OFF_MSG = 'L\'archivio non risponde: controlla la connessione e riprova.';
+function roMsg() { return live.hosted ? OFF_MSG : RO_MSG; }
+function relayNote(what) {
+  return live.hosted ? 'L\'archivio non risponde: mandalo nel gruppo e lo segna qualcun altro.'
+    : 'Da qui ' + what + ' non si salva: mandalo nel gruppo e lo segna chi ha l\'invito «Può modificare».';
+}
+var WAIT_MSG = 'Un attimo, mi collego all\'archivio…';
+var sheet = null;
+var viewStale = false;
+var started = false;
+var toastTimer = 0;
+var stashTimer = 0;
+var calJump = false;
+
+function loadMine() {
+  mine = null;
+  var mm = sGet(LS, K_MINE);
+  if (!mm || me === null || mm.i !== me) return;
+  var p = normProfile(mm.profile);
+  if (!p) return;
+  mine = { i: me, profile: p, avatar: normAvatar(mm.avatar) };
+}
+
+(function restore() {
+  sDel(LS, 'qdp.draft.v2');   // bozze del vecchio salvataggio: non servono più
+  var m = sGet(LS, K_ME);
+  if (m && Number.isInteger(m.i) && m.i >= 0 && m.i < 6) me = m.i;
+  guest = sGet(SS, K_GUEST) === 1;
+  loadMine();
+})();
+
+function profileOf(i) { return mine && mine.i === i ? mine.profile : state.profiles[i]; }
+function avatarOf(i) { return mine && mine.i === i ? mine.avatar : state.avatars[i]; }
+function screen() { return edit ? 'edit' : (me === null && !guest) ? 'gate' : 'app'; }
+
+/* ── Archivio condiviso ── */
+
+// Comandi di modifica visibili: finché non sappiamo, restano; poi decide il permesso.
+function canEdit() {
+  if (!live.resolved) return true;
+  return !!live.db && live.write !== false;
+}
+// Da qui si può solo mandare nel gruppo (archivio raggiungibile ma senza permesso, o assente).
+function relay() { return live.resolved && !canEdit(); }
+function ready() {
+  if (!live.resolved) { toast(WAIT_MSG); return false; }
+  if (!canEdit()) { toast(roMsg()); return false; }
+  return true;
+}
+function allFresh() {
+  return !!live.fresh.league && COLS.every(function (c) { return !!live.fresh[c]; });
+}
+
+function rebuild() {
+  state = live.db ? mergeStore(EMBED, live, schedule) : clone(EMBED);
+  // la scheda tenuta sul telefono non serve più quando l'archivio ha la stessa
+  if (mine && live.fresh.profiles && same(mine.profile, state.profiles[mine.i]) && mine.avatar === state.avatars[mine.i]) {
+    mine = null; sDel(LS, K_MINE);
+  }
+}
+
+function isQuiet() {
+  if (sheet) return false;
+  var a = doc.activeElement;
+  return !(a && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName) && a.type !== 'range' && a.type !== 'file');
+}
+
+// Arrivano dati nuovi (anche dagli altri telefoni): ridisegna senza disturbare chi sta scrivendo.
+function changed() {
+  if (live.frame) return;
+  live.frame = setTimeout(function () {
+    live.frame = 0;
+    rebuild();
+    if (!started) return;
+    renderMast(); renderTabs();
+    if (sheet && sheet.type === 'mvp') refreshSheet();
+    if (isQuiet() && !edit) renderView(); else viewStale = true;
+  }, 30);
+}
+
+function subscribe() {
+  var db = live.db;
+  function onErr(e) {
+    var code = e && e.code;
+    if (code === 'revoked' || code === 'not_granted' || code === 'capability_disabled' || code === 'capability_removed') { live.db = null; live.write = false; }
+    live.stale = true;
+    changed();
+  }
+  function fresh(key, meta) {
+    if (!meta || !meta.fromCache) live.fresh[key] = true;
+    if (allFresh()) { clearTimeout(live.timer); live.stale = false; }
+  }
+  try {
+    db.doc('league/main').onSnapshot(function (snap) {
+      live.league = snap.exists ? snap.data() : null;
+      fresh('league', snap.metadata); changed();
+    }, onErr);
+    COLS.forEach(function (c) {
+      db.collection(c).onSnapshot(function (qs) {
+        var map = {};
+        qs.docs.forEach(function (d) { if (d.exists) map[d.id] = d.data(); });
+        live.cols[c] = map;
+        fresh(c, qs.metadata); changed();
+      }, onErr);
+    });
+  } catch (e) { live.db = null; changed(); return; }
+  live.timer = setTimeout(function () { if (!allFresh()) { live.stale = true; renderMast(); } }, 10000);
+}
+
+function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+var FINAL = ['rejected', 'invalid_argument', 'resource_exhausted', 'quota_exceeded', 'revoked', 'not_granted', 'capability_disabled', 'capability_removed', 'transform_error'];
+
+function attempt(path, kind, data, n) {
+  return Promise.resolve().then(function () {
+    var ref = live.db.doc(path);
+    return kind === 'delete' ? ref.delete() : kind === 'update' ? ref.update(data) : ref.set(data);
+  }).catch(function (e) {
+    if (n === 0 && FINAL.indexOf(e && e.code) < 0) {
+      return wait(700 + Math.floor(Math.random() * 1200)).then(function () { return attempt(path, kind, data, 1); });
+    }
+    throw e;
+  });
+}
+
+// Una scrittura alla volta per documento, nell'ordine in cui le chiedi.
+function put(path, kind, data) {
+  if (!live.db) return Promise.resolve(false);
+  live.pending++; live.error = null; renderMast();
+  var job = (live.chains[path] || Promise.resolve()).then(function () { return attempt(path, kind, data, 0); });
+  live.chains[path] = job.catch(function () {});
+  return job.then(function () { live.pending--; renderMast(); return true; },
+    function (e) { live.pending--; writeFailed(e); return false; });
+}
+
+function writeFailed(e) {
+  var code = (e && e.code) || 'unavailable';
+  if (code === 'invalid_argument' || code === 'transform_error' || code === 'revoked' || code === 'not_granted' ||
+      code === 'capability_disabled' || code === 'capability_removed') {
+    // l'archivio rifiuta le scritture di chi non ha il permesso di modifica
+    if (code !== 'invalid_argument' && code !== 'transform_error') live.db = null;
+    if (live.write !== false) toast(roMsg());
+    live.write = false;
+    if (sheet && (sheet.type === 'reset')) closeSheet();
+    changed();
+    return;
+  }
+  live.error = code;
+  toast(code === 'rejected' ? 'L\'archivio ha rifiutato questa modifica: ricontrolla i dati e riprova.'
+    : code === 'quota_exceeded' ? 'L\'archivio è pieno: non riesco a salvare altro.'
+    : code === 'resource_exhausted' ? 'Troppe modifiche insieme: riprova tra qualche secondo.'
+    : 'Non sono riuscito a salvare: controlla la connessione e riprova.');
+  renderMast();
+}
+
+function playersMap(list) {
+  var o = {};
+  for (var i = 0; i < 6; i++) o['p' + i] = list[i];
+  return o;
+}
+
+// Nome, giocatori e regole: si vedono subito, l'archivio li conferma poco dopo.
+function leaguePut(patch) {
+  if (!ready()) return Promise.resolve(false);
+  if (live.db && live.league === undefined) { toast(WAIT_MSG); return Promise.resolve(false); }
+  var key = ++live.seq, fields = [];
+  if (has(patch, 'name')) fields.push(['name', patch.name]);
+  if (has(patch, 'rules')) fields.push(['rules', patch.rules]);
+  if (patch.players) Object.keys(patch.players).forEach(function (k) { fields.push([k, patch.players[k]]); });
+  fields.forEach(function (f) { live.over[f[0]] = { v: f[1], k: key }; });
+  changed();
+  var data = patch, kind = 'update';
+  if (!live.league) {
+    kind = 'set';
+    data = { name: state.name, players: playersMap(state.players), rules: clone(state.rules) };
+    if (has(patch, 'name')) data.name = patch.name;
+    if (has(patch, 'rules')) data.rules = patch.rules;
+    if (patch.players) Object.keys(patch.players).forEach(function (k) { data.players[k] = patch.players[k]; });
+  }
+  return put('league/main', kind, data).then(function (ok) {
+    fields.forEach(function (f) { if (live.over[f[0]] && live.over[f[0]].k === key) delete live.over[f[0]]; });
+    changed();
+    return ok;
+  });
+}
+
+function stamp() { return new Date().toISOString(); }
+
+function liveDocument() {
+  var css = $('app-style').textContent.trim(), js = $('app-code').textContent.trim();
+  if (css.indexOf('/*QDP-CSS*/') !== 0 || js.indexOf('/*QDP-JS*/') !== 0 || js.slice(-11) !== '/*QDP-END*/') throw new Error('source');
+  var copy = clone(state);
+  copy.rev = EMBED.rev + 1; copy.at = stamp();
+  return buildDocument({ css: css, js: js, state: copy });
+}
+
+// Rinnova la copia nella pagina con i dati dell'archivio (per chi apre senza account).
+function refreshCopy() {
+  if (!live.art || !live.admin || live.copyBusy) return;
+  var html;
+  try { html = liveDocument(); } catch (e) { toast('Non riesco a preparare la copia.'); return; }
+  live.copyBusy = true; saveUi(); renderView();
+  Promise.resolve().then(function () { return live.art.publish(html); }).then(function () {
+    live.copyBusy = false;
+    toast('Copia aggiornata');
+  }, function (e) {
+    var code = e && e.code;
+    live.copyBusy = false;
+    toast(code === 'conflict' ? 'La pagina è appena cambiata: riprova.'
+      : code === 'not_writer' || code === 'not_granted' ? 'Solo chi può modificare la pagina aggiorna la copia.'
+      : 'Copia non aggiornata: riprova più tardi.');
+    if (isQuiet()) renderView();
+  });
+}
+
+function safeUse(c, name) {
+  try { return Promise.resolve(c.use(name)).then(function (ns) { return ns || null; }, function () { return null; }); }
+  catch (e) { return Promise.resolve(null); }
+}
+function ask(ns, fn, arg) {
+  try { return typeof ns[fn] === 'function' ? Promise.resolve(ns[fn](arg)).then(null, function () { return null; }) : Promise.resolve(null); }
+  catch (e) { return Promise.resolve(null); }
+}
+
+function initLive() {
+  var cfg = root.QDP_FIREBASE_CONFIG;
+  if (cfg && typeof cfg === 'object') { hookFirebase(cfg); return; }
+  var tries = 0;
+  (function attemptHook() {
+    var c = root.claude;
+    if (c && typeof c.use === 'function') { hook(c); return; }
+    if (++tries > 8) { live.resolved = true; changed(); return; }
+    setTimeout(attemptHook, 250);
+  })();
+}
+
+function hookFirebase(cfg) {
+  var fb = root.firebase;
+  live.hosted = true;
+  try {
+    if (fb && typeof fb.initializeApp === 'function' && cfg.apiKey && cfg.projectId) {
+      var app = fb.apps && fb.apps.length ? fb.app() : fb.initializeApp(cfg);
+      live.db = firestoreDb(typeof app.firestore === 'function' ? app.firestore() : fb.firestore());
+    }
+  } catch (e) { live.db = null; }
+  live.resolved = true;
+  if (live.db) subscribe();
+  changed();
+}
+
+function hook(c) {
+  safeUse(c, 'db').then(function (ns) {
+    live.db = ns && typeof ns.doc === 'function' && typeof ns.collection === 'function' ? ns : null;
+    live.resolved = true;
+    if (live.db) subscribe();
+    changed();
+  });
+  safeUse(c, 'user').then(function (ns) {
+    if (!ns) return;
+    ask(ns, 'can', 'data.write').then(function (v) { if (v === true || v === false) { live.write = v; changed(); } });
+    ask(ns, 'canEdit').then(function (v) { live.admin = v === true; changed(); });
+  });
+  safeUse(c, 'artifact').then(function (ns) { live.art = ns && typeof ns.publish === 'function' ? ns : null; changed(); });
+}
+
+function syncInfo() {
+  if (!live.resolved) return { cls: 'busy', label: 'Mi collego…' };
+  if (!live.db) return live.hosted ? { cls: 'err', label: 'Non collegato' } : { cls: 'ro', label: 'Copia salvata' };
+  if (live.pending) return { cls: 'busy', label: 'Salvo…' };
+  if (live.error) return { cls: 'err', label: 'Non salvato' };
+  if (live.stale) return { cls: 'err', label: 'Non in linea' };
+  if (live.write === false) return { cls: 'ro', label: 'Sola lettura' };
+  return allFresh() ? { cls: 'ok', label: 'In diretta' } : { cls: 'busy', label: 'Mi collego…' };
+}
+
+/* ── Piccoli aiuti ── */
+
+function toast(msg) {
+  var t = $('toast');
+  t.textContent = msg;
+  t.classList.add('is-on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.classList.remove('is-on'); }, 3400);
+}
+function uiSnapshot() {
+  return {
+    tab: ui.tab, filter: ui.filter, t: Date.now(),
+    sheet: sheet && sheet.type === 'score' ? { type: 'score', id: sheet.m.id, vals: clone(sheet.vals) }
+      : sheet && sheet.type === 'mvp' ? { type: 'mvp', id: sheet.m.id, score: sheet.score || state.results[sheet.m.id] || null } : null,
+    edit: edit ? { i: edit.i, first: edit.first, f: edit.f } : null
+  };
+}
+function saveUi() { sSet(SS, K_UI, uiSnapshot()); }
+function stashSoon() { clearTimeout(stashTimer); stashTimer = setTimeout(saveUi, 400); }
+function findMatch(id) {
+  for (var g = 0; g < schedule.length; g++) if (schedule[g].id === id) return schedule[g];
+  return null;
+}
+function tabFromHash() {
+  var h = '';
+  try { h = (location.hash || '').replace(/^#/, ''); } catch (e) {}
+  return TABS.indexOf(h) >= 0 ? h : '';
+}
+function scrollTop() { try { root.scrollTo(0, 0); } catch (e) {} }
+function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+function nm(i) { return esc(state.players[i]); }
+function nameSpan(i) { return '<span' + (i === me ? ' class="is-self"' : '') + '>' + nm(i) + '</span>'; }
+function avatarHtml(i, cls) {
+  var src = avatarOf(i);
+  return '<span class="av' + (cls ? ' ' + cls : '') + '">' + (src ? '<img src="' + src + '" alt="">' : esc(state.players[i].charAt(0))) + '</span>';
+}
+
+/* ── Testata e barra ── */
+
+function renderMast() {
+  var sc = screen(), s = syncInfo(), chip = '', h;
+  if (s) {
+    chip = s.act
+      ? '<button type="button" class="sync is-' + s.cls + '" id="sync" data-act="sync"><i></i>' + s.label + '</button>'
+      : '<span class="sync is-' + s.cls + '" id="sync"><i></i>' + s.label + '</span>';
+  }
+  var T = computeTable(state, schedule);
+  if (sc === 'app' && ui.tab === 'io' && me !== null) {
+    var row = T.byPlayer[me], p = profileOf(me);
+    h = '<div class="mast-in"><div class="mast-top"><span class="mast-kicker">' + esc(state.name) + '</span>' + chip + '</div>' +
+      '<div class="mast-court"><div class="mast-left is-me">' + avatarHtml(me, 'av-xl') +
+      '<div><h1 class="mast-title">' + nm(me) + '<span class="ball" aria-hidden="true"></span></h1>' +
+      (p ? '<p class="mast-sub">' + esc(p.shot) + ' · ' + STYLES[p.style] + '</p>' : '') + '</div></div>' +
+      '<div class="mast-right"><div class="mast-box"><span class="l">Posizione</span><span class="n">' + (T.hasData ? row.rank + 'º' : '–') + '</span></div>' +
+      '<div class="mast-box"><span class="l">Punti</span><span class="n">' + row.pts + '</span></div></div></div></div>';
+  } else if (sc === 'gate' || (sc === 'app' && (ui.tab === 'classifica' || ui.tab === 'io'))) {
+    var nd = nextDay(state, schedule);
+    var lead = T.rows.filter(function (r) { return r.rank === 1; });
+    h = '<div class="mast-in"><div class="mast-top"><span class="mast-kicker">Campionato individuale</span>' + chip + '</div>' +
+      '<div class="mast-court"><div class="mast-left"><h1 class="mast-title">' + esc(state.name) + '<span class="ball" aria-hidden="true"></span></h1></div>' +
+      '<div class="mast-right"><div class="mast-box"><span class="l">' + (nd >= 0 ? 'Giornata' : 'Giornate') + '</span><span class="n">' + (nd >= 0 ? nd + 1 : N_DAYS) + '<small>/' + N_DAYS + '</small></span></div>' +
+      '<div class="mast-box"><span class="l">In testa</span><span class="n is-name">' + (!T.hasData ? '–' : lead.length === 1 ? nm(lead[0].i) : 'Pari') + '</span></div></div></div></div>';
+  } else {
+    var title = sc === 'edit' ? (edit.i === me ? 'La tua scheda' : 'Scheda di ' + nm(edit.i)) : esc(state.name);
+    h = '<div class="mast-in mast-slim"><span class="mast-name">' + title + '</span>' + chip + '</div>';
+  }
+  $('mast').innerHTML = h;
+}
+
+function renderTabs() {
+  $('tabs').innerHTML = '<div class="tabs-in">' + TABS.map(function (t) {
+    var icon = t === 'io' && me !== null && avatarOf(me) ? avatarHtml(me, 'av-xs') : ICONS[t];
+    return '<a class="tab" href="#' + t + '" data-act="tab" data-tab="' + t + '"' + (ui.tab === t ? ' aria-current="page"' : '') + '>' + icon + '<span>' + LABELS[t] + '</span></a>';
+  }).join('') + '</div>';
+}
+
+/* ── Ingresso ── */
+
+function viewGate() {
+  return '<section class="block" aria-labelledby="h-gate"><div class="block-head"><h2 id="h-gate">Entra in campo</h2></div>' +
+    '<p class="note">Ognuno ha la sua area personale. La parola d\'ordine è il tuo nome.</p>' +
+    '<form class="gate-form" id="login-form" novalidate>' +
+    '<div class="field"><label for="f-word">Parola d\'ordine</label>' +
+    '<input type="text" id="f-word" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go" maxlength="20" placeholder="Scrivila qui"></div>' +
+    '<p class="err" id="login-err" role="alert" hidden></p>' +
+    '<button type="submit" class="btn primary wide" id="b-login">Entra</button></form>' +
+    (guest ? '' : '<button type="button" class="btn quiet wide" id="b-guest" data-act="guest">Dai solo un\'occhiata</button>') +
+    (live.resolved && canEdit() && state.players.indexOf('Tu') >= 0 ? '<p class="note">Prima volta? Il tuo posto si chiama ancora «Tu»: entra con quella parola e scegli il tuo nome.</p>' : '') +
+    '</section>';
+}
+
+function login(i) {
+  me = i; guest = false;
+  sSet(LS, K_ME, { i: i });
+  sDel(SS, K_GUEST);
+  loadMine();
+  try { if (doc.activeElement) doc.activeElement.blur(); } catch (e) {}
+  if (!profileOf(i)) { openEdit(i, true); return; }
+  ui.tab = 'io';
+  go();
+}
+
+function logout() {
+  me = null; mine = null; edit = null; guest = false;
+  sDel(LS, K_ME); sDel(SS, K_GUEST);
+  closeSheet();
+  ui.tab = 'io';
+  go();
+}
+
+function go() {
+  saveUi();
+  try { if (location.hash !== '#' + ui.tab) location.hash = ui.tab; } catch (e) {}
+  render();
+  scrollTop();
+}
+
+/* ── Pezzi comuni ── */
+
+function formDots(form) {
+  if (!form.length) return '';
+  var last = form.slice(-5);
+  return '<span class="form" role="img" aria-label="Ultime partite: ' + last.join(', ') + '">' +
+    last.map(function (r) { return '<i class="f f-' + r + '"></i>'; }).join('') + '</span>';
+}
+
+function mvpText(mv) {
+  if (mv.winners.length) {
+    return '<span class="star" aria-hidden="true">★</span><span><b>MVP ' + mv.winners.map(nm).join(' e ') + '</b>' + (mv.count < 4 ? ' · ' + plural(mv.count, 'voto', 'voti') + ' su 4' : '') + '</span>';
+  }
+  return '<span class="star is-off" aria-hidden="true">★</span><span>MVP da votare' + (mv.count ? ' · ' + plural(mv.count, 'voto', 'voti') + ' su 4' : '') + '</span>';
+}
+
+// Chi può scrivere inserisce o modifica; chi è in sola lettura manda risultato o voto nel gruppo.
+function matchAction(m) {
+  var r = state.results[m.id];
+  if (canEdit()) return { act: 'edit-match', label: r ? 'Modifica' : 'Inserisci risultato' };
+  if (!r) return { act: 'edit-match', label: 'Manda il risultato' };
+  if (me !== null && matchPlayers(m).indexOf(me) >= 0 && !has(state.mvp[m.id] || {}, String(me))) return { act: 'open-mvp', label: 'Manda il voto MVP' };
+  return null;
+}
+
+function matchCard(m) {
+  var r = state.results[m.id], wa = r && r[0] > r[1], wb = r && r[1] > r[0], ma = matchAction(m), editable = !!ma;
+  var date = fmtDate(state.dates[m.g]);
+  var label = 'Giornata ' + (m.g + 1) + ': ' + pairName(state, m.a, ' e ') + ' contro ' + pairName(state, m.b, ' e ') +
+    (r ? ', ' + r[0] + ' a ' + r[1] + '. Modifica il risultato' : '. Inserisci il risultato');
+  var open = editable
+    ? '<button type="button" class="match' + (r ? '' : ' is-empty') + '" id="m-' + m.id + '" data-act="' + ma.act + '" data-id="' + m.id + '" aria-label="' + esc(label) + '">'
+    : '<div class="match' + (r ? '' : ' is-empty') + '">';
+  var cta = editable ? '<span class="match-cta">' + ma.label + '</span>'
+    : (r ? '' : '<span class="match-cta is-off">da giocare</span>');
+  function side(cls, pair, score, win, lose) {
+    return '<span class="side ' + cls + (win ? ' is-win' : lose ? ' is-lose' : '') + '">' +
+      '<span class="names">' + nameSpan(pair[0]) + nameSpan(pair[1]) + '</span>' +
+      '<span class="score">' + score + '</span></span>';
+  }
+  return open +
+    '<span class="match-meta"><span><b>Giornata ' + (m.g + 1) + '</b>' + (date ? ' · ' + esc(date) : '') + ' · riposano ' + nm(m.rest[0]) + ' e ' + nm(m.rest[1]) + '</span>' + cta + '</span>' +
+    '<span class="court"><span class="court-in">' +
+    side('side-a', m.a, r ? r[0] : '–', wa, wb) + '<span class="net" aria-hidden="true"></span>' + side('side-b', m.b, r ? r[1] : '–', wb, wa) +
+    '</span></span>' + (r ? '<span class="match-mvp">' + mvpText(mvpOf(state, m)) + '</span>' : '') + (editable ? '</button>' : '</div>');
+}
+
+function kpisHtml(row, T, mv) {
+  var perc = row.pg ? Math.round(100 * row.v / row.pg) + '%' : '–';
+  var avg = row.pg ? ((row.pts - row.extra) / row.pg).toFixed(1).replace('.', ',') : '–';
+  return '<dl class="kpis">' +
+    '<div><dt>Partite giocate</dt><dd>' + row.pg + '</dd></div>' +
+    '<div><dt>Vinte · ' + (T.draws ? 'pari · ' : '') + 'perse</dt><dd>' + row.v + '·' + (T.draws ? row.n + '·' : '') + row.p + '</dd></div>' +
+    '<div><dt>Vittorie</dt><dd>' + perc + '</dd></div>' +
+    '<div><dt>Game vinti · persi</dt><dd>' + row.gf + '·' + row.gs + '</dd></div>' +
+    '<div><dt>Differenza game</dt><dd>' + fmtSigned(row.dg) + '</dd></div>' +
+    '<div><dt>Punti a partita</dt><dd>' + avg + '</dd></div></dl>' +
+    (row.form.length ? '<div class="lastfive"><span>Ultime partite</span><span class="res-list">' +
+      row.form.slice(-5).map(function (r) { return '<span class="res res-' + r + '">' + r + '</span>'; }).join('') + '</span></div>' : '') +
+    (mv && mv.votes ? '<p class="mvp-line"><span class="star" aria-hidden="true">★</span><span>MVP ' + plural(mv.mvp, 'volta', 'volte') + ' · ' + plural(mv.votes, 'voto ricevuto', 'voti ricevuti') + '</span></p>' : '') +
+    (row.extra ? '<p class="hint">Bonus e malus: ' + fmtSigned(row.extra) + ' (già nei punti)</p>' : '');
+}
+
+function schedaHtml(p) {
+  if (!p) return '<p class="note">Scheda non ancora compilata.</p>';
+  return '<div class="tags"><span class="tagp is-shot">' + esc(p.shot) + '</span><span class="tagp">' + SIDES[p.side] + '</span>' +
+    '<span class="tagp">' + HANDS[p.hand] + '</span><span class="tagp">' + STYLES[p.style] + '</span></div>' +
+    (p.motto ? '<p class="motto">«' + esc(p.motto) + '»</p>' : '') +
+    '<div class="skills">' + SKILLS.map(function (label, k) {
+      return '<div class="skill"><span>' + label + '</span><span class="bar"><i style="width:' + (p.skills[k] * 10) + '%"></i></span><b>' + p.skills[k] + '</b></div>';
+    }).join('') + '</div>';
+}
+
+function rate(t) { return t.pg ? t.v / t.pg : -1; }
+function miniHead(first, T, withPts) {
+  return '<thead><tr><th class="c-who" scope="col">' + first + '</th><th scope="col"><abbr title="Partite giocate">PG</abbr></th>' +
+    '<th scope="col"><abbr title="Vinte">V</abbr></th>' + (T.draws ? '<th scope="col"><abbr title="Pareggiate">N</abbr></th>' : '') +
+    '<th scope="col"><abbr title="Perse">P</abbr></th><th scope="col"><abbr title="Differenza game">DG</abbr></th>' +
+    (withPts ? '<th scope="col"><abbr title="Punti">PT</abbr></th>' : '') + '</tr></thead>';
+}
+function miniRows(list, kind, T, tagFor) {
+  var h = '';
+  list.forEach(function (t) {
+    var tag = tagFor(t);
+    h += '<tr><th class="c-who" scope="row">' + (kind === 'pair' ? nm(t.a) + ' + ' + nm(t.b) : nm(t.j)) +
+      (tag ? '<span class="tag">' + tag + '</span>' : '') + '</th><td>' + t.pg + '</td><td>' + t.v + '</td>' +
+      (T.draws ? '<td>' + t.n + '</td>' : '') + '<td>' + t.p + '</td><td>' + fmtSigned(t.gf - t.gs) + '</td>' +
+      (kind === 'opp' ? '' : '<td class="strong">' + t.pts + '</td>') + '</tr>';
+  });
+  return h;
+}
+function sortPartners(det) {
+  return det.partners.slice().sort(function (a, b) { return (rate(b) - rate(a)) || ((b.gf - b.gs) - (a.gf - a.gs)) || (a.j - b.j); });
+}
+function sortOpponents(det) {
+  return det.opponents.slice().sort(function (a, b) { return (b.p - a.p) || (rate(a) - rate(b)) || (a.j - b.j); });
+}
+
+/* ── Io: l'area personale ── */
+
+function viewIo() {
+  if (me === null) return viewGate();
+  var T = computeTable(state, schedule), row = T.byPlayer[me], log = playerLog(state, schedule, me);
+  var p = profileOf(me), nd = nextDay(state, schedule), ed = canEdit(), g, h = '';
+
+  var M = mvpTable(state, schedule);
+  if (relay()) {
+    h += '<section class="block" aria-labelledby="h-ro"><div class="card pad block"><h3 id="h-ro">Per ora sei in sola lettura</h3>' +
+      '<p class="note">' + (live.hosted ? 'L\'archivio non risponde, quindi vedi la copia salvata nella pagina. Controlla la connessione; intanto risultati e voti li puoi mandare nel gruppo.'
+        : 'Vedi tutto in diretta, ma per segnare risultati e votare l\'MVP dal tuo telefono serve l\'invito per email con «Può modificare»: chiedilo a chi gestisce il campionato. Intanto risultati e voti li puoi mandare nel gruppo.') + '</p></div></section>';
+  }
+  var toVote = ed && live.resolved ? log.filter(function (e) { return e.played && !has(state.mvp[e.m.id] || {}, String(me)); }) : [];
+  if (toVote.length) {
+    h += '<section class="block" aria-labelledby="h-vote"><div class="block-head"><h2 id="h-vote">Vota l\'MVP</h2>' +
+      '<span class="hint">' + plural(toVote.length, 'partita aspetta', 'partite aspettano') + ' il tuo voto</span></div><div class="card"><ul class="log">' +
+      toVote.slice(-3).reverse().map(function (e) {
+        return '<li><span class="star" aria-hidden="true">★</span><span class="log-txt">con <b>' + nm(e.mate) + '</b> contro ' + nm(e.opps[0]) + ' e ' + nm(e.opps[1]) +
+          '<small>giornata ' + (e.m.g + 1) + ' · ' + e.gf + '–' + e.gs + '</small></span>' +
+          '<button type="button" class="btn" id="v-' + e.m.id + '" data-act="open-mvp" data-id="' + e.m.id + '">Vota</button></li>';
+      }).join('') + '</ul></div></section>';
+  }
+
+  var nextMine = null;
+  for (g = 0; g < log.length; g++) if (log[g].plays && !log[g].played) { nextMine = log[g]; break; }
+  h += '<section class="block" aria-labelledby="h-turn"><div class="block-head"><h2 id="h-turn">Il tuo prossimo turno</h2></div>';
+  if (nd >= 0 && !log[nd].plays) {
+    h += '<div class="card rest-note">' + avatarHtml(log[nd].mate, '') + '<span>Alla giornata ' + (nd + 1) + ' riposi insieme a <b>' + nm(log[nd].mate) + '</b>.</span></div>';
+  }
+  h += nextMine ? matchCard(nextMine.m) : '<p class="note">Hai giocato tutte le tue 30 partite.</p>';
+  h += '</section>';
+
+  h += '<section class="block" aria-labelledby="h-num"><div class="block-head"><h2 id="h-num">I tuoi numeri</h2>' +
+    '<span class="hint">' + row.pg + ' di 30 partite</span></div><div class="card pad">' + kpisHtml(row, T, M.byPlayer[me]) + '</div></section>';
+
+  h += '<section class="block" aria-labelledby="h-card"><div class="block-head"><h2 id="h-card">La tua scheda</h2>' +
+    (p ? '<span class="hint">pagella ' + vote(p) + '</span>' : '') + '</div>';
+  if (p) {
+    h += '<div class="card pad block">' + schedaHtml(p) + '</div>';
+    if (mine && (live.fresh.profiles || (live.resolved && !live.db)) && (!same(mine.profile, state.profiles[me]) || mine.avatar !== state.avatars[me])) {
+      h += live.db && canEdit()
+        ? '<div class="actions"><button type="button" class="btn primary" id="b-push" data-act="push-mine">Mostra la mia scheda a tutti</button></div>'
+        : '<p class="hint">Per ora scheda e avatar sono salvati solo su questo telefono. Per mostrarli a tutti serve il permesso di modifica sulla pagina: chiedilo a chi gestisce il campionato.</p>';
+    }
+    h += '<div class="actions"><button type="button" class="btn" id="b-edit-me" data-act="edit-profile" data-i="' + me + '">Modifica scheda e avatar</button></div>';
+  } else {
+    h += '<p class="note">Manca ancora la tua scheda: colpo preferito, caratteristiche e la foto per l\'avatar caricatura.</p>' +
+      '<div class="actions"><button type="button" class="btn primary" id="b-edit-me" data-act="edit-profile" data-i="' + me + '">Crea la tua scheda</button></div>';
+  }
+  h += '</section>';
+
+  var done = log.filter(function (e) { return e.played; }).reverse().slice(0, 5);
+  h += '<section class="block" aria-labelledby="h-log"><div class="block-head"><h2 id="h-log">Le tue ultime partite</h2></div>';
+  if (done.length) {
+    h += '<div class="card"><ul class="log">' + done.map(function (e) {
+      return '<li><span class="res res-' + e.res + '">' + e.res + '</span>' +
+        '<span class="log-txt">con <b>' + nm(e.mate) + '</b> contro ' + nm(e.opps[0]) + ' e ' + nm(e.opps[1]) +
+        '<small>giornata ' + (e.m.g + 1) + ' · ' + fmtSigned(e.pts) + ' pt</small></span>' +
+        '<span class="log-score">' + e.gf + '–' + e.gs + '</span></li>';
+    }).join('') + '</ul></div>';
+  } else {
+    h += '<p class="note">Ancora nessuna partita giocata: i risultati compaiono qui appena vengono inseriti.</p>';
+  }
+  h += '</section>';
+
+  var det = playerDetail(state, schedule, me), partners = sortPartners(det), opps = sortOpponents(det);
+  var bestOk = partners.filter(function (t) { return t.pg > 0; }).length >= 2 && partners[0].v > 0;
+  var worstOk = opps[0].p > 0 && opps[0].p > opps[0].v;
+  if (bestOk || worstOk) {
+    h += '<section class="block" aria-labelledby="h-duo"><div class="block-head"><h2 id="h-duo">Intesa e bestia nera</h2></div><div class="duo">';
+    if (bestOk) h += '<div class="card"><span class="label">Miglior intesa</span><span class="duo-who">' + avatarHtml(partners[0].j, '') + nm(partners[0].j) + '</span>' +
+      '<span class="hint">' + partners[0].v + ' vinte su ' + partners[0].pg + ' insieme</span></div>';
+    if (worstOk) h += '<div class="card"><span class="label">Bestia nera</span><span class="duo-who">' + avatarHtml(opps[0].j, '') + nm(opps[0].j) + '</span>' +
+      '<span class="hint">' + opps[0].p + ' perse su ' + opps[0].pg + ' contro</span></div>';
+    h += '</div></section>';
+  }
+
+  h += '<div class="actions"><button type="button" class="btn quiet" id="b-logout" data-act="logout">Esci da ' + nm(me) + '</button></div>';
+  return h;
+}
+
+/* ── Classifica ── */
+
+function viewClassifica() {
+  var T = computeTable(state, schedule), nd = nextDay(state, schedule);
+  var h = '<section class="block" aria-labelledby="h-rank">' +
+    '<div class="block-head"><h2 id="h-rank">Classifica</h2><span class="hint">' +
+    (T.played ? 'dopo ' + plural(T.played, 'partita', 'partite') : 'si parte da zero') + '</span></div>' +
+    '<div class="card"><table class="rank"><thead><tr>' +
+    '<th class="c-pos" scope="col"><span class="sr">Posizione</span></th><th class="c-who" scope="col">Giocatore</th>' +
+    '<th scope="col"><abbr title="Partite giocate">PG</abbr></th><th scope="col"><abbr title="Vinte">V</abbr></th>' +
+    (T.draws ? '<th scope="col"><abbr title="Pareggiate">N</abbr></th>' : '') +
+    '<th scope="col"><abbr title="Perse">P</abbr></th><th scope="col"><abbr title="Differenza game">DG</abbr></th>' +
+    '<th class="c-pt" scope="col"><abbr title="Punti">PT</abbr></th></tr></thead><tbody>';
+  T.rows.forEach(function (r) {
+    h += '<tr' + (T.hasData && r.rank === 1 ? ' class="is-lead"' : '') + '>' +
+      '<td class="c-pos"><span class="pos">' + (T.hasData ? r.rank : '–') + '</span></td>' +
+      '<th class="c-who" scope="row"><button type="button" class="who" id="w-' + r.i + '" data-act="open-player" data-i="' + r.i + '">' +
+      avatarHtml(r.i, '') + '<span class="who-txt"><span class="who-name">' + nm(r.i) + (r.i === me ? '<span class="me-tag">tu</span>' : '') + '</span>' + formDots(r.form) + '</span></button></th>' +
+      '<td>' + r.pg + '</td><td>' + r.v + '</td>' + (T.draws ? '<td>' + r.n + '</td>' : '') + '<td>' + r.p + '</td>' +
+      '<td>' + fmtSigned(r.dg) + '</td><td class="c-pt">' + r.pts + '</td></tr>';
+  });
+  h += '</tbody></table></div>' +
+    '<p class="note">Tocca un giocatore per la sua scheda. A pari punti decide la differenza game, poi i game vinti.</p></section>';
+
+  if (nd >= 0) {
+    h += '<section class="block" aria-labelledby="h-next"><div class="block-head"><h2 id="h-next">Prossima giornata</h2></div>' +
+      matchCard(schedule[nd]) + '</section>';
+  } else {
+    var champs = T.rows.filter(function (r) { return r.rank === 1; }).map(function (r) { return state.players[r.i]; });
+    h += '<section class="block" aria-labelledby="h-next"><h2 id="h-next">Campionato finito</h2>' +
+      '<p class="note">Giocate tutte le ' + N_DAYS + ' partite. ' + (champs.length === 1 ? 'Vince ' : 'In testa a pari merito: ') + esc(champs.join(', ')) + '.</p></section>';
+  }
+  var M = mvpTable(state, schedule);
+  h += '<section class="block" aria-labelledby="h-mvp"><div class="block-head"><h2 id="h-mvp">Classifica MVP</h2>' +
+    (M.any ? '<span class="hint">la votano i quattro in campo</span>' : '') + '</div>';
+  if (M.any) {
+    h += '<div class="card"><table class="rank mini"><thead><tr><th class="c-who" scope="col">Giocatore</th><th scope="col">Voti presi</th><th scope="col">Volte MVP</th></tr></thead><tbody>' +
+      M.rows.map(function (r) {
+        return '<tr' + (r.rank === 1 && r.mvp > 0 ? ' class="is-lead"' : '') + '><th class="c-who" scope="row"><span class="mvp-who">' + avatarHtml(r.i, 'av-xs') + nm(r.i) + '</span></th>' +
+          '<td>' + r.votes + '</td><td class="strong">' + r.mvp + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  } else {
+    h += '<p class="note">Dopo ogni partita i quattro in campo votano il migliore. Qui si vede chi è stato MVP più volte.</p>';
+  }
+  h += '</section>';
+  h += '<div class="actions"><button type="button" class="btn" id="b-share-table" data-act="share-table">Invia la classifica al gruppo</button></div>';
+  return h;
+}
+
+/* ── Calendario ── */
+
+function gRow(m, nd, ed) {
+  var r = state.results[m.id], wa = r && r[0] > r[1], wb = r && r[1] > r[0];
+  var resting = me !== null && m.rest.indexOf(me) >= 0, playing = me !== null && !resting;
+  var date = fmtDate(state.dates[m.g]);
+  var cls = 'g-row' + (m.g === nd ? ' is-next' : '') + (playing ? ' is-mine' : '');
+  var mv = r ? mvpOf(state, m) : null;
+  var mvpTag = !mv ? '' : mv.winners.length ? '<b class="is-mvp">★ ' + mv.winners.map(nm).join(' e ') + '</b>' : (ed ? '<span>MVP da votare</span>' : '');
+  var restTxt = resting ? 'riposi tu con ' + nm(m.rest[0] === me ? m.rest[1] : m.rest[0]) : 'riposano ' + nm(m.rest[0]) + ' e ' + nm(m.rest[1]);
+  var inner = '<span class="g-grid"><span class="g-num">' + (m.g + 1) + '</span>' +
+    '<span class="g-a' + (wa ? ' is-win' : wb ? ' is-lose' : '') + '">' + nameSpan(m.a[0]) + nameSpan(m.a[1]) + '</span>' +
+    (r ? '<span class="g-score">' + r[0] + '–' + r[1] + '</span>' : '<span class="g-score is-vs">contro</span>') +
+    '<span class="g-b' + (wb ? ' is-win' : wa ? ' is-lose' : '') + '">' + nameSpan(m.b[0]) + nameSpan(m.b[1]) + '</span>' +
+    '<span class="g-meta"><span>' + restTxt + (date ? ' · ' + esc(date) : '') + '</span>' + (m.g === nd ? '<b>prossima</b>' : '') + mvpTag + '</span></span>';
+  var label = 'Giornata ' + (m.g + 1) + ': ' + pairName(state, m.a, ' e ') + ' contro ' + pairName(state, m.b, ' e ') + (r ? ', ' + r[0] + ' a ' + r[1] : ', da giocare');
+  var ma = matchAction(m);
+  return ma
+    ? '<button type="button" class="' + cls + '" id="g-' + m.g + '" data-act="' + ma.act + '" data-id="' + m.id + '" aria-label="' + esc(label + '. ' + ma.label) + '">' + inner + '</button>'
+    : '<div class="' + cls + '" id="g-' + m.g + '">' + inner + '</div>';
+}
+
+function viewCalendario() {
+  var nd = nextDay(state, schedule), ed = canEdit();
+  var filters = me !== null ? [['tutte', 'Tutte'], ['mie', 'Le mie'], ['aperte', 'Da giocare']] : [['tutte', 'Tutte'], ['aperte', 'Da giocare'], ['giocate', 'Giocate']];
+  if (!filters.some(function (f) { return f[0] === ui.filter; })) ui.filter = 'tutte';
+  var h = '<section class="block" aria-labelledby="h-cal"><div class="block-head"><h2 id="h-cal">Calendario</h2>' +
+    '<span class="hint">' + N_DAYS + ' giornate · una partita a giornata</span></div>' +
+    '<div class="seg" role="group" aria-label="Quali giornate mostrare">' + filters.map(function (f) {
+      return '<button type="button" id="flt-' + f[0] + '" data-act="filter" data-f="' + f[0] + '" aria-pressed="' + (ui.filter === f[0]) + '">' + f[1] + '</button>';
+    }).join('') + '</div>';
+  var rows = schedule.filter(function (m) {
+    var r = state.results[m.id];
+    if (ui.filter === 'mie') return m.rest.indexOf(me) < 0;
+    if (ui.filter === 'aperte') return !r;
+    if (ui.filter === 'giocate') return !!r;
+    return true;
+  });
+  h += rows.length
+    ? '<div class="card"><ol class="g-list">' + rows.map(function (m) { return '<li>' + gRow(m, nd, ed) + '</li>'; }).join('') + '</ol></div>'
+    : '<p class="note">Nessuna giornata in questo elenco.</p>';
+  h += '<p class="note">Ogni giornata due coppie giocano e la terza riposa' + (ed ? ': tocca una giornata per inserire risultato, data e voti MVP.' : ': tocca una giornata da giocare per mandare il risultato nel gruppo.') + '</p>';
+  if (nd >= 0) h += '<div class="actions"><button type="button" class="btn" id="b-share-day" data-act="share-day">Invia la prossima giornata al gruppo</button></div>';
+  h += '</section>';
+  return h;
+}
+
+/* ── Giocatori ── */
+
+function viewGiocatori() {
+  var T = computeTable(state, schedule), M = mvpTable(state, schedule);
+  var h = '<section class="block" aria-labelledby="h-figs"><div class="block-head"><h2 id="h-figs">Giocatori</h2>' +
+    '<span class="hint">tocca una figurina</span></div><div class="figs">';
+  T.rows.forEach(function (r) {
+    var p = profileOf(r.i);
+    h += '<button type="button" class="fig" id="fig-' + r.i + '" data-act="open-player" data-i="' + r.i + '">' +
+      '<span class="fig-band"><span>' + (T.hasData ? r.rank + 'º' : '–') + '</span><span class="vote">' + (p ? vote(p) : '') + '</span></span>' +
+      avatarHtml(r.i, 'av-l' + (r.i === me ? ' is-ring' : '')) +
+      '<span class="fig-name">' + nm(r.i) + '</span>' +
+      '<span class="fig-sub">' + r.pts + ' pt · ' + M.byPlayer[r.i].mvp + ' MVP</span>' +
+      '<span class="fig-shot">' + (p ? esc(p.shot) : 'scheda da fare') + '</span></button>';
+  });
+  h += '</div><p class="note">In alto a sinistra la posizione, a destra la pagella che ognuno si è dato.</p></section>';
+
+  var pairs = pairTable(state, schedule);
+  h += '<section class="block" aria-labelledby="h-pairs"><div class="block-head"><h3 id="h-pairs">Le coppie più forti</h3>' +
+    '<span class="hint">per curiosità: la classifica resta individuale</span></div>';
+  h += pairs.length
+    ? '<div class="card"><table class="rank mini">' + miniHead('Coppia', T, true) + '<tbody>' + miniRows(pairs, 'pair', T, function () { return ''; }) + '</tbody></table></div>'
+    : '<p class="note">Dopo le prime partite qui compaiono le coppie, dalla più redditizia in giù.</p>';
+  h += '</section>';
+  return h;
+}
+
+/* ── Lega ── */
+
+function fmtStamp(iso) {
+  var d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  try { return d.toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); }
+  catch (e) { return iso.slice(0, 10); }
+}
+
+function sameRules(a, b) { return a.win === b.win && a.draw === b.draw && a.loss === b.loss && a.game === b.game; }
+
+function viewLega() {
+  var ed = canEdit(), dis = ed ? '' : ' disabled', R = state.rules;
+  var h = '<section class="block" aria-labelledby="h-lega"><div class="block-head"><h2 id="h-lega">Lega</h2>' +
+    (ed ? '' : '<span class="hint">sola lettura</span>') + '</div>' +
+    '<div class="card pad"><div class="field"><label for="f-name">Nome del campionato</label>' +
+    '<input type="text" id="f-name" data-field="name" maxlength="32" autocomplete="off" value="' + esc(state.name) + '"' + dis + '></div></div></section>';
+
+  h += '<section class="block" aria-labelledby="h-players"><div class="block-head"><h3 id="h-players">Giocatori e parole d\'ordine</h3></div>' +
+    '<div class="card roster">' + state.players.map(function (name, i) {
+      return '<div class="roster-row">' + avatarHtml(i, '') +
+        (ed ? '<input type="text" id="f-p' + i + '" data-field="player" data-i="' + i + '" maxlength="14" autocomplete="off" autocapitalize="words" aria-label="Nome del giocatore ' + (i + 1) + '" value="' + esc(name) + '">'
+            : '<span class="roster-name">' + esc(name) + '</span>') +
+        (ed ? '<button type="button" class="btn" id="b-card-' + i + '" data-act="edit-profile" data-i="' + i + '">Scheda</button>' : '<span></span>') + '</div>';
+    }).join('') + '</div>' +
+    '<p class="note">Ognuno entra scrivendo il proprio nome: serve a riconoscersi, non a proteggere. Chi conosce un nome può entrare al posto suo.</p></section>';
+
+  h += '<section class="block" aria-labelledby="h-rules"><div class="block-head"><h3 id="h-rules">Punteggio</h3>' +
+    '<span class="hint">vale per entrambi i giocatori della coppia</span></div>' +
+    '<div class="chips">' +
+    '<button type="button" class="chip tall" id="pr-lega" data-act="preset" data-p="lega" aria-pressed="' + sameRules(R, PRESETS.lega) + '"' + dis + '>Campionato<small>3 vittoria · 1 pari · 0 sconfitta</small></button>' +
+    '<button type="button" class="chip tall" id="pr-americano" data-act="preset" data-p="americano" aria-pressed="' + sameRules(R, PRESETS.americano) + '"' + dis + '>Americano<small>1 punto per ogni game vinto</small></button>' +
+    '</div><div class="card rules">' +
+    [['win', 'Vittoria', ''], ['draw', 'Pareggio', ''], ['loss', 'Sconfitta', ''], ['game', 'Ogni game vinto', 'si somma al resto']].map(function (x) {
+      return '<div class="rule"><span class="rule-name" id="rl-' + x[0] + '">' + x[1] + (x[2] ? '<small>' + x[2] + '</small>' : '') + '</span>' +
+        '<span class="stepper" role="group" aria-labelledby="rl-' + x[0] + '">' +
+        '<button type="button" id="r-' + x[0] + '-dec" data-act="rule" data-key="' + x[0] + '" data-d="-1" aria-label="Un punto in meno"' + dis + '>−</button>' +
+        '<output>' + R[x[0]] + '</output>' +
+        '<button type="button" id="r-' + x[0] + '-inc" data-act="rule" data-key="' + x[0] + '" data-d="1" aria-label="Un punto in più"' + dis + '>+</button></span></div>';
+    }).join('') + '</div></section>';
+
+  h += '<section class="block" aria-labelledby="h-extra"><div class="block-head"><h3 id="h-extra">Bonus e malus</h3>' +
+    '<span class="hint">punti extra fuori dal campo</span></div>';
+  if (state.extras.length) {
+    h += '<div class="card"><ul class="extras">' + state.extras.map(function (e) {
+      return '<li><span class="ex-pts' + (e.pts < 0 ? ' is-neg' : '') + '">' + fmtSigned(e.pts) + '</span>' +
+        '<span class="ex-txt"><b>' + nm(e.p) + '</b>' + (e.note ? ' · ' + esc(e.note) : '') + '</span>' +
+        (ed ? '<button type="button" class="x" data-act="extra-del" data-id="' + esc(e.id) + '" aria-label="Elimina">×</button>' : '<span></span>') + '</li>';
+    }).join('') + '</ul></div>';
+  }
+  if (ed) {
+    h += '<div class="card pad extra-form">' +
+      '<div class="field"><label for="f-ex-p">Giocatore</label><select id="f-ex-p" data-field="ex-p">' +
+      state.players.map(function (name, i) { return '<option value="' + i + '"' + (i === ui.ex.p ? ' selected' : '') + '>' + esc(name) + '</option>'; }).join('') + '</select></div>' +
+      '<div class="field"><span class="label" id="l-ex-pts">Punti</span><span class="stepper" role="group" aria-labelledby="l-ex-pts">' +
+      '<button type="button" id="ex-dec" data-act="ex-step" data-d="-1" aria-label="Un punto in meno">−</button><output id="f-ex-pts">' + fmtSigned(ui.ex.pts) + '</output>' +
+      '<button type="button" id="ex-inc" data-act="ex-step" data-d="1" aria-label="Un punto in più">+</button></span></div>' +
+      '<div class="field full"><label for="f-ex-note">Motivo</label><input type="text" id="f-ex-note" data-field="ex-note" maxlength="40" autocomplete="off" placeholder="Es. ha dato buca all\'ultimo" value="' + esc(ui.ex.note) + '"></div>' +
+      '<button type="button" class="btn full" id="ex-add" data-act="extra-add"' + (ui.ex.pts === 0 ? ' disabled' : '') + '>Aggiungi alla classifica</button></div>';
+  } else if (!state.extras.length) {
+    h += '<p class="note">Nessun bonus o malus assegnato.</p>';
+  }
+  h += '</section>';
+
+  h += '<section class="block" aria-labelledby="h-how"><h3 id="h-how">Come funziona</h3>' +
+    '<p class="note">Sei giocatori, partite 2 contro 2, classifica individuale. A ogni giornata si formano tre coppie: due giocano, la terza riposa. I punti della partita vanno a tutti e due i compagni.</p>' +
+    '<p class="note">In 45 giornate escono tutte le sfide possibili fra coppie. Alla fine ognuno ha giocato 30 partite (6 insieme a ciascun compagno, 12 contro ciascun avversario) e ne ha riposate 15. Nessuno riposa due giornate di fila, ogni tre giornate tutti hanno giocato due volte e la stessa coppia non torna insieme prima di quattro giornate.</p>' +
+    '<p class="note">Dopo ogni partita i quattro in campo votano l\'MVP: ognuno sceglie uno degli altri tre. Lo prende chi ha più voti, purché almeno due; a parità è condiviso.</p></section>';
+
+  h += '<section class="block" aria-labelledby="h-save"><h3 id="h-save">Salvataggio</h3>';
+  if (!live.resolved) {
+    h += '<p class="note">Mi sto collegando all\'archivio condiviso…</p>';
+  } else if (!live.db) {
+    h += '<p class="note">Da qui l\'archivio condiviso non si raggiunge: stai vedendo la copia salvata nella pagina' + (EMBED.at ? ' il ' + esc(fmtStamp(EMBED.at)) : '') + '. ' +
+      (live.hosted ? (root.QDP_FIREBASE_CONFIG && root.QDP_FIREBASE_CONFIG.projectId ? 'Controlla la connessione e ricarica la pagina.' : 'Manca il collegamento a Firebase: va completato il file firebase-config.js.')
+        : 'Per i dati in diretta apri la pagina con il tuo account Claude.') + '</p>';
+  } else if (canEdit()) {
+    h += '<p class="note">Risultati, voti MVP, date e schede finiscono in un archivio condiviso: ognuno li segna dal suo telefono e gli altri li vedono subito, anche se scrivete nello stesso momento.</p>';
+  } else {
+    h += '<p class="note">Vedi tutto in diretta, ma per segnare risultati e votare l\'MVP serve l\'invito per email con «Può modificare». Intanto risultati e voti li puoi mandare nel gruppo.</p>';
+  }
+  if (live.db && live.admin && live.art) {
+    h += '<p class="note">Chi apre la pagina senza account vede una copia salvata dentro la pagina' + (EMBED.at ? ', aggiornata il ' + esc(fmtStamp(EMBED.at)) : '') + '. Aggiornarla ricarica la pagina a chi la sta guardando.</p>' +
+      '<div class="actions"><button type="button" class="btn" id="b-copy" data-act="copy-refresh"' + (live.copyBusy ? ' disabled' : '') + '>' + (live.copyBusy ? 'Aggiorno la copia…' : 'Aggiorna la copia') + '</button></div>';
+  }
+  if (ed && live.resolved) h += '<div class="actions"><button type="button" class="btn danger" id="b-reset" data-act="reset-ask">Azzera risultati, voti, date e bonus</button></div>';
+  h += '</section>';
+
+  h += '<section class="block" aria-labelledby="h-acc"><h3 id="h-acc">Accesso</h3>' +
+    (me !== null
+      ? '<p class="note">Sei entrato come ' + nm(me) + '.</p><div class="actions"><button type="button" class="btn" id="b-logout2" data-act="logout">Esci</button></div>'
+      : '<p class="note">Stai solo guardando. Per la tua area personale entra con la parola d\'ordine.</p><div class="actions"><button type="button" class="btn" id="b-enter" data-act="to-login">Entra</button></div>') +
+    '</section>';
+  return h;
+}
+
+/* ── Scheda: editor con avatar ── */
+
+function openEdit(i, first) {
+  var p = profileOf(i), known = !!p && SHOTS.indexOf(p.shot) >= 0;
+  edit = {
+    i: i, first: !!first,
+    f: {
+      name: state.players[i],
+      shot: p ? (known ? p.shot : 'altro') : '', other: p && !known ? p.shot : '',
+      side: p ? p.side : 'dx', hand: p ? p.hand : 'dx', style: p ? p.style : 'jol',
+      skills: p ? p.skills.slice() : [6, 6, 6, 6, 6, 6],
+      motto: p ? p.motto : '',
+      avatar: avatarOf(i) || '', bulge: 55, toon: 70
+    }
+  };
+  photo.src = null;
+  closeSheet();
+  saveUi();
+  render();
+  scrollTop();
+}
+
+function pick(k, v, label, cur) {
+  return '<button type="button" data-act="e-pick" data-k="' + k + '" data-v="' + esc(v) + '" aria-pressed="' + (cur === v) + '">' + label + '</button>';
+}
+
+function viewEdit() {
+  var f = edit.f, i = edit.i, own = i === me, hasPic = !!(photo.src || f.avatar);
+  var h = '<section class="block" aria-labelledby="h-ed"><div class="block-head"><h2 id="h-ed">' +
+    (own ? (edit.first ? 'Crea la tua scheda' : 'La tua scheda') : 'Scheda di ' + nm(i)) + '</h2></div>' +
+    (edit.first ? '<p class="note">Primo accesso: due minuti per presentarti agli altri. Poi cambi tutto quando vuoi.</p>' : '');
+  if (canEdit()) {
+    h += '<div class="card pad"><div class="field"><label for="e-name">Nome in campo' + (own ? ' (è anche la tua parola d\'ordine)' : '') + '</label>' +
+      '<input type="text" id="e-name" data-ef="name" maxlength="14" autocomplete="off" autocapitalize="words" value="' + esc(f.name) + '"></div></div>';
+  }
+  h += '</section>';
+
+  h += '<section class="block" aria-labelledby="h-av"><div class="block-head"><h3 id="h-av">Avatar caricatura</h3><span class="hint">nasce dalla tua foto</span></div>' +
+    '<div class="card pad stage-row"><div class="stage" id="stage">' +
+    (photo.src ? '<canvas id="stage-cv" width="' + AV + '" height="' + AV + '" role="img" aria-label="Anteprima dell\'avatar: trascina per spostare la foto"></canvas>'
+      : f.avatar ? '<img src="' + f.avatar + '" alt="Avatar attuale">' : esc(f.name.charAt(0) || '?')) + '</div>' +
+    '<div class="actions"><label class="btn' + (hasPic ? '' : ' primary') + '" for="e-photo">' + (hasPic ? 'Cambia foto' : 'Scegli una foto') + '</label>' +
+    '<input type="file" class="file-in" id="e-photo" accept="image/*" data-ef="photo">' +
+    (hasPic ? '<button type="button" class="btn danger" id="e-nophoto" data-act="photo-clear">Togli</button>' : '') + '</div>';
+  if (photo.src) {
+    h += '<div class="sliders" style="align-self:stretch">' +
+      '<label for="e-zoom">Zoom</label><input type="range" id="e-zoom" data-ef="zoom" min="100" max="400" step="1" value="' + Math.round(photo.zoom * 100) + '">' +
+      '<label for="e-bulge">Caricatura</label><input type="range" id="e-bulge" data-ef="bulge" min="0" max="100" step="1" value="' + f.bulge + '">' +
+      '<label for="e-toon">Fumetto</label><input type="range" id="e-toon" data-ef="toon" min="0" max="100" step="1" value="' + f.toon + '">' +
+      '</div><p class="hint">Trascina la foto per portare il viso al centro del cerchio, poi regola quanto deformarla e quanto farla diventare un disegno.</p>';
+  } else {
+    h += '<p class="hint">Meglio un primo piano con il viso al centro. La foto resta sul tuo telefono: nel campionato finisce solo l\'avatar, che vede chiunque possa aprire la pagina.</p>';
+  }
+  h += '</div></section>';
+
+  h += '<section class="block" aria-labelledby="h-shot"><div class="block-head"><h3 id="h-shot">Colpo preferito</h3></div><div class="chips" id="e-shots">' +
+    SHOTS.map(function (s) {
+      return '<button type="button" class="chip" data-act="e-pick" data-k="shot" data-v="' + esc(s) + '" aria-pressed="' + (f.shot === s) + '">' + esc(s) + '</button>';
+    }).join('') +
+    '<button type="button" class="chip" data-act="e-pick" data-k="shot" data-v="altro" aria-pressed="' + (f.shot === 'altro') + '">Altro</button></div>' +
+    '<div class="field" id="e-other-wrap"' + (f.shot === 'altro' ? '' : ' hidden') + '><label for="e-other">Il tuo colpo</label>' +
+    '<input type="text" id="e-other" data-ef="other" maxlength="24" autocomplete="off" value="' + esc(f.other) + '"></div></section>';
+
+  h += '<section class="block" aria-labelledby="h-traits"><div class="block-head"><h3 id="h-traits">Caratteristiche</h3></div>' +
+    '<div class="field"><span class="label" id="l-side">Lato del campo</span><div class="seg" role="group" aria-labelledby="l-side">' +
+    pick('side', 'dx', 'Destra', f.side) + pick('side', 'sx', 'Sinistra', f.side) + pick('side', 'ind', 'Entrambi', f.side) + '</div></div>' +
+    '<div class="field"><span class="label" id="l-hand">Mano</span><div class="seg" role="group" aria-labelledby="l-hand">' +
+    pick('hand', 'dx', 'Destro', f.hand) + pick('hand', 'sx', 'Mancino', f.hand) + '</div></div>' +
+    '<div class="field"><span class="label" id="l-style">Stile di gioco</span><div class="seg" role="group" aria-labelledby="l-style">' +
+    pick('style', 'att', 'Attaccante', f.style) + pick('style', 'dif', 'Difensore', f.style) + pick('style', 'reg', 'Regista', f.style) + pick('style', 'jol', 'Jolly', f.style) + '</div></div></section>';
+
+  h += '<section class="block" aria-labelledby="h-rate"><div class="block-head"><h3 id="h-rate">Pagella</h3><span class="hint">datti un voto da 1 a 10, senza barare</span></div><div class="card pad block">' +
+    SKILLS.map(function (label, k) {
+      return '<div class="rate"><label for="e-sk' + k + '">' + label + '</label>' +
+        '<input type="range" id="e-sk' + k + '" data-ef="skill" data-k="' + k + '" min="1" max="10" step="1" value="' + f.skills[k] + '">' +
+        '<output id="e-sk' + k + '-o" for="e-sk' + k + '">' + f.skills[k] + '</output></div>';
+    }).join('') + '</div></section>';
+
+  h += '<section class="block" aria-labelledby="h-motto"><div class="block-head"><h3 id="h-motto">Grido di battaglia</h3><span class="hint">facoltativo</span></div>' +
+    '<div class="field"><label for="e-motto" class="sr">Grido di battaglia</label><input type="text" id="e-motto" data-ef="motto" maxlength="60" autocomplete="off" placeholder="Es. la prossima la tiro dentro" value="' + esc(f.motto) + '"></div></section>';
+
+  h += '<div class="savebar"><button type="button" class="btn" id="e-cancel" data-act="edit-cancel">' + (edit.first ? 'Più tardi' : 'Annulla') + '</button>' +
+    '<button type="button" class="btn primary" id="e-save" data-act="edit-save">Salva la scheda</button></div>';
+  return h;
+}
+
+function cropRect() {
+  var side = Math.min(photo.w, photo.h) / photo.zoom;
+  var x0 = Math.min(Math.max(photo.cx - side / 2, 0), photo.w - side);
+  var y0 = Math.min(Math.max(photo.cy - side / 2, 0), photo.h - side);
+  photo.cx = x0 + side / 2; photo.cy = y0 + side / 2;
+  return { x: x0, y: y0, side: side };
+}
+
+// fast = solo ritaglio (mentre si trascina); altrimenti applica caricatura e fumetto.
+function paintStage(fast) {
+  var cv = $('stage-cv');
+  if (!cv || !photo.src || !edit) return;
+  var ctx = cv.getContext('2d'), r = cropRect();
+  ctx.drawImage(photo.src, r.x, r.y, r.side, r.side, 0, 0, AV, AV);
+  if (fast) return;
+  try {
+    var img = ctx.getImageData(0, 0, AV, AV);
+    img.data.set(toonify(img.data, AV, AV, edit.f.bulge / 100 * 0.55, edit.f.toon / 100));
+    ctx.putImageData(img, 0, 0);
+    edit.f.avatar = normAvatar(cv.toDataURL('image/jpeg', 0.84));
+  } catch (e) {}
+  stashSoon();
+}
+function paintSoon(ms) {
+  clearTimeout(photo.timer);
+  photo.timer = setTimeout(function () { paintStage(false); }, ms === undefined ? 140 : ms);
+}
+
+function loadPhoto(file) {
+  if (!file) return;
+  var url;
+  try { url = URL.createObjectURL(file); } catch (e) { toast('Non riesco ad aprire questa foto.'); return; }
+  var img = new Image();
+  img.onload = function () {
+    var w = img.naturalWidth, hh = img.naturalHeight, s = Math.min(1, 1024 / Math.max(w, hh, 1));
+    var c = doc.createElement('canvas');
+    c.width = Math.max(1, Math.round(w * s)); c.height = Math.max(1, Math.round(hh * s));
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    try { URL.revokeObjectURL(url); } catch (e) {}
+    photo.src = c; photo.w = c.width; photo.h = c.height;
+    photo.cx = c.width / 2; photo.cy = c.height * 0.45; photo.zoom = 1; photo.ptr = {}; photo.dist = 0;
+    if (edit) { renderView(); }
+  };
+  img.onerror = function () {
+    try { URL.revokeObjectURL(url); } catch (e) {}
+    toast('Non riesco a leggere questa foto: provane un\'altra.');
+  };
+  img.src = url;
+}
+
+function stagePointers(cv) {
+  function pts() { return Object.keys(photo.ptr).map(function (k) { return photo.ptr[k]; }); }
+  function spread() { var p = pts(); return p.length < 2 ? 0 : Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y); }
+  cv.addEventListener('pointerdown', function (ev) {
+    photo.ptr[ev.pointerId] = { x: ev.clientX, y: ev.clientY };
+    photo.dist = spread();
+    try { cv.setPointerCapture(ev.pointerId); } catch (e) {}
+    ev.preventDefault();
+  });
+  cv.addEventListener('pointermove', function (ev) {
+    var p = photo.ptr[ev.pointerId];
+    if (!p) return;
+    var n = pts().length, r = cropRect(), k = r.side / (cv.clientWidth || AV);
+    if (n === 1) {
+      photo.cx -= (ev.clientX - p.x) * k; photo.cy -= (ev.clientY - p.y) * k;
+    }
+    p.x = ev.clientX; p.y = ev.clientY;
+    if (n >= 2) {
+      var d = spread();
+      if (photo.dist > 0 && d > 0) {
+        photo.zoom = Math.min(4, Math.max(1, photo.zoom * d / photo.dist));
+        var z = $('e-zoom'); if (z) z.value = Math.round(photo.zoom * 100);
+      }
+      photo.dist = d;
+    }
+    paintStage(true);
+    paintSoon();
+  });
+  function up(ev) { delete photo.ptr[ev.pointerId]; photo.dist = spread(); paintSoon(60); }
+  cv.addEventListener('pointerup', up);
+  cv.addEventListener('pointercancel', up);
+}
+
+function saveEdit() {
+  var f = edit.f, i = edit.i, own = i === me;
+  var shot = f.shot === 'altro' ? cleanText(f.other, 24) : f.shot;
+  if (!shot) {
+    toast('Scegli il tuo colpo preferito.');
+    try { $('h-shot').scrollIntoView({ block: 'center' }); } catch (e) {}
+    return;
+  }
+  if (!live.resolved) { toast(WAIT_MSG); return; }
+  var writer = canEdit() && !!live.db, name = cleanText(f.name, 14), rename = '';
+  if (writer && name && name !== state.players[i]) {
+    var clash = findPlayer(state, name);
+    if (clash >= 0 && clash !== i) { toast('C\'è già un giocatore con questo nome.'); return; }
+    rename = name;
+  }
+  if (!writer && !own) { toast(roMsg()); return; }
+  if (rename && live.league === undefined) { toast(WAIT_MSG); return; }
+  if (photo.src) { clearTimeout(photo.timer); paintStage(false); }
+  var prof = normProfile({ shot: shot, side: f.side, hand: f.hand, style: f.style, skills: f.skills, motto: f.motto });
+  var avatar = normAvatar(f.avatar);
+  if (own) { mine = { i: i, profile: prof, avatar: avatar }; sSet(LS, K_MINE, mine); }
+  edit = null; photo.src = null;
+  if (own) ui.tab = 'io';
+  saveUi();
+  if (writer) {
+    put('profiles/p' + i, 'set', { profile: prof, avatar: avatar, at: stamp() });
+    if (rename) { var pl = {}; pl['p' + i] = rename; leaguePut({ players: pl }); }
+  }
+  render();
+  try { if (location.hash !== '#' + ui.tab) location.hash = ui.tab; } catch (e) {}
+  scrollTop();
+  toast(writer ? 'Scheda salvata' : 'Scheda salvata su questo telefono');
+}
+
+var VIEWS = { io: viewIo, classifica: viewClassifica, calendario: viewCalendario, giocatori: viewGiocatori, lega: viewLega };
+
+function renderView() {
+  var sc = screen(), a = doc.activeElement, keep = a && a.id && $('view').contains(a) ? a.id : '';
+  viewStale = false;
+  doc.body.setAttribute('data-screen', sc);
+  $('view').innerHTML = sc === 'gate' ? viewGate() : sc === 'edit' ? viewEdit() : VIEWS[ui.tab]();
+  if (sc === 'edit' && photo.src) {
+    var cv = $('stage-cv');
+    if (cv) { stagePointers(cv); paintStage(false); }
+  }
+  if (sc === 'app' && ui.tab === 'calendario' && calJump) {
+    calJump = false;
+    var nd = nextDay(state, schedule), row = nd > 3 ? $('g-' + nd) : null;
+    if (row) { try { row.scrollIntoView({ block: 'center' }); } catch (e) {} }
+  }
+  if (keep && $(keep)) { try { $(keep).focus({ preventScroll: true }); } catch (e) {} }
+}
+
+function render() { renderMast(); renderTabs(); renderView(); }
+
+function setTab(t) {
+  if (TABS.indexOf(t) < 0) return;
+  var changed = ui.tab !== t;
+  ui.tab = t;
+  if (t === 'calendario' && changed) calJump = true;
+  saveUi();
+  try { if (location.hash !== '#' + t) location.hash = t; } catch (e) {}
+  if (changed) scrollTop();
+  render();
+}
+
+/* ── Pannelli ── */
+
+function sheetHead(kicker, title) {
+  return '<div class="sheet-head"><div>' + (kicker ? '<p class="sheet-kicker">' + kicker + '</p>' : '') +
+    '<h2 id="sh-title">' + title + '</h2></div><button type="button" class="x" data-act="close-sheet" aria-label="Chiudi">×</button></div>';
+}
+
+function scoreRow(side, pair) {
+  var v = sheet.vals[side], q = '';
+  for (var n = 0; n <= 7; n++) {
+    q += '<button type="button" data-act="score-set" data-side="' + side + '" data-n="' + n + '" aria-pressed="' + (v === n) + '">' + n + '</button>';
+  }
+  return '<div class="score-row"><div class="score-who" id="sw-' + side + '">' + nm(pair[0]) + ' e ' + nm(pair[1]) + '</div>' +
+    '<div class="stepper"><button type="button" data-act="score-step" data-side="' + side + '" data-d="-1" aria-label="Un game in meno">−</button>' +
+    '<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" id="score-' + side + '" data-field="score" data-side="' + side + '" placeholder="–" aria-labelledby="sw-' + side + '" value="' + (v === null ? '' : v) + '">' +
+    '<button type="button" data-act="score-step" data-side="' + side + '" data-d="1" aria-label="Un game in più">+</button></div>' +
+    '<div class="quick" role="group" aria-label="Scelta rapida dei game">' + q + '</div></div>';
+}
+
+function playerSheet(i) {
+  var T = computeTable(state, schedule), row = T.byPlayer[i], p = profileOf(i), det = playerDetail(state, schedule, i);
+  var partners = sortPartners(det), opps = sortOpponents(det), M = mvpTable(state, schedule);
+  var best = partners.filter(function (t) { return t.pg > 0; }).length >= 2 && partners[0].v > 0 ? partners[0].j : -1;
+  var worst = opps[0].p > 0 && opps[0].p > opps[0].v ? opps[0].j : -1;
+  var h = '<div class="sheet-head"><div class="p-head">' + avatarHtml(i, 'av-l' + (i === me ? ' is-ring' : '')) +
+    '<div><h2 class="p-name" id="sh-title">' + nm(i) + '</h2><p class="hint">' + (T.hasData ? row.rank + 'º in classifica · ' : '') + row.pts + ' punti' + (p ? ' · pagella ' + vote(p) : '') + '</p></div></div>' +
+    '<button type="button" class="x" data-act="close-sheet" aria-label="Chiudi">×</button></div>';
+  h += schedaHtml(p);
+  h += '<div class="p-sec"><h3>Numeri</h3>' + kpisHtml(row, T, M.byPlayer[i]) + '</div>';
+  h += '<div class="p-sec"><h3>In coppia con</h3><div class="card"><table class="rank mini">' + miniHead('Compagno', T, true) + '<tbody>' +
+    miniRows(partners, 'mate', T, function (t) { return t.j === best ? 'miglior intesa' : ''; }) + '</tbody></table></div></div>';
+  h += '<div class="p-sec"><h3>Contro</h3><div class="card"><table class="rank mini">' + miniHead('Avversario', T, false) + '<tbody>' +
+    miniRows(opps, 'opp', T, function (t) { return t.j === worst ? 'bestia nera' : ''; }) + '</tbody></table></div></div>';
+  if (i === me || canEdit()) {
+    h += '<div class="sheet-actions"><button type="button" class="btn wide" data-act="edit-profile" data-i="' + i + '">' + (p ? 'Modifica la scheda' : 'Compila la scheda') + '</button></div>';
+  }
+  return h;
+}
+
+// Voti registrati; con mine === true anche quelli appena toccati su questo telefono.
+function mvpVals(withTouched) {
+  var m = sheet.m, cur = state.mvp[m.id] || {}, vals = {};
+  matchPlayers(m).forEach(function (p) { vals[p] = has(cur, String(p)) ? cur[p] : null; });
+  if (withTouched !== false) Object.keys(sheet.touched).forEach(function (k) { vals[k] = sheet.touched[k]; });
+  return vals;
+}
+
+function mvpNow(vals) {
+  var P = matchPlayers(sheet.m), tally = {}, count = 0, max = 0;
+  P.forEach(function (p) { tally[p] = 0; });
+  P.forEach(function (p) { var v = vals[p]; if (v !== null && v !== undefined) { tally[v]++; count++; } });
+  P.forEach(function (p) { if (tally[p] > max) max = tally[p]; });
+  if (!count) return 'Ancora nessun voto.';
+  var top = P.filter(function (p) { return tally[p] === max; });
+  var txt = P.filter(function (p) { return tally[p] > 0; }).sort(function (a, b) { return tally[b] - tally[a]; })
+    .map(function (p) { return nm(p) + ' ' + tally[p]; }).join(' · ');
+  return (max >= 2 ? '<b>MVP ' + top.map(nm).join(' e ') + '</b> · ' : '') + txt + ' · ' + plural(count, 'voto', 'voti') + ' su 4';
+}
+
+function voteRow(voter, vals) {
+  var P = matchPlayers(sheet.m), voted = vals[voter] !== null && vals[voter] !== undefined;
+  return '<div class="field"><span class="label" id="mv-l' + voter + '">' + (voter === me ? 'Il tuo voto' : 'Il voto di ' + nm(voter)) +
+    (voter !== me && !voted ? ' · deve ancora votare' : '') + '</span>' +
+    '<div class="seg" role="group" aria-labelledby="mv-l' + voter + '">' +
+    P.filter(function (p) { return p !== voter; }).map(function (p) {
+      return '<button type="button" data-act="mvp-pick" data-voter="' + voter + '" data-p="' + p + '" aria-pressed="' + (vals[voter] === p) + '">' + nm(p) + '</button>';
+    }).join('') + '</div></div>';
+}
+
+function mvpSheet() {
+  var m = sheet.m, r = sheet.score || state.results[m.id], P = matchPlayers(m), vals = mvpVals(), mine2 = me !== null && P.indexOf(me) >= 0;
+  var h = sheetHead('Giornata ' + (m.g + 1) + ' · ' + nm(m.a[0]) + ' e ' + nm(m.a[1]) + (r ? ' ' + r[0] + '–' + r[1] + ' ' : ' contro ') + nm(m.b[0]) + ' e ' + nm(m.b[1]), 'Chi è stato l\'MVP?');
+  if (relay()) {
+    h += '<p class="note">' + relayNote('il voto') + '</p>';
+    if (mine2) {
+      h += voteRow(me, vals) + '<p class="mvp-now" id="mvp-now" aria-live="polite">Voti già segnati: ' + mvpNow(mvpVals(false)) + '</p>' +
+        '<div class="sheet-actions"><button type="button" class="btn primary wide" id="mvp-send" data-act="mvp-relay"' + (sheet.touched[me] === null || sheet.touched[me] === undefined ? ' disabled' : '') + '>Manda il voto nel gruppo</button></div>';
+    } else {
+      h += '<p class="note">' + (me === null ? 'Votano solo i quattro in campo: entra con la tua parola d\'ordine.' : 'Non eri in campo in questa partita: votano solo i quattro che hanno giocato.') + '</p>' +
+        '<p class="mvp-now" id="mvp-now" aria-live="polite">' + mvpNow(vals) + '</p>';
+    }
+    return h;
+  }
+  var order = P.slice();
+  if (mine2) { order.splice(order.indexOf(me), 1); order.unshift(me); }
+  h += '<p class="note">Votano i quattro in campo, ognuno per uno degli altri tre. Il voto si salva appena tocchi un nome; toccalo di nuovo per toglierlo.</p>';
+  order.forEach(function (voter) { h += voteRow(voter, vals); });
+  return h + '<p class="mvp-now" id="mvp-now" aria-live="polite">' + mvpNow(vals) + '</p>' +
+    '<p class="hint">Se qualcuno non ha l\'app, puoi segnare tu il suo voto.</p>' +
+    '<div class="sheet-actions"><button type="button" class="btn primary wide" id="mvp-done" data-act="close-sheet">Fatto</button></div>';
+}
+
+function openMvp(m, score) {
+  openSheet({ type: 'mvp', m: m, touched: {}, score: score || null });
+}
+
+function refreshSheet() {
+  var el = $('sheet');
+  if (!el || !sheet) return;
+  var top = el.scrollTop;
+  el.innerHTML = sheetHtml();
+  el.scrollTop = top;
+}
+
+function resultText(m, vals) {
+  var date = fmtDate(state.dates[m.g]);
+  return ['*' + state.name + '* · giornata ' + (m.g + 1) + (date ? ' (' + date + ')' : ''),
+    'Risultato: ' + pairName(state, m.a, ' + ') + '  ' + vals[0] + '-' + vals[1] + '  ' + pairName(state, m.b, ' + '),
+    me !== null ? '(lo manda ' + state.players[me] + ', da segnare nell\'app)' : '(da segnare nell\'app)'].join('\n');
+}
+
+function voteText(m, voter, pick) {
+  return '*' + state.name + '* · giornata ' + (m.g + 1) + '\nVoto MVP di ' + state.players[voter] + ': ' + state.players[pick] + '\n(da segnare nell\'app)';
+}
+
+function sheetHtml() {
+  if (sheet.type === 'score') {
+    var m = sheet.m, filled = sheet.vals[0] !== null && sheet.vals[1] !== null, ro = relay(), has2 = !!state.results[m.id];
+    return sheetHead('Giornata ' + (m.g + 1) + ' · riposano ' + nm(m.rest[0]) + ' e ' + nm(m.rest[1]), 'Risultato') +
+      (ro ? '<p class="note">' + relayNote('il risultato') + '</p>' : '') +
+      scoreRow(0, m.a) + '<hr class="net-line">' + scoreRow(1, m.b) +
+      (ro ? '' : '<div class="field"><label for="f-date">Data della giornata</label><input type="date" id="f-date" data-field="date" value="' + esc(state.dates[m.g] || '') + '"></div>') +
+      '<div class="sheet-actions"><button type="button" class="btn primary wide" id="score-save" data-act="score-save"' + (filled ? '' : ' disabled') + '>' + (ro ? 'Manda il risultato nel gruppo' : 'Salva risultato') + '</button>' +
+      (has2 && !ro ? '<button type="button" class="btn wide" data-act="open-mvp" data-id="' + m.id + '">' + (mvpOf(state, m).count ? 'Voti MVP' : 'Vota l\'MVP') + '</button>' : '') +
+      (has2 && !ro ? '<button type="button" class="btn danger wide" data-act="score-clear">Cancella risultato</button>' : '') + '</div>';
+  }
+  if (sheet.type === 'mvp') return mvpSheet();
+  if (sheet.type === 'player') return playerSheet(sheet.i);
+  if (sheet.type === 'share') {
+    return sheetHead('', 'Messaggio per il gruppo') +
+      '<div class="field"><label for="share-text">Testo pronto da incollare in chat</label><textarea id="share-text" readonly>' + esc(sheet.text) + '</textarea></div>' +
+      '<div class="sheet-actions"><button type="button" class="btn primary wide" data-act="copy">Copia il testo</button>' +
+      '<a class="btn wide" href="https://wa.me/?text=' + encodeURIComponent(sheet.text) + '" target="_blank" rel="noopener">Apri WhatsApp</a></div>';
+  }
+  if (sheet.type === 'reset') {
+    return sheetHead('', 'Azzerare il campionato?') +
+      '<p class="note">Spariscono tutti i risultati, i voti MVP, le date e i bonus. Giocatori, schede, calendario e regole restano come sono.</p>' +
+      '<div class="sheet-actions"><button type="button" class="btn danger wide" data-act="reset-do">Sì, azzera tutto</button>' +
+      '<button type="button" class="btn wide" data-act="close-sheet">Annulla</button></div>';
+  }
+  return '';
+}
+
+function openSheet(s) {
+  var a = doc.activeElement;
+  s.openerId = a && a.id ? a.id : '';
+  sheet = s;
+  $('sheet-root').innerHTML = '<div class="sheet-wrap" data-act="backdrop"><div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title" tabindex="-1">' + sheetHtml() + '</div></div>';
+  doc.body.classList.add('has-sheet');
+  try { $('sheet').focus({ preventScroll: true }); } catch (e) {}
+  saveUi();
+}
+
+function closeSheet() {
+  if (!sheet) return;
+  var id = sheet.openerId;
+  sheet = null;
+  $('sheet-root').innerHTML = '';
+  doc.body.classList.remove('has-sheet');
+  saveUi();
+  if (viewStale && isQuiet() && !edit) renderView();
+  if (id && $(id)) { try { $(id).focus({ preventScroll: true }); } catch (e) {} }
+}
+
+function refreshScore(skipInput) {
+  [0, 1].forEach(function (side) {
+    var v = sheet.vals[side], input = $('score-' + side);
+    if (input && input !== skipInput) input.value = v === null ? '' : v;
+    var btns = doc.querySelectorAll('#sheet [data-act="score-set"][data-side="' + side + '"]');
+    for (var k = 0; k < btns.length; k++) btns[k].setAttribute('aria-pressed', String(Number(btns[k].getAttribute('data-n')) === v));
+  });
+  var save = $('score-save');
+  if (save) save.disabled = sheet.vals[0] === null || sheet.vals[1] === null;
+  saveUi();
+}
+
+function openShare(text) { openSheet({ type: 'share', text: text }); }
+
+function copyShare() {
+  var ta = $('share-text'), text = sheet ? sheet.text : '';
+  function fallback() {
+    var ok = false;
+    try { ta.focus(); ta.select(); ok = doc.execCommand('copy'); } catch (e) {}
+    toast(ok ? 'Testo copiato' : 'Copia non riuscita: tieni premuto sul testo e copialo a mano.');
+  }
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast('Testo copiato'); }, fallback);
+      return;
+    }
+  } catch (e) {}
+  fallback();
+}
+
+function saveScore() {
+  if (!sheet || sheet.type !== 'score' || sheet.vals[0] === null || sheet.vals[1] === null) return;
+  var m = sheet.m, vals = [sheet.vals[0], sheet.vals[1]];
+  if (relay()) { closeSheet(); openShare(resultText(m, vals)); return; }
+  if (!ready()) return;
+  put('results/' + m.id, 'set', { a: vals[0], b: vals[1], at: stamp() });
+  closeSheet();
+  if (mvpOf(state, m).count < 4) openMvp(m, vals); else toast('Risultato inserito');
+}
+
+/* ── Azioni ── */
+
+var ACTIONS = {
+  tab: function (t, ev) { ev.preventDefault(); setTab(t.getAttribute('data-tab')); },
+  guest: function () { guest = true; sSet(SS, K_GUEST, 1); ui.tab = 'classifica'; go(); },
+  'to-login': function () { ui.tab = 'io'; go(); },
+  logout: function () { logout(); },
+  filter: function (t) { ui.filter = t.getAttribute('data-f'); saveUi(); renderView(); },
+  'open-player': function (t) { openSheet({ type: 'player', i: Number(t.getAttribute('data-i')) }); },
+  'edit-profile': function (t) {
+    var i = Number(t.getAttribute('data-i'));
+    if (i !== me && !canEdit()) return;
+    openEdit(i, false);
+  },
+  'edit-cancel': function () {
+    if (edit && edit.first) ui.tab = 'io';
+    edit = null; photo.src = null;
+    saveUi(); render(); scrollTop();
+  },
+  'edit-save': function () { saveEdit(); },
+  'e-pick': function (t) {
+    var k = t.getAttribute('data-k'), v = t.getAttribute('data-v');
+    edit.f[k] = v;
+    var all = doc.querySelectorAll('#view [data-act="e-pick"][data-k="' + k + '"]');
+    for (var j = 0; j < all.length; j++) all[j].setAttribute('aria-pressed', String(all[j] === t));
+    if (k === 'shot') {
+      $('e-other-wrap').hidden = v !== 'altro';
+      if (v === 'altro') { try { $('e-other').focus(); } catch (e) {} }
+    }
+    stashSoon();
+  },
+  'photo-clear': function () { photo.src = null; edit.f.avatar = ''; stashSoon(); renderView(); },
+  'push-mine': function () {
+    if (!mine || me === null) return;
+    var p = mine.profile, a = mine.avatar, i = me;
+    if (!ready()) return;
+    put('profiles/p' + i, 'set', { profile: p, avatar: a, at: stamp() }).then(function (ok) { if (ok) toast('Scheda inviata a tutti'); });
+  },
+  'edit-match': function (t) {
+    var id = t.getAttribute('data-id'), m = findMatch(id);
+    if (!m) return;
+    var r = state.results[id];
+    openSheet({ type: 'score', m: m, vals: r ? [r[0], r[1]] : [null, null] });
+  },
+  'score-set': function (t) {
+    sheet.vals[Number(t.getAttribute('data-side'))] = Number(t.getAttribute('data-n'));
+    refreshScore();
+  },
+  'score-step': function (t) {
+    var side = Number(t.getAttribute('data-side')), v = sheet.vals[side];
+    sheet.vals[side] = Math.min(99, Math.max(0, (v === null ? 0 : v) + Number(t.getAttribute('data-d'))));
+    refreshScore();
+  },
+  'score-save': function () { saveScore(); },
+  'open-mvp': function (t) {
+    var m = findMatch(t.getAttribute('data-id'));
+    if (!m || !state.results[m.id]) return;
+    if (sheet) closeSheet();
+    openMvp(m);
+  },
+  'mvp-pick': function (t) {
+    var voter = Number(t.getAttribute('data-voter')), p = Number(t.getAttribute('data-p')), m = sheet.m;
+    if (matchPlayers(m).indexOf(voter) < 0 || matchPlayers(m).indexOf(p) < 0 || voter === p) return;
+    var next = mvpVals()[voter] === p ? null : p;
+    if (relay()) {
+      if (voter !== me) return;
+      sheet.touched[voter] = next;
+      refreshSheet();
+      return;
+    }
+    if (!ready()) return;
+    sheet.touched[voter] = next;
+    refreshSheet();
+    put('votes/' + m.id + '-' + voter, next === null ? 'delete' : 'set', next === null ? undefined : { p: next, at: stamp() }).then(function () {
+      // il voto ora arriva dall'archivio (oppure non è passato e torna com'era)
+      if (sheet && sheet.type === 'mvp' && sheet.m === m && sheet.touched[voter] === next) { delete sheet.touched[voter]; refreshSheet(); }
+    });
+  },
+  'mvp-relay': function () {
+    var m = sheet.m, pick = sheet.touched[me];
+    if (me === null || pick === null || pick === undefined) return;
+    closeSheet();
+    openShare(voteText(m, me, pick));
+  },
+  'score-clear': function () {
+    if (!ready()) return;
+    var m = sheet.m, votes = live.cols.votes || {};
+    put('results/' + m.id, 'delete');
+    matchPlayers(m).forEach(function (p) { if (has(votes, m.id + '-' + p)) put('votes/' + m.id + '-' + p, 'delete'); });
+    closeSheet();
+    toast('Risultato cancellato');
+  },
+  'close-sheet': function () { closeSheet(); },
+  backdrop: function (t, ev) { if (ev.target === t) closeSheet(); },
+  'share-table': function () { openShare(tableText(state, schedule)); },
+  'share-day': function () {
+    var nd = nextDay(state, schedule);
+    if (nd >= 0) openShare(dayText(state, schedule[nd]));
+  },
+  copy: function () { copyShare(); },
+  preset: function (t) {
+    var p = PRESETS[t.getAttribute('data-p')];
+    if (p) leaguePut({ rules: clone(p) });
+  },
+  rule: function (t) {
+    var key = t.getAttribute('data-key'), d = Number(t.getAttribute('data-d')), r = clone(state.rules);
+    if (!has(r, key)) return;
+    r[key] = key === 'game' ? clampInt(r[key] + d, 0, 5, 0) : clampInt(r[key] + d, -9, 20, 0);
+    leaguePut({ rules: r });
+  },
+  'ex-step': function (t) {
+    ui.ex.pts = Math.min(20, Math.max(-20, ui.ex.pts + Number(t.getAttribute('data-d'))));
+    $('f-ex-pts').textContent = fmtSigned(ui.ex.pts);
+    $('ex-add').disabled = ui.ex.pts === 0;
+  },
+  'extra-add': function () {
+    if (!ui.ex.pts) return;
+    if (!ready()) return;
+    var id = 'x' + Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
+    var e = { p: ui.ex.p, pts: ui.ex.pts, note: cleanText(ui.ex.note, 40), at: stamp() };
+    ui.ex.note = '';
+    put('extras/' + id, 'set', e).then(function (ok) { if (ok) toast('Aggiunto alla classifica'); });
+  },
+  'extra-del': function (t) {
+    var id = t.getAttribute('data-id');
+    if (!/^[A-Za-z0-9_-]{1,40}$/.test(id) || !ready()) return;
+    put('extras/' + id, 'delete');
+  },
+  'reset-ask': function () { openSheet({ type: 'reset' }); },
+  'reset-do': function () {
+    if (!ready()) return;
+    var paths = [];
+    ['results', 'votes', 'dates', 'extras'].forEach(function (c) {
+      Object.keys(live.cols[c] || {}).forEach(function (id) { paths.push(c + '/' + id); });
+    });
+    closeSheet();
+    if (!paths.length) { toast('Non c\'è niente da azzerare'); return; }
+    toast('Azzero il campionato…');
+    var failed = false, lanes = [];
+    for (var k = 0; k < 4; k++) {
+      lanes.push(paths.filter(function (_, j) { return j % 4 === k; }).reduce(function (pr, path) {
+        return pr.then(function () { return failed ? false : put(path, 'delete').then(function (ok) { if (!ok) failed = true; }); });
+      }, Promise.resolve()));
+    }
+    Promise.all(lanes).then(function () { toast(failed ? 'Azzeramento interrotto: riprova.' : 'Campionato azzerato'); });
+  },
+  'copy-refresh': function () { refreshCopy(); }
+};
+
+doc.addEventListener('click', function (ev) {
+  var t = ev.target && ev.target.closest ? ev.target.closest('[data-act]') : null;
+  if (!t || t.disabled) return;
+  var fn = ACTIONS[t.getAttribute('data-act')];
+  if (fn) fn(t, ev);
+});
+
+doc.addEventListener('submit', function (ev) {
+  var f = ev.target;
+  if (!f || f.id !== 'login-form') return;
+  ev.preventDefault();
+  var w = $('f-word').value, i = findPlayer(state, w);
+  if (i < 0) {
+    var e = $('login-err');
+    e.hidden = false;
+    e.textContent = normName(w) ? 'Parola d\'ordine non riconosciuta. È il tuo nome, scritto come in classifica.' : 'Scrivi la tua parola d\'ordine.';
+    return;
+  }
+  login(i);
+});
+
+doc.addEventListener('input', function (ev) {
+  var t = ev.target, f = t && t.getAttribute ? t.getAttribute('data-field') : '', ef = t && t.getAttribute ? t.getAttribute('data-ef') : '';
+  if (f === 'score' && sheet && sheet.type === 'score') {
+    var digits = t.value.replace(/\D/g, '').slice(0, 2);
+    if (digits !== t.value) t.value = digits;
+    sheet.vals[Number(t.getAttribute('data-side'))] = digits === '' ? null : Number(digits);
+    refreshScore(t);
+  } else if (f === 'ex-note') {
+    ui.ex.note = t.value;
+  } else if (ef && edit) {
+    if (ef === 'name') edit.f.name = t.value;
+    else if (ef === 'other') edit.f.other = t.value;
+    else if (ef === 'motto') edit.f.motto = t.value;
+    else if (ef === 'skill') {
+      var k = Number(t.getAttribute('data-k'));
+      edit.f.skills[k] = clampInt(t.value, 1, 10, 6);
+      $('e-sk' + k + '-o').textContent = edit.f.skills[k];
+    } else if (ef === 'zoom') { photo.zoom = Math.min(4, Math.max(1, Number(t.value) / 100)); paintStage(true); paintSoon(); }
+    else if (ef === 'bulge') { edit.f.bulge = clampInt(t.value, 0, 100, 55); paintSoon(40); }
+    else if (ef === 'toon') { edit.f.toon = clampInt(t.value, 0, 100, 70); paintSoon(40); }
+    stashSoon();
+  }
+});
+
+doc.addEventListener('change', function (ev) {
+  var t = ev.target, f = t && t.getAttribute ? t.getAttribute('data-field') : '', ef = t && t.getAttribute ? t.getAttribute('data-ef') : '';
+  if (ef === 'photo' && edit) {
+    loadPhoto(t.files && t.files[0]);
+    try { t.value = ''; } catch (e) {}
+  } else if (f === 'name') {
+    var v = cleanText(t.value, 32);
+    if (!v || v === state.name) { t.value = state.name; return; }
+    leaguePut({ name: v });
+  } else if (f === 'player') {
+    var i = Number(t.getAttribute('data-i')), name = cleanText(t.value, 14), clash = name ? findPlayer(state, name) : -1;
+    if (!name || name === state.players[i]) { t.value = state.players[i]; return; }
+    if (clash >= 0 && clash !== i) { t.value = state.players[i]; toast('C\'è già un giocatore con questo nome.'); return; }
+    var pl = {}; pl['p' + i] = name;
+    leaguePut({ players: pl });
+  } else if (f === 'date' && sheet && sheet.type === 'score') {
+    var g = sheet.m.g, val = /^\d{4}-\d{2}-\d{2}$/.test(t.value) ? t.value : '';
+    if (!ready()) { t.value = state.dates[g] || ''; return; }
+    put('dates/g' + g, val ? 'set' : 'delete', val ? { d: val } : undefined);
+  } else if (f === 'ex-p') {
+    ui.ex.p = Number(t.value);
+  }
+});
+
+// Dopo un cambio di nome la vista si aggiorna appena nessun campo è in uso.
+doc.addEventListener('focusout', function () {
+  if (!viewStale) return;
+  setTimeout(function () { if (viewStale && isQuiet() && !edit) renderView(); }, 80);
+});
+
+doc.addEventListener('keydown', function (ev) {
+  if (ev.key === 'Escape' && sheet) { closeSheet(); return; }
+  var t = ev.target, f = t && t.getAttribute ? t.getAttribute('data-field') : '', ef = t && t.getAttribute ? t.getAttribute('data-ef') : '';
+  if (ev.key === 'Enter' && f === 'score') { ev.preventDefault(); saveScore(); return; }
+  if (ev.key === 'Enter' && (f === 'name' || f === 'player' || f === 'ex-note' || ef === 'name' || ef === 'other' || ef === 'motto')) { t.blur(); return; }
+  if (ev.key === 'Tab' && sheet) {
+    var items = doc.querySelectorAll('#sheet button:not([disabled]), #sheet input, #sheet textarea, #sheet a[href]');
+    if (!items.length) return;
+    var first = items[0], last = items[items.length - 1], a = doc.activeElement;
+    if (ev.shiftKey && (a === first || a === $('sheet'))) { ev.preventDefault(); last.focus(); }
+    else if (!ev.shiftKey && a === last) { ev.preventDefault(); first.focus(); }
+  }
+});
+
+root.addEventListener('hashchange', function () {
+  var t = tabFromHash();
+  if (t && t !== ui.tab && screen() === 'app') setTab(t);
+});
+
+/* ── Avvio ── */
+
+function start(snap) {
+  if (started) return;
+  started = true;
+  rebuild();
+  var s = snap && typeof snap === 'object' && snap.tab ? snap : null;
+  if (!s) {
+    var saved = sGet(SS, K_UI);
+    if (saved && typeof saved === 'object' && Date.now() - Number(saved.t || 0) < 30 * 60 * 1000) s = saved;
+  }
+  s = s || {};
+  var fresh = Date.now() - Number(s.t || 0) < 10 * 60 * 1000;
+  ui.filter = typeof s.filter === 'string' ? s.filter : 'tutte';
+  ui.tab = tabFromHash() || (TABS.indexOf(s.tab) >= 0 ? s.tab : (me !== null ? 'io' : 'classifica'));
+  var e = fresh && s.edit && typeof s.edit === 'object' && s.edit.f && typeof s.edit.f === 'object' ? s.edit : null;
+  if (e && Number.isInteger(e.i) && e.i >= 0 && e.i < 6 && (e.i === me || canEdit())) {
+    var f = e.f, skills = [];
+    for (var k = 0; k < SKILLS.length; k++) skills.push(clampInt(f.skills && f.skills[k], 1, 10, 6));
+    edit = {
+      i: e.i, first: !!e.first,
+      f: {
+        name: cleanText(f.name, 14), shot: cleanText(f.shot, 24), other: cleanText(f.other, 24),
+        side: has(SIDES, f.side) ? f.side : 'dx', hand: has(HANDS, f.hand) ? f.hand : 'dx', style: has(STYLES, f.style) ? f.style : 'jol',
+        skills: skills, motto: cleanText(f.motto, 60), avatar: normAvatar(f.avatar),
+        bulge: clampInt(f.bulge, 0, 100, 55), toon: clampInt(f.toon, 0, 100, 70)
+      }
+    };
+  }
+  if (ui.tab === 'calendario') calJump = true;
+  render();
+  var pending = s.sheet && typeof s.sheet === 'object' && Date.now() - Number(s.t || 0) < 90 * 1000 ? s.sheet : null;
+  var pm = pending ? findMatch(pending.id) : null;
+  if (!edit && pm) {
+    if (pending.type === 'mvp') {
+      var sc = Array.isArray(pending.score) ? [clampInt(pending.score[0], 0, 99, 0), clampInt(pending.score[1], 0, 99, 0)] : null;
+      openMvp(pm, sc);
+    } else if (Array.isArray(pending.vals)) {
+      openSheet({ type: 'score', m: pm, vals: [clampInt(pending.vals[0], 0, 99, null), clampInt(pending.vals[1], 0, 99, null)] });
+    }
+  }
+  initLive();
+}
+
+try {
+  doc.fonts.load('900 48px "Sofia Sans Extra Condensed"').then(function (f) {
+    if (f && f.length) doc.documentElement.classList.add('fonts-ok');
+  }, function () {});
+} catch (e) {}
+
+var hot = root.claude && root.claude.hot;
+try {
+  if (hot && typeof hot.snapshot === 'function') hot.snapshot(uiSnapshot);
+} catch (e) {}
+if (hot && typeof hot.ready === 'function') {
+  try { hot.ready(start); } catch (e) {}
+  setTimeout(function () { start({}); }, 1200);
+} else {
+  start((hot && hot.data) || {});
+}
+
+})(typeof window !== 'undefined' ? window : globalThis);
+/*QDP-END*/</script>
+</body>
+</html>
